@@ -1,0 +1,21 @@
+spring:
+    datasource:
+        name: wscq
+        url: jdbc:mysql://127.0.0.1:3306/syg
+        username: root
+        password: 123456
+        driver-class-name: com.mysql.jdbc.Driver
+    redis:
+        host: localhost
+        password: root
+        port: 6380
+        timeout: 300
+mybatis:
+    mapperLocations: classpath:mappers/*.xml
+    type-handlers-package: cn.xunyingge.domain.dao.mybatis
+    type-aliases-package: cn.xunyingge.domain.model.mybatis.gen
+server:
+    port: 2333
+logging:
+    config: classpath:logbak.xml
+    level: debug
