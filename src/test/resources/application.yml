@@ -12,8 +12,8 @@ spring:
         timeout: 300
 mybatis:
     mapperLocations: classpath:mappers/*.xml
-    type-handlers-package: cn.xunyingge.domain.dao.mybatis
-    type-aliases-package: cn.xunyingge.domain.model.mybatis.gen
+    type-handlers-package: cn.monstar.payment.domain.dao.mybatis
+    type-aliases-package: cn.monstar.payment.domain.model.mybatis.gen
 server:
     port: 2333
 logging:
