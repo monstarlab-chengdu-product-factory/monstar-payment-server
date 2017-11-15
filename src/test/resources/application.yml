@@ -1,0 +1,21 @@
+spring:
+    datasource:
+        name: wscq
+        url: jdbc:mysql://52.69.201.172:3306/syg
+        username: root
+        password: 123456
+        driver-class-name: com.mysql.jdbc.Driver
+    redis:
+        host: 52.69.201.172
+        password: root
+        port: 6379
+        timeout: 1500
+mybatis:
+    mapperLocations: classpath:mappers/*.xml
+    type-handlers-package: cn.monstar.payment.domain.dao.mybatis
+    type-aliases-package: cn.monstar.payment.domain.model.mybatis.gen
+server:
+    port: 2333
+logging:
+    config: classpath:logbak.xml
+    level: debug
