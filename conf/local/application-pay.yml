@@ -1,12 +1,12 @@
 spring:
     datasource:
         name: syg
-        url: jdbc:mysql://52.69.201.172:3306/syg
+        url: jdbc:mysql://localhost:3306/syg
         username: root
         password: 123456
         driver-class-name: com.mysql.jdbc.Driver
     redis:
-        host: 52.69.201.172
+        host: localhost
         password: root
         port: 6379
         timeout: 300
