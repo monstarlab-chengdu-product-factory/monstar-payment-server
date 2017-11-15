@@ -136,6 +136,14 @@ task copyConf {
             }
             into('build/resources/main')
         }
+        copy {
+            from('conf/' + p) {
+                include '*.yml'
+                include '*.properties'
+                include 'messages/'
+            }
+            into('build/resources/test')
+        }
     }
 }
 
