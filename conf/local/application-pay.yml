@@ -10,7 +10,7 @@ spring:
         host: 52.69.201.172
         password: root
         port: 6379
-        timeout: 15000
+        timeout: 90000
 mybatis:
     mapperLocations: classpath:mappers/*.xml
     type-handlers-package: cn.monstar.payment.domain.dao.mybatis
