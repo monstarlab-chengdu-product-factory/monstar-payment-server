@@ -32,7 +32,7 @@ public class demoControllerTest {
 
     @Test
     public void testDemo() {
-        String rs = this.restTemplate.getForObject("/test1?userId=ss", String.class);
+        String rs = this.restTemplate.getForObject("/test1", String.class);
         Assert.assertEquals(rs, "test");
     }
 }
