@@ -1,14 +1,13 @@
 spring:
     datasource:
         name: syg
-        #url: jdbc:mysql://localhost:3306/payment?characterEncoding=utf-8
-        url: jdbc:mysql://keep-api.dyfeiyu.com:3306/payment?characterEncoding=utf-8
+        url: jdbc:mysql://localhost:3306/payment?characterEncoding=utf-8
         username: root
         password: 123456
         driver-class-name: com.mysql.jdbc.Driver
     redis:
-        host: keep-api.dyfeiyu.com
-        password: wangxianding
+        host: localhost
+        password: root
         port: 6379
         timeout: 90000
 mybatis:
