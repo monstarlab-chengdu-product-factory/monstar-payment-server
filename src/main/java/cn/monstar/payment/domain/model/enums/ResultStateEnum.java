@@ -29,11 +29,11 @@ public enum ResultStateEnum implements BaseEnum {
 
 	@Override
 	public int getEnumValue() {
-		return 0;
+		return this.enumValue;
 	}
 
 	@Override
 	public String getLabel() {
-		return null;
+		return this.lable;
 	}
 }
