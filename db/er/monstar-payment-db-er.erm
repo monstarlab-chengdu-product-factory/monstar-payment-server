@@ -146,7 +146,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2017-11-13 14:48:38</creation_date>
-			<updated_date>2017-11-16 11:46:52</updated_date>
+			<updated_date>2017-11-16 15:03:28</updated_date>
 			<model_property>
 				<name>Project Name</name>
 				<value></value>
@@ -530,7 +530,7 @@
 			<binary>false</binary>
 			<args></args>
 			<char_semantics>false</char_semantics>
-			<description>支付状态: 0.待支付 1.已支付 2.已过期 3.已取消</description>
+			<description>支付状态: 0.待支付 1.已支付 2.已关闭 3.支付失败</description>
 			<logical_name>payment_status</logical_name>
 			<physical_name>payment_status</physical_name>
 			<type>tinyint</type>
@@ -546,7 +546,7 @@
 			<binary>false</binary>
 			<args></args>
 			<char_semantics>false</char_semantics>
-			<description>支付类型: 0.微信 1.支付宝</description>
+			<description>支付类型: 0.微信 1.支付宝 2.ApplyPay 3.银联支付</description>
 			<logical_name>payment_type</logical_name>
 			<physical_name>payment_type</physical_name>
 			<type>tinyint</type>
@@ -715,7 +715,7 @@
 			<connections>
 				<relation>
 					<id>0</id>
-					<source>2</source>
+					<source>1</source>
 					<target>0</target>
 						<source_xp>-1</source_xp>
 						<source_yp>-1</source_yp>
@@ -737,7 +737,7 @@
 				</relation>
 				<relation>
 					<id>1</id>
-					<source>1</source>
+					<source>2</source>
 					<target>0</target>
 						<source_xp>-1</source_xp>
 						<source_yp>-1</source_yp>
@@ -966,7 +966,7 @@
 				<normal_column>
 					<id>6</id>
 					<referenced_column>10</referenced_column>
-					<relation>1</relation>
+					<relation>0</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
@@ -1000,7 +1000,7 @@
 				<normal_column>
 					<id>7</id>
 					<referenced_column>24</referenced_column>
-					<relation>0</relation>
+					<relation>1</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
@@ -1065,7 +1065,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>29</word_id>
+					<word_id>30</word_id>
 					<id>9</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -1950,7 +1950,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>30</word_id>
+					<word_id>29</word_id>
 					<id>33</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
