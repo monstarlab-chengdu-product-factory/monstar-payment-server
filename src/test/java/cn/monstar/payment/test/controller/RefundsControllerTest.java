@@ -1,12 +1,14 @@
 package cn.monstar.payment.test.controller;
 
-
 import cn.monstar.payment.config.TestsConfiguration;
 import cn.monstar.payment.domain.model.dto.APIResultDto;
 import cn.monstar.payment.web.controller.form.RefundsFrom;
+import com.alibaba.fastjson.JSON;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -17,6 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestsConfiguration.class)
 public class RefundsControllerTest {
+
+	private Logger logger = LoggerFactory.getLogger(RefundsControllerTest.class);
 
 	@Autowired
 	private TestRestTemplate testRestTemplate;
@@ -30,10 +34,9 @@ public class RefundsControllerTest {
 		refundsFrom.setRefundNo("666666");
 		refundsFrom.setRefundDescription("退款原因");
 
-		APIResultDto apiResultDto = testRestTemplate.postForObject("/payment/refunds/sendRefund", refundsFrom, APIResultDto.class);
+		APIResultDto apiResultDto = testRestTemplate.postForObject("/payment/refunds/sendRefund", null, APIResultDto.class);
+		//System.out.println(JSON.toJSON(apiResultDto));
 		Assert.assertEquals(apiResultDto.getReturnCode(), 0);
-		Assert.assertNotNull(apiResultDto.getData());
-		Assert.assertNotNull(apiResultDto.getData());
 	}
 
 }

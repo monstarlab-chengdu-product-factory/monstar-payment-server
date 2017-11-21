@@ -42,6 +42,17 @@ public class APIResultDtoUtil {
 	}
 
 	/**
+	 * 基础的API失败的返回封装
+	 *
+	 * @param returnCode
+	 * @param returnMsg  返回信息
+	 * @return
+	 */
+	public static APIResultDto failure(int returnCode, String returnMsg) {
+		return baseMethod(returnCode, returnMsg, null);
+	}
+
+	/**
 	 * 基础的API成功的返回封装
 	 *
 	 * @return
