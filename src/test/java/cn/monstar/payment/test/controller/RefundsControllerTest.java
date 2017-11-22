@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,12 +33,10 @@ public class RefundsControllerTest {
 		refundsFrom.setOrderMoney("1");
 		refundsFrom.setRefundMoney("0.5");
 		refundsFrom.setPaymentNo("123456");
-		refundsFrom.setRefundNo("666666");
-		refundsFrom.setRefundDescription("退款原因");
-
-		APIResultDto apiResultDto = testRestTemplate.postForObject("/payment/refunds/sendRefund", null, APIResultDto.class);
-		//System.out.println(JSON.toJSON(apiResultDto));
-		Assert.assertEquals(apiResultDto.getReturnCode(), 0);
+		//refundsFrom.setRefundDescription("退款原因");
+		ResponseEntity<APIResultDto> responseEntity = testRestTemplate.postForEntity("/payment/refunds/sendRefund", refundsFrom, APIResultDto.class);
+		Assert.assertEquals(responseEntity.getStatusCode().value(),200);
+		logger.info("返回数据:{}", JSON.toJSON(responseEntity.getBody()));
 	}
 
 }
