@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.LinkedHashMap;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestsConfiguration.class)
@@ -33,10 +35,19 @@ public class RefundsControllerTest {
 		refundsFrom.setOrderMoney("1");
 		refundsFrom.setRefundMoney("0.5");
 		refundsFrom.setPaymentNo("123456");
-		//refundsFrom.setRefundDescription("退款原因");
+		refundsFrom.setRefundDescription("退款原因");
 		ResponseEntity<APIResultDto> responseEntity = testRestTemplate.postForEntity("/payment/refunds/sendRefund", refundsFrom, APIResultDto.class);
 		Assert.assertEquals(responseEntity.getStatusCode().value(),200);
 		logger.info("返回数据:{}", JSON.toJSON(responseEntity.getBody()));
+		APIResultDto apiResultDto = responseEntity.getBody();
+		Assert.assertNotNull(apiResultDto);
+		Assert.assertEquals(apiResultDto.getReturnCode(), 0);
+		LinkedHashMap<String, Object> objectLinkedHashMap = (LinkedHashMap<String, Object>) apiResultDto.getData();
+		Assert.assertEquals(objectLinkedHashMap.get("orderMoney"), refundsFrom.getOrderMoney());
+//		RefundsFrom refundsFrom1 = (RefundsFrom) apiResultDto.getData();
+//		Assert.assertNotNull(refundsFrom1);
+//		Assert.assertEquals(refundsFrom1.getOrderMoney(), refundsFrom.getOrderMoney());
+//		Assert.assertEquals(refundsFrom1.getRefundMoney(), refundsFrom.getRefundMoney());
 	}
 
 }

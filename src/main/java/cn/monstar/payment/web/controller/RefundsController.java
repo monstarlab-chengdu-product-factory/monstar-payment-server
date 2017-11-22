@@ -42,9 +42,9 @@ public class RefundsController extends BaseController {
 		}
 		logger.info("请求数据:{}", JSON.toJSON(refundsFrom));
 		//业务逻辑处理
+		refundsFrom.setRefundNo("123456");
 
-
-		return APIResultDtoUtil.success();
+		return APIResultDtoUtil.success(refundsFrom);
 	}
 
 
