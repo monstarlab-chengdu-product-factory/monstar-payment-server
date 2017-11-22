@@ -1,10 +1,3 @@
-/*
- * System Name    : BaseServiceImpl
- * SubSystem Name : base
- * Class Name     : BaseServiceImpl
- * Description    : BaseServiceImpl
- */
-
 package cn.monstar.payment.domain.service;
 
 import cn.monstar.payment.domain.dao.BaseMapper;
@@ -16,9 +9,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Revision ：
- * Rev -- Date---------Name------------Note
- * 1.0    2017.06.12   MONSTAR-LAB-CN  Created
+ * @author zhangshuai
+ * @version 1.0
+ * @description BaseServiceImpl
+ * @date 2017/11/22 16:09
  */
 public abstract class BaseServiceImpl <T, ID extends Serializable, R extends BaseMapper<T, ID>> implements
         BaseService<T, ID> {

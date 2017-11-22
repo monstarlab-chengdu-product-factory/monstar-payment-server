@@ -1,10 +1,3 @@
-/*
- * System Name    : XXXXX
- * SubSystem Name : Product
- * Class Name     : WebControllerAop
- * Description    : XXXXX
- */
-
 package cn.monstar.payment.config;
 
 import org.aspectj.lang.JoinPoint;
@@ -22,9 +15,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Revision ：
- * Rev -- Date---------Name------------Note
- * 1.0    2017.11.01   MONSTAR-LAB-CN  Created
+ * @author zhangshuai
+ * @version 1.0
+ * @description aop输出日志
+ * @date 2017/11/22 16:09
  */
 @Component
 @Aspect

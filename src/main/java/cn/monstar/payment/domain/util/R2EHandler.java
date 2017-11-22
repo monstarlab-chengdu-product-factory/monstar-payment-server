@@ -10,7 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by shuai on 2017/6/16.
+ * @author zhangshuai
+ * @version 1.0
+ * @description 处理枚举类型转换
+ * @date 2017/11/22 16:09
  */
 public class R2EHandler extends BaseTypeHandler<BaseEnum> {
 

@@ -3,7 +3,10 @@ package cn.monstar.payment.domain.dao;
 import java.util.List;
 
 /**
- * Created by zs on 16/10/24.
+ * @author zhangshuai
+ * @version 1.0
+ * @description BaseMapper
+ * @date 2017/11/22 16:09
  */
 public interface BaseMapper<T, ID>{
 

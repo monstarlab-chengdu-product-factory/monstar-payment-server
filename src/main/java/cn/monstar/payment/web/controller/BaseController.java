@@ -4,9 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Revision ：
- * Rev -- Date---------Name------------Note
- * 1.0    2017.11.10   MONSTAR-LAB-CN  Created
+ * @author zhangshuai
+ * @version 1.0
+ * @description BaseController
+ * @date 2017/11/22 16:09
  */
 public class BaseController {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());

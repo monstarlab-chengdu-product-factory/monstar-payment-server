@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * @author zhangshuai
  * @version 1.0
- * @description
+ * @description 返回结果API
  * @date 2017/11/22 16:09
  */
 public class APIResult implements Serializable {
