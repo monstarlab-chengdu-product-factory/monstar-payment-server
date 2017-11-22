@@ -4,7 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
- * Created by shuai on 2017/11/10.
+ * @author zhangshuai
+ * @version 1.0
+ * @description 返回结果API
+ * @date 2017/11/22 16:09
  */
 @Configuration
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1500)
