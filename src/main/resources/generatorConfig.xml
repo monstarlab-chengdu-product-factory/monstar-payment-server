@@ -29,13 +29,37 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
         
-        <table tableName="t_test" domainObjectName="TTest"
+        <table tableName="t_bill" domainObjectName="TBill"
                enableCountByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
                selectByExampleQueryId="false">
             <generatedKey column="id" identity="true" sqlStatement="SELECT LAST_INSERT_ID()"/>
+            <columnOverride column="bill_type" javaType="cn.monstar.payment.domain.model.enums.BillTypeEnum"
+                            typeHandler="cn.monstar.payment.domain.util.R2EHandler"/>
+        </table>
+        <table tableName="t_payment" domainObjectName="TPayment"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableUpdateByExample="false"
+               selectByExampleQueryId="false">
+            <generatedKey column="id" identity="true" sqlStatement="SELECT LAST_INSERT_ID()"/>
+            <columnOverride column="payment_type" javaType="cn.monstar.payment.domain.model.enums.PaymentTypeEnum"
+                            typeHandler="cn.monstar.payment.domain.util.R2EHandler"/>
+            <columnOverride column="payment_status" javaType="cn.monstar.payment.domain.model.enums.PaymentStatusEnum"
+                            typeHandler="cn.monstar.payment.domain.util.R2EHandler"/>
+        </table>
+        <table tableName="t_refund" domainObjectName="TRefund"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableUpdateByExample="false"
+               selectByExampleQueryId="false">
+            <generatedKey column="id" identity="true" sqlStatement="SELECT LAST_INSERT_ID()"/>
+            <columnOverride column="refund_status" javaType="cn.monstar.payment.domain.model.enums.RefundStatusEnum"
+                            typeHandler="cn.monstar.payment.domain.util.R2EHandler"/>
         </table>
 
     </context>

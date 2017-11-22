@@ -1,7 +1,10 @@
 package cn.monstar.payment.domain.model.enums;
 
 /**
- * Created by shuai on 2017/6/12.
+ * @author zhangshuai
+ * @version 1.0
+ * @description BaseEnum
+ * @date 2017/11/22 16:09
  */
 public interface  BaseEnum<V> {
 
