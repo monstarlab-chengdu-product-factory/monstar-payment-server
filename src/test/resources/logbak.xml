@@ -13,7 +13,7 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily 配置日志所生成的目录以及生成文件名的规则 -->
-            <fileNamePattern>logs/payment-test-log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>logs/monstar-payment-log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 64 MB -->
