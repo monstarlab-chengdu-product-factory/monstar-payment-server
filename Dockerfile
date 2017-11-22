@@ -4,4 +4,4 @@ ADD ./ .
 
 USER root
 
-RUN gradle build -Pprofile=dev
+RUN gradle -info build -Pprofile=dev
