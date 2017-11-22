@@ -1,21 +1,17 @@
 package cn.monstar.payment.web.exception;
 
+import cn.monstar.payment.domain.model.enums.ExceptionEnum;
+
 /**
  * @author wangxianding
  * @version 1.0
  * @description 无效参数异常
  * @date 2017/11/21 下午5:12
  */
-public class InvalidParamException extends RuntimeException {
+public class InvalidParamException extends BaseCustomerException {
 
-	private int code;
-
-	public InvalidParamException(int code, String message) {
-		super(message);
-		this.code = code;
+	public InvalidParamException() {
+		super(ExceptionEnum.ILLEGALPARAMETER.getEnumValue(), ExceptionEnum.ILLEGALPARAMETER.getLabel());
 	}
 
-	public int getCode() {
-		return code;
-	}
 }

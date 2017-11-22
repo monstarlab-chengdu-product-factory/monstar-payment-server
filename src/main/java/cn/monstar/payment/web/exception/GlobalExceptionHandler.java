@@ -30,4 +30,17 @@ public class GlobalExceptionHandler {
 		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
 	}
 
+	/**
+	 * 必填参数异常
+	 *
+	 * @param e
+	 * @param response
+	 * @return
+	 */
+	@ExceptionHandler(ParamRequiredException.class)
+	@ResponseBody
+	public APIResultDto exceptionHandler(ParamRequiredException e, HttpServletResponse response) {
+		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
+	}
+
 }

@@ -11,7 +11,12 @@ public enum ExceptionEnum implements BaseEnum {
 	/**
 	 * 非法参数
 	 */
-	ILLEGALPARAMETER(100, "非法参数"),;
+	ILLEGALPARAMETER(100, "非法参数"),
+
+	/**
+	 * 必填参数
+	 */
+	PARAMREQUIRED(101, "%s参数必填");
 
 	private int enumValue;
 
