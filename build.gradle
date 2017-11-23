@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.0.M5'
+        springBootVersion = '2.0.0.M6'
     }
     repositories {
         mavenCentral()
@@ -9,6 +9,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.springframework:springloaded:1.2.8.RELEASE")
     }
 }
 
@@ -24,6 +25,19 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
+
+jar {
+    baseName = 'manstar-payment'
+    version = '1.0.0'
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+        testOutputDir = file("$buildDir/classes/test/")
+    }
+}
 
 repositories {
     mavenCentral()
@@ -46,7 +60,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-configuration-processor")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     // 尝试官方推荐的热加载工具
-    compile("org.springframework.boot:spring-boot-devtools")
+//    compile("org.springframework.boot:spring-boot-devtools")
     compile("com.alibaba:fastjson:1.2.40")
     compile("joda-time:joda-time:2.9.9")
     compile("org.springframework.boot:spring-boot-starter-aop")
@@ -70,12 +84,33 @@ dependencies {
     mybatisGenerator 'tk.mybatis:mapper:3.4.4'
 }
 
-idea {
-    module {
-        inheritOutputDirs = false
-        outputDir = file("$buildDir/classes/main/")
-        testOutputDir = file("$buildDir/classes/test/")
+task copyConf {
+    doFirst {
+        def p = "local"
+        if (project.hasProperty("profile")) {
+            p = "${profile}"
+        }
+        copy {
+            from('conf/' + p) {
+                include '*.yml'
+                include '*.properties'
+                include 'messages/'
+            }
+            into('build/resources/main')
+        }
+        copy {
+            from('conf/' + p) {
+                include '*.yml'
+                include '*.properties'
+                include 'messages/'
+            }
+            into('build/resources/test')
+        }
     }
+}
+
+gradle.projectsEvaluated {
+    classes.dependsOn(copyConf)
 }
 
 def getDbProperties = {
@@ -120,33 +155,4 @@ task mybatisGenerate << {
             propertyref(name: 'sqlMapperPackage')
         }
     }
-}
-
-task copyConf {
-    doFirst {
-        def p = "local"
-        if (project.hasProperty("profile")) {
-            p = "${profile}"
-        }
-        copy {
-            from('conf/' + p) {
-                include '*.yml'
-                include '*.properties'
-                include 'messages/'
-            }
-            into('build/resources/main')
-        }
-        copy {
-            from('conf/' + p) {
-                include '*.yml'
-                include '*.properties'
-                include 'messages/'
-            }
-            into('build/resources/test')
-        }
-    }
-}
-
-gradle.projectsEvaluated {
-    classes.dependsOn(copyConf)
 }

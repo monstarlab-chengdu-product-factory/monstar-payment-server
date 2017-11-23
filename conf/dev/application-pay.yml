@@ -10,12 +10,16 @@ spring:
         password: root
         port: 6379
         timeout: 1500
+    messages:
+        basename: i18n/messages
 mybatis:
     mapperLocations: classpath:mappers/*.xml
     type-handlers-package: cn.monstar.payment.domain.dao.mybatis
     type-aliases-package: cn.monstar.payment.domain.model.mybatis.gen
 server:
     port: 2333
+    servlet:
+        context-path: '/'
 logging:
     config: classpath:logbak.xml
     level: debug
