@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @description 退款请求Form
  * @date 2017/11/21 上午9:50
  */
-public class RefundsFrom implements Serializable{
+public class RefundForm implements Serializable{
 
 	/**
 	 * 平台交易流水号

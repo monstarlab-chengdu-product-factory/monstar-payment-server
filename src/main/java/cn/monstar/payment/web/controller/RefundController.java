@@ -1,14 +1,14 @@
 package cn.monstar.payment.web.controller;
 
 import cn.monstar.payment.domain.model.dto.APIResultDto;
-import cn.monstar.payment.domain.model.enums.ExceptionEnum;
+import cn.monstar.payment.domain.model.dto.RefundDto;
+import cn.monstar.payment.domain.service.refunds.RefundService;
 import cn.monstar.payment.domain.util.APIResultDtoUtil;
-import cn.monstar.payment.web.controller.form.RefundsFrom;
+import cn.monstar.payment.web.controller.form.RefundForm;
 import cn.monstar.payment.web.exception.InvalidParamException;
 import cn.monstar.payment.web.exception.ParamRequiredException;
 import com.alibaba.fastjson.JSON;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,31 +20,39 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/payment/refunds")
-public class RefundsController extends BaseController {
+public class RefundController extends BaseController {
 
+	@Autowired
+	private RefundService refundService;
+
+	/**
+	 *
+	 * @param refundForm 退款申请Form
+	 * @return
+	 */
 	@PostMapping("/sendRefund")
-	public APIResultDto sendRefunds(@RequestBody RefundsFrom refundsFrom) {
+	public APIResultDto sendRefunds(@RequestBody RefundForm refundForm) {
 		//参数检查
-		if (refundsFrom == null) {
+		if (refundForm == null) {
 			throw new InvalidParamException();
 		}
-		if (StringUtils.isEmpty(refundsFrom.getOrderMoney())) {
+		if (StringUtils.isEmpty(refundForm.getOrderMoney())) {
 			throw new ParamRequiredException("orderMoney");
 		}
-		if (StringUtils.isEmpty(refundsFrom.getPaymentNo())) {
+		if (StringUtils.isEmpty(refundForm.getPaymentNo())) {
 			throw new ParamRequiredException("paymentNo");
 		}
-		if (StringUtils.isEmpty(refundsFrom.getRefundMoney())) {
+		if (StringUtils.isEmpty(refundForm.getRefundMoney())) {
 			throw new ParamRequiredException("refundMoney");
 		}
-		if (StringUtils.isEmpty(refundsFrom.getRefundDescription())) {
+		if (StringUtils.isEmpty(refundForm.getRefundDescription())) {
 			throw new ParamRequiredException("refundDescription");
 		}
-		logger.info("请求数据:{}", JSON.toJSON(refundsFrom));
+		//logger.info("请求数据:{}", JSON.toJSON(refundForm));
 		//业务逻辑处理
-		refundsFrom.setRefundNo("123456");
+		RefundDto refundDto = refundService.refundApplication(refundForm);
 
-		return APIResultDtoUtil.success(refundsFrom);
+		return APIResultDtoUtil.success(refundForm);
 	}
 
 

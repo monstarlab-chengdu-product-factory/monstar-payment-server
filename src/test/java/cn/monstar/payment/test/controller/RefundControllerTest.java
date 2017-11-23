@@ -2,7 +2,7 @@ package cn.monstar.payment.test.controller;
 
 import cn.monstar.payment.config.TestsConfiguration;
 import cn.monstar.payment.domain.model.dto.APIResultDto;
-import cn.monstar.payment.web.controller.form.RefundsFrom;
+import cn.monstar.payment.web.controller.form.RefundForm;
 import com.alibaba.fastjson.JSON;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,36 +15,37 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.LinkedHashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestsConfiguration.class)
-public class RefundsControllerTest {
+public class RefundControllerTest {
 
-	private Logger logger = LoggerFactory.getLogger(RefundsControllerTest.class);
+	private Logger logger = LoggerFactory.getLogger(RefundControllerTest.class);
 
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 
 	@Test
 	public void submitRefunds() {
-		RefundsFrom refundsFrom = new RefundsFrom();
-		refundsFrom.setOrderMoney("1");
-		refundsFrom.setRefundMoney("0.5");
-		refundsFrom.setPaymentNo("123456");
-		refundsFrom.setRefundDescription("退款原因");
-		ResponseEntity<APIResultDto> responseEntity = testRestTemplate.postForEntity("/payment/refunds/sendRefund", refundsFrom, APIResultDto.class);
+		RefundForm refundForm = new RefundForm();
+		refundForm.setOrderMoney("1");
+		refundForm.setRefundMoney("0.5");
+		refundForm.setPaymentNo("123456");
+		refundForm.setRefundDescription("退款原因");
+		logger.info("请求数据:{}", JSON.toJSON(refundForm));
+		ResponseEntity<APIResultDto> responseEntity = testRestTemplate.postForEntity("/payment/refunds/sendRefund", refundForm, APIResultDto.class);
 		Assert.assertEquals(responseEntity.getStatusCode().value(),200);
 		logger.info("返回数据:{}", JSON.toJSON(responseEntity.getBody()));
 		APIResultDto apiResultDto = responseEntity.getBody();
 		Assert.assertNotNull(apiResultDto);
 		Assert.assertEquals(apiResultDto.getReturnCode(), 0);
 		LinkedHashMap<String, Object> objectLinkedHashMap = (LinkedHashMap<String, Object>) apiResultDto.getData();
-		Assert.assertEquals(objectLinkedHashMap.get("orderMoney"), refundsFrom.getOrderMoney());
-//		RefundsFrom refundsFrom1 = (RefundsFrom) apiResultDto.getData();
+		Assert.assertEquals(objectLinkedHashMap.get("orderMoney"), refundForm.getOrderMoney());
+		Assert.assertNotNull(objectLinkedHashMap.get("refundNo"));
+//		RefundForm refundsFrom1 = (RefundForm) apiResultDto.getData();
 //		Assert.assertNotNull(refundsFrom1);
 //		Assert.assertEquals(refundsFrom1.getOrderMoney(), refundsFrom.getOrderMoney());
 //		Assert.assertEquals(refundsFrom1.getRefundMoney(), refundsFrom.getRefundMoney());

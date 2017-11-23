@@ -11,7 +11,7 @@ import java.util.Date;
  * @description 退款Dto
  * @date 2017/11/16 下午6:17
  */
-public class RefundsDto {
+public class RefundDto {
 
 	/**
 	 * 退款
