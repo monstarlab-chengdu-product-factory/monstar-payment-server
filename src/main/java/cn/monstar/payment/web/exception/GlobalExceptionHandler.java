@@ -43,4 +43,17 @@ public class GlobalExceptionHandler {
 		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
 	}
 
+	/**
+	 * 检查异常
+	 *
+	 * @param e
+	 * @param response
+	 * @return
+	 */
+	@ExceptionHandler(CheckedException.class)
+	@ResponseBody
+	public APIResultDto exceptionHandler(CheckedException e, HttpServletResponse response) {
+		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
+	}
+
 }

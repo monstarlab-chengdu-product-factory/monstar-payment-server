@@ -16,7 +16,9 @@ public enum ExceptionEnum implements BaseEnum {
 	/**
 	 * 必填参数
 	 */
-	PARAMREQUIRED(101, "%s参数必填");
+	PARAMREQUIRED(101, "%s参数必填"),
+
+	NOF_FOUND_PAYMENT(40001, "不存在付款流水号");
 
 	private int enumValue;
 
