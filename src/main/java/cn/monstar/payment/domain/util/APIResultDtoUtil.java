@@ -23,11 +23,11 @@ public class APIResultDtoUtil {
 	/**
 	 * 基础的API失败的返回封装
 	 *
-	 * @param data 数据
+	 * @param message 数据
 	 * @return
 	 */
-	public static APIResultDto failure(Object data) {
-		return failure(ResultStateEnum.FAILD.getLabel(), data);
+	public static APIResultDto failure(String message) {
+		return failure(ResultStateEnum.FAILD.getEnumValue(), message);
 	}
 
 	/**
