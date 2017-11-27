@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(InvalidParamException.class)
 	@ResponseBody
 	public APIResultDto exceptionHandler(InvalidParamException e, HttpServletResponse response) {
-		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
+		return APIResultDtoUtil.failure(e.getMessage());
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ParamRequiredException.class)
 	@ResponseBody
 	public APIResultDto exceptionHandler(ParamRequiredException e, HttpServletResponse response) {
-		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
+		return APIResultDtoUtil.failure(e.getMessage());
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(CheckedException.class)
 	@ResponseBody
 	public APIResultDto exceptionHandler(CheckedException e, HttpServletResponse response) {
-		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
+		return APIResultDtoUtil.failure(e.getMessage());
 	}
 
 }
