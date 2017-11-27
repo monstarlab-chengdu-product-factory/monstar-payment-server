@@ -45,6 +45,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-autoconfigure")
     compile("org.springframework.boot:spring-boot-configuration-processor")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile('org.apache.httpcomponents:httpclient')
     // 尝试官方推荐的热加载工具
     compile("org.springframework.boot:spring-boot-devtools")
     compile("com.alibaba:fastjson:1.2.40")
