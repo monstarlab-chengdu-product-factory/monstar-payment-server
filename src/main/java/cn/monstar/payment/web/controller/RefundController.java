@@ -33,9 +33,6 @@ public class RefundController extends BaseController {
 	@PostMapping("/sendRefund")
 	public APIResultDto sendRefunds(@RequestBody RefundForm refundForm) {
 		//参数检查
-		if (refundForm == null) {
-			throw new InvalidParamException();
-		}
 		if (StringUtils.isEmpty(refundForm.getOrderMoney())) {
 			throw new ParamRequiredException("orderMoney");
 		}
@@ -48,11 +45,10 @@ public class RefundController extends BaseController {
 		if (StringUtils.isEmpty(refundForm.getRefundDescription())) {
 			throw new ParamRequiredException("refundDescription");
 		}
-		//logger.info("请求数据:{}", JSON.toJSON(refundForm));
 		//业务逻辑处理
 		RefundDto refundDto = refundService.refundApplication(refundForm);
 
-		return APIResultDtoUtil.success(refundForm);
+		return APIResultDtoUtil.success(refundDto);
 	}
 
 

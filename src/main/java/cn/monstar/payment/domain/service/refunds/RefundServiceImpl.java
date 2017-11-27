@@ -9,6 +9,7 @@ import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
 import cn.monstar.payment.domain.model.mybatis.gen.TRefund;
 import cn.monstar.payment.domain.service.BaseServiceImpl;
 import cn.monstar.payment.domain.service.payment.PaymentService;
+import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.web.controller.form.RefundForm;
 import cn.monstar.payment.web.exception.CheckedException;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +30,7 @@ public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMap
 	@Autowired
 	private PaymentService paymentService;
 
+	@Autowired
 	@Override
 	public void setRepository(TRefundMapper repository) {
 		super.repository = repository;
@@ -51,19 +53,29 @@ public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMap
 		refundDto = new RefundDto();
 		BeanUtils.copyProperties(refundForm, refundDto);
 		refundDto.setPaymentId(tPayment.getPaymentId());
-		// 判断支付类型，确定退款接口
+		refundDto.setRefundNo(StringUtil.uuidGenerator());
+		//存入退款表
+		TRefund refund = new TRefund();
+		BeanUtils.copyProperties(refundDto, refund);
+		super.repository.insert(refund);
+
+		// 判断支付类型，调用支付平台申请退款接口
+
 		switch (tPayment.getPaymentType()) {
 			case WECHAT:
+				System.out.println("微信支付");
 				break;
 			case ALIPAY:
+				System.out.println("支付宝支付");
 				break;
 			case APPLEPAY:
+				System.out.println("苹果支付");
 				break;
 			case UNIONPAY:
+				System.out.println("银联支付");
 				break;
 		}
 
-
-		return null;
+		return refundDto;
 	}
 }
