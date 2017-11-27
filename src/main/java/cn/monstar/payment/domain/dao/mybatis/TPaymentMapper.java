@@ -2,6 +2,7 @@ package cn.monstar.payment.domain.dao.mybatis;
 
 import cn.monstar.payment.domain.dao.BaseMapper;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -10,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
  * @description 支付Mapper
  * @date 2017/11/23 下午1:44
  */
+@Mapper
 public interface TPaymentMapper extends BaseMapper<TPayment, Long> {
 
 	/**
