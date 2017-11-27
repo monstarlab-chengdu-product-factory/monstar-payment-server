@@ -8,33 +8,25 @@ package cn.monstar.payment.domain.model.enums;
  */
 public enum BillTypeEnum implements BaseEnum {
 
-	/**
-	 * 支付
-	 */
-	PAYMENT(0, "支付"),
+    PAYMENT(0, "支付"),
+    REFUNDS(1, "退款");
 
-	/**
-	 * 退款
-	 */
-	REFUNDS(1, "退款");
+    private int enumValue;
 
+    private String label;
 
-	private String label;
+    BillTypeEnum(int enumValue, String label) {
+        this.enumValue = enumValue;
+        this.label = label;
+    }
 
-	private int enumValue;
+    @Override
+    public int getEnumValue() {
+        return this.enumValue;
+    }
 
-	BillTypeEnum(int enumValue, String label) {
-		this.enumValue = enumValue;
-		this.label = label;
-	}
-
-	@Override
-	public int getEnumValue() {
-		return this.enumValue;
-	}
-
-	@Override
-	public String getLabel() {
-		return label;
-	}
+    @Override
+    public String getLabel() {
+        return label;
+    }
 }

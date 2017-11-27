@@ -8,42 +8,27 @@ package cn.monstar.payment.domain.model.enums;
  */
 public enum PaymentStatusEnum implements BaseEnum {
 
-	/**
-	 * 待支付
-	 */
-	UNPAID(0, "待支付"),
+    UNPAID(0, "待支付"),
+    PAID(1, "已支付"),
+    CLOSED(2, "已关闭"),
+    PAYMENTFAILURE(3, "支付失败");
 
-	/**
-	 * 已支付
-	 */
-	PAID(1, "已支付"),
+    private int enumValue;
 
-	/**
-	 * 已关闭
-	 */
-	CLOSED(2, "已关闭"),
+    private String label;
 
-	/**
-	 * 支付失败
-	 */
-	PAYMENTFAILURE(3, "支付失败");
+    PaymentStatusEnum(int enumValue, String label) {
+        this.enumValue = enumValue;
+        this.label = label;
+    }
 
-	private int enumValue;
+    @Override
+    public int getEnumValue() {
+        return this.enumValue;
+    }
 
-	private String label;
-
-	PaymentStatusEnum(int enumValue, String label) {
-		this.enumValue = enumValue;
-		this.label = label;
-	}
-
-	@Override
-	public int getEnumValue() {
-		return this.enumValue;
-	}
-
-	@Override
-	public String getLabel() {
-		return this.label;
-	}
+    @Override
+    public String getLabel() {
+        return this.label;
+    }
 }
