@@ -1,16 +1,15 @@
 package cn.monstar.payment.web.controller;
 
-import cn.monstar.payment.domain.model.dto.APIResultDto;
+import cn.monstar.payment.domain.model.dto.APIResult;
+import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
 import cn.monstar.payment.domain.model.dto.RefundDto;
-import cn.monstar.payment.domain.service.refunds.RefundService;
-import cn.monstar.payment.domain.util.APIResultDtoUtil;
-import cn.monstar.payment.web.controller.form.RefundForm;
-import cn.monstar.payment.web.exception.InvalidParamException;
-import cn.monstar.payment.web.exception.ParamRequiredException;
-import com.alibaba.fastjson.JSON;
+import cn.monstar.payment.domain.service.refund.RefundService;
+import cn.monstar.payment.web.controller.form.ApplyRefundForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author wangxianding
@@ -22,34 +21,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/payment/refunds")
 public class RefundController extends BaseController {
 
-	@Autowired
-	private RefundService refundService;
+    @Autowired
+    private RefundService refundService;
 
-	/**
-	 *
-	 * @param refundForm 退款申请Form
-	 * @return
-	 */
-	@PostMapping("/sendRefund")
-	public APIResultDto sendRefunds(@RequestBody RefundForm refundForm) {
-		//参数检查
-		if (StringUtils.isEmpty(refundForm.getOrderMoney())) {
-			throw new ParamRequiredException("orderMoney");
-		}
-		if (StringUtils.isEmpty(refundForm.getPaymentNo())) {
-			throw new ParamRequiredException("paymentNo");
-		}
-		if (StringUtils.isEmpty(refundForm.getRefundMoney())) {
-			throw new ParamRequiredException("refundMoney");
-		}
-		if (StringUtils.isEmpty(refundForm.getRefundDescription())) {
-			throw new ParamRequiredException("refundDescription");
-		}
-		//业务逻辑处理
-		RefundDto refundDto = refundService.refundApplication(refundForm);
-
-		return APIResultDtoUtil.success(refundDto);
-	}
+    /**
+     * @param applyRefundForm 退款申请Form
+     * @return
+     */
+    @PostMapping("/sendRefund")
+    public APIResult sendRefunds(@RequestBody @Valid ApplyRefundForm applyRefundForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return APIResult.failure().setMessage(bindingResult.getFieldError().getField() + bindingResult.getFieldError().getDefaultMessage());
+        }
+        try {
+            //业务逻辑处理
+            ApplyRefundResultDto applyRefundResultDto = refundService.refundApplication(applyRefundForm);
+            return APIResult.success().setData(applyRefundResultDto);
+        } catch (Exception e) {
+            logger.error("退款申请出现错误:{}", e.getMessage());
+            //TODO 错误描述待定
+            return APIResult.failure().setMessage("申请失败");
+        }
+    }
 
 
 }
