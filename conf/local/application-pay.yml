@@ -14,9 +14,9 @@ spring:
         #设置不返回空属性值
         default-property-inclusion: non_null
         #设置返回的日期类型格式
-        #date-format: yyyy-MM-dd HH:mm:ss
+        date-format: yyyy-MM-dd HH:mm:ss
         #设置时区
-        #time-zone: GMT+8
+        time-zone: GMT+8
     messages:
         basename: i18n/messages
 mybatis:
@@ -30,3 +30,7 @@ server:
 logging:
     config: classpath:logbak.xml
     level: debug
+
+# monstar config
+monstar:
+    sandboxnew: true
