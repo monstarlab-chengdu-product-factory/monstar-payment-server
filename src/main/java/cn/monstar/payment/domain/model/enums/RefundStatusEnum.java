@@ -8,42 +8,27 @@ package cn.monstar.payment.domain.model.enums;
  */
 public enum RefundStatusEnum implements BaseEnum {
 
-	/**
-	 * 退款处理中
-	 */
-	REFUNDPROCESSING(0, "退款处理中"),
+    REFUNDPROCESSING(0, "退款处理中"),
+    SUCCESSFULREFUND(1, "退款成功"),
+    REFUNDCLOSE(2, "退款关闭"),
+    REFUNDEXCEPTION(3, "退款异常");
 
-	/**
-	 * 退款成功
-	 */
-	SUCCESSFULREFUND(1, "退款成功"),
+    private int enumValue;
 
-	/**
-	 * 退款关闭
-	 */
-	REFUNDCLOSE(2, "退款关闭"),
+    private String label;
 
-	/**
-	 * 退款异常
-	 */
-	REFUNDEXCEPTION(3, "退款异常");
+    private RefundStatusEnum(int enumValue, String label) {
+        this.enumValue = enumValue;
+        this.label = label;
+    }
 
-	private int enumValue;
+    @Override
+    public int getEnumValue() {
+        return this.enumValue;
+    }
 
-	private String lable;
-
-	private RefundStatusEnum(int enumValue, String lable) {
-		this.enumValue = enumValue;
-		this.lable = lable;
-	}
-
-	@Override
-	public int getEnumValue() {
-		return 0;
-	}
-
-	@Override
-	public String getLabel() {
-		return null;
-	}
+    @Override
+    public String getLabel() {
+        return this.label;
+    }
 }

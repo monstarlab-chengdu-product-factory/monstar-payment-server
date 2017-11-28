@@ -23,6 +23,7 @@ hs_err_pid*
 .DS_Store
 *.iml
 .gradle/
+gradle/
 */.gradle/
 .idea
 */gradle/
@@ -33,3 +34,4 @@ logs/
 .project
 classes/
 out/
+src/test/resources/application-pay.yml

@@ -8,34 +8,25 @@ package cn.monstar.payment.domain.model.enums;
  */
 public enum ExceptionEnum implements BaseEnum {
 
-	/**
-	 * 非法参数
-	 */
-	ILLEGALPARAMETER(100, "非法参数"),
+    ILLEGALPARAMETER(100, "非法参数"),
+    PARAMREQUIRED(101, "%s参数必填");
 
-	/**
-	 * 必填参数
-	 */
-	PARAMREQUIRED(101, "%s参数必填"),
+    private int enumValue;
 
-	NOF_FOUND_PAYMENT(40001, "不存在付款流水号");
+    private String label;
 
-	private int enumValue;
+    private ExceptionEnum(int enumValue, String label) {
+        this.enumValue = enumValue;
+        this.label = label;
+    }
 
-	private String label;
+    @Override
+    public int getEnumValue() {
+        return this.enumValue;
+    }
 
-	private ExceptionEnum(int enumValue, String label) {
-		this.enumValue = enumValue;
-		this.label = label;
-	}
-
-	@Override
-	public int getEnumValue() {
-		return this.enumValue;
-	}
-
-	@Override
-	public String getLabel() {
-		return this.label;
-	}
+    @Override
+    public String getLabel() {
+        return this.label;
+    }
 }

@@ -17,17 +17,16 @@ spring:
         #date-format: yyyy-MM-dd HH:mm:ss
         #设置时区
         #time-zone: GMT+8
+    messages:
+        basename: i18n/messages
 mybatis:
     mapperLocations: classpath:mappers/*.xml
     type-handlers-package: cn.monstar.payment.domain.dao.mybatis
     type-aliases-package: cn.monstar.payment.domain.model.mybatis.gen
 server:
-    port: 2335
+    port: 2333
     servlet:
         context-path: '/'
-    compression:
-        enabled: true
-        min-response-size: 2
 logging:
     config: classpath:logbak.xml
     level: debug
