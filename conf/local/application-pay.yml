@@ -34,3 +34,11 @@ logging:
 # monstar config
 monstar:
     sandboxnew: true
+
+# wechat pay config
+wx:
+    appid:
+    mchId:
+    mchKey:
+    mchCertPath:
+    notifyUrl:
