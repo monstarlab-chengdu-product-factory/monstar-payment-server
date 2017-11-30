@@ -9,6 +9,7 @@ package cn.monstar.payment.domain.model.enums;
 public enum ExceptionEnum implements BaseEnum {
 
     ILLEGALPARAMETER(100, "非法参数"),
+
     PARAMREQUIRED(101, "%s参数必填");
 
     private int enumValue;
