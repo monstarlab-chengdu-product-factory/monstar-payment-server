@@ -1,7 +1,9 @@
 package cn.monstar.payment.web.exception;
 
+import cn.monstar.payment.domain.model.dto.APIResult;
 import cn.monstar.payment.domain.model.dto.APIResultDto;
 import cn.monstar.payment.domain.util.APIResultDtoUtil;
+import cn.monstar.payment.web.exception.wx.WxPayException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,42 +20,29 @@ import javax.servlet.http.HttpServletResponse;
 public class GlobalExceptionHandler {
 
 	/**
-	 * 无效参数异常
+	 * 微信支付异常
 	 *
 	 * @param e
 	 * @param response
 	 * @return
 	 */
-	@ExceptionHandler(InvalidParamException.class)
+	@ExceptionHandler(WxPayException.class)
 	@ResponseBody
-	public APIResultDto exceptionHandler(InvalidParamException e, HttpServletResponse response) {
+	public APIResultDto exceptionHandler(WxPayException e, HttpServletResponse response) {
 		return APIResultDtoUtil.failure(e.getMessage());
 	}
 
-	/**
-	 * 必填参数异常
-	 *
-	 * @param e
-	 * @param response
-	 * @return
-	 */
-	@ExceptionHandler(ParamRequiredException.class)
-	@ResponseBody
-	public APIResultDto exceptionHandler(ParamRequiredException e, HttpServletResponse response) {
-		return APIResultDtoUtil.failure(e.getMessage());
-	}
 
 	/**
-	 * 检查异常
-	 *
+	 * 统一异常处理
 	 * @param e
 	 * @param response
 	 * @return
 	 */
-	@ExceptionHandler(CheckedException.class)
+	@ExceptionHandler(Exception.class)
 	@ResponseBody
-	public APIResultDto exceptionHandler(CheckedException e, HttpServletResponse response) {
-		return APIResultDtoUtil.failure(e.getMessage());
+	public APIResult exceptionHandler(Exception e, HttpServletResponse response) {
+		return APIResult.failure().setMessage(e.getMessage());
 	}
 
 }

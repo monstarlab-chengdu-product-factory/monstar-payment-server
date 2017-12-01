@@ -1,10 +1,15 @@
 package cn.monstar.payment.domain.util.wechat.request;
 
 import cn.monstar.payment.config.WxConfig;
+import cn.monstar.payment.domain.util.BeanUtil;
 import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.domain.util.encryption.SignUtils;
+import cn.monstar.payment.domain.util.wechat.annotation.Required;
 import cn.monstar.payment.domain.util.xml.XStreamInitializer;
+import cn.monstar.payment.web.exception.wx.WxErrorException;
+import cn.monstar.payment.web.exception.wx.WxPayException;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.springframework.util.StringUtils;
 
 /**
@@ -21,6 +26,8 @@ public abstract class WxPayBaseRequest {
      * String(32)
      * 是否必填: 是
      */
+    @Required
+    @XStreamAlias("appid")
     private String appid;
 
     /**
@@ -29,6 +36,8 @@ public abstract class WxPayBaseRequest {
      * String(32)
      * 是否必填: 是
      */
+    @Required
+    @XStreamAlias("mch_id")
     private String mchId;
 
     /**
@@ -37,6 +46,8 @@ public abstract class WxPayBaseRequest {
      * String(32)
      * 是否必填: 是
      */
+    @Required
+    @XStreamAlias("nonce_str")
     private String nonceStr;
 
     /**
@@ -44,6 +55,8 @@ public abstract class WxPayBaseRequest {
      * String(32)
      * 是否必填: 是
      */
+    @Required
+    @XStreamAlias("sign")
     private String sign;
 
     /**
@@ -51,8 +64,8 @@ public abstract class WxPayBaseRequest {
      * 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
      * String(32)
      * 是否必填: 否
-     * TODO 设置默认类型
      */
+    @XStreamAlias("sign_type")
     private String signType;
 
 
@@ -61,12 +74,11 @@ public abstract class WxPayBaseRequest {
      * 检查请求参数内容，包括必填参数以及特殊约束
      */
     protected void checkFields() {
-        // TODO check required fields
-//        try {
-//            BeanUtils.checkRequiredFields(this);
-//        } catch (WxErrorException e) {
-//            throw new WxPayException(e.getError().getErrorMsg(), e);
-//        }
+        try {
+            BeanUtil.checkRequiredFields(this);
+        } catch (WxErrorException e) {
+            throw new WxPayException(e.getCode(), e.getMessage());
+        }
 
         //check other parameters
         this.checkConstraints();
@@ -145,4 +157,5 @@ public abstract class WxPayBaseRequest {
     public void setSignType(String signType) {
         this.signType = signType;
     }
+
 }

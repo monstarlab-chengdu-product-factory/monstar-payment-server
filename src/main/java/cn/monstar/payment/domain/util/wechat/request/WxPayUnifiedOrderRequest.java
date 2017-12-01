@@ -1,6 +1,11 @@
 package cn.monstar.payment.domain.util.wechat.request;
 
 import cn.monstar.payment.config.WxConfig;
+import cn.monstar.payment.domain.model.enums.ExceptionEnum;
+import cn.monstar.payment.domain.util.StringUtil;
+import cn.monstar.payment.domain.util.constant.ConstantUtil;
+import cn.monstar.payment.domain.util.wechat.annotation.Required;
+import cn.monstar.payment.web.exception.wx.WxPayException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.springframework.util.StringUtils;
 
@@ -28,6 +33,7 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
      * String(128)
      * 是否必填: 是
      */
+    @Required
     @XStreamAlias("body")
     private String body;
 
@@ -56,6 +62,7 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
      * String(32)
      * 是否必填: 是
      */
+    @Required
     @XStreamAlias("out_trade_no")
     private String outTradeNo;
 
@@ -75,6 +82,7 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
      * int
      * 是否必填，是
      */
+    @Required
     @XStreamAlias("total_fee")
     private int totalFee;
 
@@ -84,6 +92,7 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
      * String(16)
      * 是否必填：是
      */
+    @Required
     @XStreamAlias("spbill_create_ip")
     private String spbillCreateIp;
 
@@ -124,6 +133,7 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
      * String(256)
      * 是否必填: 是
      */
+    @Required
     @XStreamAlias("notify_url")
     private String notifyUrl;
 
@@ -133,6 +143,7 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
      * String(16)
      * 是否必填: 是
      */
+    @Required
     @XStreamAlias("trade_type")
     private String tradeType;
 
@@ -216,6 +227,42 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
 
     @Override
     protected void checkConstraints() {
+        if (ConstantUtil.TRADE_JSAPI.equals(this.tradeType)) {
+            if (StringUtils.isEmpty(this.openid)) {
+                throw new WxPayException(ExceptionEnum.PARAMREQUIRED.getEnumValue(), String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "openid"));
+            }
+        } else if (ConstantUtil.TRADE_NATIVE.equals(this.tradeType)) {
+            if (StringUtils.isEmpty(this.productId)) {
+                throw new WxPayException(ExceptionEnum.PARAMREQUIRED.getEnumValue(), String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "product_id"));
+            }
+        }
+    }
+
+    public WxPayUnifiedOrderRequest(){}
+
+    public WxPayUnifiedOrderRequest(Builder builder){
+        setAppid(builder.appid);
+        setMchId(builder.mchId);
+        setDeviceInfo(builder.deviceInfo);
+        setNonceStr(builder.nonceStr);
+        setNotifyUrl(builder.notifyUrl);
+        setSign(builder.sign);
+        setSignType(builder.signType);
+        setBody(builder.body);
+        setDetail(builder.detail);
+        setAttach(builder.attach);
+        setOutTradeNo(builder.outTradeNo);
+        setFeeType(builder.feeType);
+        setTotalFee(builder.totalFee);
+        setSpbillCreateIp(builder.spbillCreateIp);
+        setTimeStart(builder.timeStart);
+        setTimeExpire(builder.timeExpire);
+        setGoodsTag(builder.goodsTag);
+        setTradeType(builder.tradeType);
+        setProductId(builder.productId);
+        setLimitPay(builder.limitPay);
+        setOpenid(builder.openid);
+        setSceneInfo(builder.sceneInfo);
 
     }
 
@@ -354,4 +401,151 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
     public void setSceneInfo(String sceneInfo) {
         this.sceneInfo = sceneInfo;
     }
+
+    public static class Builder {
+
+        private String appid;
+        private String mchId;
+        private String deviceInfo;
+        private String nonceStr;
+        private String sign;
+        private String signType;
+        private String body;
+        private String detail;
+        private String attach;
+        private String outTradeNo;
+        private String feeType;
+        private Integer totalFee;
+        private String spbillCreateIp;
+        private String timeStart;
+        private String timeExpire;
+        private String goodsTag;
+        private String notifyUrl;
+        private String tradeType;
+        private String productId;
+        private String limitPay;
+        private String openid;
+        private String sceneInfo;
+
+        public Builder() {
+        }
+
+        public Builder setAppid(String appid) {
+            this.appid = appid;
+            return this;
+        }
+
+        public Builder setMchId(String mchId) {
+            this.mchId = mchId;
+            return this;
+        }
+
+        public Builder setDeviceInfo(String deviceInfo) {
+            this.deviceInfo = deviceInfo;
+            return this;
+        }
+
+        public Builder setNonceStr(String nonceStr) {
+            this.nonceStr = nonceStr;
+            return this;
+        }
+
+        public Builder setSign(String sign) {
+            this.sign = sign;
+            return this;
+        }
+
+        public Builder setSignType(String signType) {
+            this.signType = signType;
+            return this;
+        }
+
+        public Builder setBody(String body) {
+            this.body = body;
+            return this;
+        }
+
+        public Builder setDetail(String detail) {
+            this.detail = detail;
+            return this;
+        }
+
+        public Builder setAttach(String attach) {
+            this.attach = attach;
+            return this;
+        }
+
+        public Builder setOutTradeNo(String outTradeNo) {
+            this.outTradeNo = outTradeNo;
+            return this;
+        }
+
+        public Builder setFeeType(String feeType) {
+            this.feeType = feeType;
+            return this;
+        }
+
+        public Builder setTotalFee(Integer totalFee) {
+            this.totalFee = totalFee;
+            return this;
+        }
+
+        public Builder setSpbillCreateIp(String spbillCreateIp) {
+            this.spbillCreateIp = spbillCreateIp;
+            return this;
+        }
+
+        public Builder setTimeStart(String timeStart) {
+            this.timeStart = timeStart;
+            return this;
+        }
+
+        public Builder setTimeExpire(String timeExpire) {
+            this.timeExpire = timeExpire;
+            return this;
+        }
+
+        public Builder setGoodsTag(String goodsTag) {
+            this.goodsTag = goodsTag;
+            return this;
+        }
+
+        public Builder setNotifyUrl(String notifyUrl) {
+            this.notifyUrl = notifyUrl;
+            return this;
+        }
+
+        public Builder setTradeType(String tradeType) {
+            this.tradeType = tradeType;
+            return this;
+        }
+
+        public Builder setProductId(String productId) {
+            this.productId = productId;
+            return this;
+        }
+
+        public Builder setLimitPay(String limitPay) {
+            this.limitPay = limitPay;
+            return this;
+        }
+
+        public Builder setOpenid(String openid) {
+            this.openid = openid;
+            return this;
+        }
+
+        public Builder setSceneInfo(String sceneInfo) {
+            this.sceneInfo = sceneInfo;
+            return this;
+        }
+
+        public WxPayUnifiedOrderRequest newBuiler()
+
+        {
+            return new WxPayUnifiedOrderRequest(this);
+        }
+
+    }
+
 }
