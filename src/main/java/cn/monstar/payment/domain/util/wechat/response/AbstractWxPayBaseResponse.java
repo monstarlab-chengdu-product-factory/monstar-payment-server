@@ -1,9 +1,26 @@
 package cn.monstar.payment.domain.util.wechat.response;
 
+import cn.monstar.payment.config.WxConfig;
+import cn.monstar.payment.config.WxPayConfig;
+import cn.monstar.payment.domain.util.encryption.SignUtils;
 import cn.monstar.payment.domain.util.xml.XStreamInitializer;
+import cn.monstar.payment.web.exception.wx.WxPayException;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author wangxianding
@@ -117,6 +134,73 @@ public abstract class AbstractWxPayBaseResponse {
         return result;
     }
 
+    /**
+     * xml字符串转为map
+     *
+     * @return
+     */
+    public Map<String, String> toMap() {
+        if (StringUtils.isBlank(this.xmlString)) {
+            throw new WxPayException("xmlString有问题，请核实");
+        }
+        Map<String, String> result = new HashMap<>();
+        Document doc = this.getXmlDoc();
+
+        try {
+            NodeList list = (NodeList) XPathFactory.newInstance().newXPath()
+                    .compile("/xml/*")
+                    .evaluate(doc, XPathConstants.NODESET);
+            int len = list.getLength();
+            for (int i = 0; i < len; i++) {
+                result.put(list.item(i).getNodeName(), list.item(i).getTextContent());
+            }
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+            throw new WxPayException("非法的xml文本内容：" + xmlString);
+        }
+        return result;
+    }
+
+    /**
+     * 校验结果
+     *
+     * @param wxConfig     微信配置
+     * @param signType     签名类型
+     * @param checkSuccess 是否检查结果
+     * @throws WxPayException
+     */
+    public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess) throws WxPayException {
+        Map<String, String> map = toMap();
+        if (StringUtils.isNotBlank(this.sign) && !SignUtils.checkSign(map, wxConfig.getMchKey())) {
+            throw new WxPayException("签名校验失败");
+        }
+
+        if (checkSuccess) {
+            StringBuilder errMsg = new StringBuilder();
+            if (StringUtils.isNotBlank(this.resultCode)) {
+                errMsg.append("返回码：").append(this.returnCode);
+            }
+
+            if (StringUtils.isNotBlank(this.returnMsg)) {
+                errMsg.append(",返回信息：").append(this.returnMsg);
+            }
+
+            if (StringUtils.isNotBlank(this.resultCode)) {
+                errMsg.append(",返回结果码：").append(this.resultCode);
+            }
+
+            if (StringUtils.isNotBlank(this.errCode)) {
+                errMsg.append(",返回错误码：").append(this.errCode);
+            }
+
+            if (StringUtils.isNotBlank(this.errCodeDes)) {
+                errMsg.append(",错误码描述：").append(this.errCodeDes);
+            }
+            throw new WxPayException("结果业务代码异常：" + errMsg.toString());
+        }
+
+    }
+
     public String getReturnCode() {
         return returnCode;
     }
@@ -197,8 +281,26 @@ public abstract class AbstractWxPayBaseResponse {
         this.xmlString = xmlString;
     }
 
+    /**
+     * xml转Document对象，以便读取其元数据
+     *
+     * @return
+     */
     public Document getXmlDoc() {
-        return xmlDoc;
+        if (this.xmlDoc != null) {
+            return this.xmlDoc;
+        }
+
+        try {
+            this.xmlDoc = DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder()
+                    .parse(new ByteArrayInputStream(this.xmlString.getBytes("UTF-8")));
+            return this.xmlDoc;
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            e.printStackTrace();
+            throw new WxPayException("非法的xml文本内容：" + xmlString);
+        }
     }
 
     public void setXmlDoc(Document xmlDoc) {

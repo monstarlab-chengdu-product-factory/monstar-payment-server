@@ -15,6 +15,11 @@ public abstract class BaseCustomerException extends RuntimeException {
         this.code = code;
     }
 
+    public BaseCustomerException(String message) {
+        super(message);
+        this.code = 1;
+    }
+
     public int getCode() {
         return code;
     }

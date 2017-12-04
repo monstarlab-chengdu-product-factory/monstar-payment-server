@@ -10,6 +10,11 @@ public enum ExceptionEnum implements BaseEnum {
 
     ILLEGALPARAMETER(100, "非法参数"),
 
+    PAYMENT_NOT_FOUND(40001, "%s付款单未找到相应的付款单"),
+
+    PAYMENT_STATUS_ERROR(50001, "%s付款单状态异常"),
+
+
     PARAMREQUIRED(101, "%s参数必填");
 
     private int enumValue;

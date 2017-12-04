@@ -8,8 +8,8 @@ package cn.monstar.payment.web.exception.wx;
  */
 public class WxPayException extends BaseCustomerException {
 
-    public WxPayException(int state, String message) {
-        super(state, message);
+    public WxPayException(String message) {
+        super(message);
     }
 
 }

@@ -3,6 +3,7 @@ package cn.monstar.payment.domain.service.refund;
 import cn.monstar.payment.config.MonstarConfig;
 import cn.monstar.payment.domain.dao.mybatis.TRefundMapper;
 import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
+import cn.monstar.payment.domain.model.enums.ExceptionEnum;
 import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
 import cn.monstar.payment.domain.model.enums.RefundStatusEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
@@ -11,6 +12,7 @@ import cn.monstar.payment.domain.service.BaseServiceImpl;
 import cn.monstar.payment.domain.service.payment.PaymentService;
 import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.web.controller.form.ApplyRefundForm;
+import cn.monstar.payment.web.exception.BusinessException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,12 +51,12 @@ public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMap
         TPayment tPayment = paymentService.findByPaymentNo(applyRefundForm.getPaymentNo());
         // 构建refund
         if (tPayment == null) {
-            throw new RuntimeException();
+            throw new BusinessException(String.format(ExceptionEnum.PAYMENT_NOT_FOUND.getLabel(), applyRefundForm.getPaymentNo()));
         }
 
         if (tPayment.getPaymentStatus() == PaymentStatusEnum.UNPAID || tPayment.getPaymentStatus() == PaymentStatusEnum.PAYMENTFAILURE) {
             // 付款单状态不正确
-            throw new RuntimeException();
+            throw new BusinessException(String.format(ExceptionEnum.PAYMENT_STATUS_ERROR.getLabel(), applyRefundForm.getPaymentNo()));
         }
 
         applyRefundResultDto = new ApplyRefundResultDto(new BigDecimal(applyRefundForm.getOrderMoney()), new BigDecimal(applyRefundForm.getRefundMoney()),

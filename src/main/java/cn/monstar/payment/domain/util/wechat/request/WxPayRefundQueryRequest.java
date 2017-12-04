@@ -55,6 +55,11 @@ public class WxPayRefundQueryRequest extends WxPayBaseRequest implements Seriali
      */
     private Integer offset;
 
+    @Override
+    protected void checkConstraints() {
+
+    }
+
     public String getTransactionId() {
         return transactionId;
     }

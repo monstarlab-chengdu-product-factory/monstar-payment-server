@@ -229,11 +229,11 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
     protected void checkConstraints() {
         if (ConstantUtil.TRADE_JSAPI.equals(this.tradeType)) {
             if (StringUtils.isEmpty(this.openid)) {
-                throw new WxPayException(ExceptionEnum.PARAMREQUIRED.getEnumValue(), String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "openid"));
+                throw new WxPayException(String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "openid"));
             }
         } else if (ConstantUtil.TRADE_NATIVE.equals(this.tradeType)) {
             if (StringUtils.isEmpty(this.productId)) {
-                throw new WxPayException(ExceptionEnum.PARAMREQUIRED.getEnumValue(), String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "product_id"));
+                throw new WxPayException(String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "product_id"));
             }
         }
     }

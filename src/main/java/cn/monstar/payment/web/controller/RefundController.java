@@ -33,15 +33,9 @@ public class RefundController extends BaseController {
         if (bindingResult.hasErrors()) {
             return APIResult.failure().setMessage(bindingResult.getFieldError().getField() + bindingResult.getFieldError().getDefaultMessage());
         }
-        try {
-            //业务逻辑处理
-            ApplyRefundResultDto applyRefundResultDto = refundService.refundApplication(applyRefundForm);
-            return APIResult.success().setData(applyRefundResultDto);
-        } catch (Exception e) {
-            logger.error("退款申请出现错误:{}", e.getMessage());
-            //TODO 错误描述待定
-            return APIResult.failure().setMessage("申请失败");
-        }
+        //业务逻辑处理
+        ApplyRefundResultDto applyRefundResultDto = refundService.refundApplication(applyRefundForm);
+        return APIResult.success().setData(applyRefundResultDto);
     }
 
 

@@ -27,7 +27,7 @@ public class ApplyRefundForm implements Serializable {
      * 支付总金额
      */
     @NotNull
-    @Pattern(regexp = "/^[0-9]+(\\.[0-9]{1,2})?$/")
+    @Pattern(regexp = "^[0-9]+(\\.[0-9]{1,2})?$")
     @Length(max = 15)
     private String orderMoney;
 
@@ -35,7 +35,7 @@ public class ApplyRefundForm implements Serializable {
      * 退款金额
      */
     @NotNull
-    @Pattern(regexp = "/^[0-9]+(\\.[0-9]{1,2})?$/")
+    @Pattern(regexp = "^[0-9]+(\\.[0-9]{1,2})?$")
     @Length(max = 15)
     private String refundMoney;
 

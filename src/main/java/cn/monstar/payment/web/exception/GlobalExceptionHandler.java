@@ -1,8 +1,6 @@
 package cn.monstar.payment.web.exception;
 
 import cn.monstar.payment.domain.model.dto.APIResult;
-import cn.monstar.payment.domain.model.dto.APIResultDto;
-import cn.monstar.payment.domain.util.APIResultDtoUtil;
 import cn.monstar.payment.web.exception.wx.WxPayException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,8 +26,14 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(WxPayException.class)
 	@ResponseBody
-	public APIResultDto exceptionHandler(WxPayException e, HttpServletResponse response) {
-		return APIResultDtoUtil.failure(e.getMessage());
+	public APIResult exceptionHandler(WxPayException e, HttpServletResponse response) {
+		return APIResult.failure().setMessage(e.getMessage());
+	}
+
+	@ExceptionHandler(BusinessException.class)
+	@ResponseBody
+	public APIResult exceptionHandler(BusinessException e, HttpServletResponse response) {
+		return APIResult.failure().setMessage(e.getMessage());
 	}
 
 

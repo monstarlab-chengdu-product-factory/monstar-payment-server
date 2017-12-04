@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
  * @description 微信配置
  * @date 2017/11/29 下午3:49
  */
-@Component
 @ConfigurationProperties(prefix = "wx")
 public class WxConfig {
 
@@ -31,7 +30,7 @@ public class WxConfig {
     /**
      * 商户证书地址
      */
-    private String mchCertPath;
+    private String keyPath;
 
     /**
      * 支付回调地址
@@ -62,12 +61,12 @@ public class WxConfig {
         this.mchKey = mchKey;
     }
 
-    public String getMchCertPath() {
-        return mchCertPath;
+    public String getKeyPath() {
+        return keyPath;
     }
 
-    public void setMchCertPath(String mchCertPath) {
-        this.mchCertPath = mchCertPath;
+    public void setKeyPath(String keyPath) {
+        this.keyPath = keyPath;
     }
 
     public String getNotifyUrl() {

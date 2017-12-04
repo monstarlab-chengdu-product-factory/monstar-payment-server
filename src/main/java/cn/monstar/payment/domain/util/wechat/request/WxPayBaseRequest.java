@@ -77,7 +77,7 @@ public abstract class WxPayBaseRequest {
         try {
             BeanUtil.checkRequiredFields(this);
         } catch (WxErrorException e) {
-            throw new WxPayException(e.getCode(), e.getMessage());
+            throw new WxPayException(e.getMessage());
         }
 
         //check other parameters
