@@ -16,6 +16,8 @@ mybatis:
     mapperLocations: classpath:mappers/*.xml
     type-handlers-package: cn.monstar.payment.domain.dao.mybatis
     type-aliases-package: cn.monstar.payment.domain.model.mybatis.gen
+    configuration:
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
     port: 2333
     servlet:
