@@ -1,7 +1,9 @@
 package cn.monstar.payment.domain.service.wechat;
 
+import cn.monstar.payment.domain.util.wechat.request.WxPayCloseOrderRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayOrderQueryRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
+import cn.monstar.payment.domain.util.wechat.response.WxPayCloseOrderResponse;
 import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
 import cn.monstar.payment.domain.util.wechat.response.WxPayUnifiedOrderResponese;
 
@@ -29,5 +31,13 @@ public interface WxPayService {
      * @return 微信支付订单的查询结果
      */
     WxPayOrderQueryResponse wxOrderQuery(WxPayOrderQueryRequest request);
+
+    /**
+     * 微信关闭订单接口
+     *
+     * @param request
+     * @return
+     */
+    WxPayCloseOrderResponse wxCloseOrder(WxPayCloseOrderRequest request);
 
 }

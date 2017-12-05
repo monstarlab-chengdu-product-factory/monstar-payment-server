@@ -4,7 +4,7 @@ import cn.monstar.payment.domain.model.enums.ExceptionEnum;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
 import cn.monstar.payment.web.exception.wx.WxErrorException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -70,7 +70,7 @@ public class BeanUtil {
                 if (required != null) {
                     String value = field.get(object).toString();
                     field.setAccessible(isAccessible);
-                    if (StringUtils.isEmpty(value)){
+                    if (StringUtils.isBlank(value)){
                         throw new WxErrorException(ExceptionEnum.PARAMREQUIRED.getEnumValue(),String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), field.getName()));
                     }
                     continue;
