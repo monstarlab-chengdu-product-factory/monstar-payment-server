@@ -2,7 +2,6 @@ package cn.monstar.payment.domain.util.wechat.request;
 
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.domain.model.enums.ExceptionEnum;
-import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.domain.util.constant.ConstantUtil;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
 import cn.monstar.payment.web.exception.wx.WxPayException;
@@ -16,7 +15,7 @@ import org.springframework.util.StringUtils;
  * @date 2017/11/29 上午10:44
  */
 @XStreamAlias("xml")
-public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
+public class WxPayUnifiedOrderRequest extends AbstractWxPayBaseRequest {
 
     /**
      * 设备号

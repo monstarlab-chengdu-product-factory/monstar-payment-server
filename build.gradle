@@ -71,6 +71,7 @@ dependencies {
 
     compile('com.thoughtworks.xstream:xstream:1.4.10')
     compile('org.apache.commons:commons-lang3:3.7')
+    compile('com.google.guava:guava:23.0')
 
     compile("org.apache.httpcomponents:httpclient:4.4") {
         exclude(module: "commons-logging")

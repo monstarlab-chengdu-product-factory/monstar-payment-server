@@ -5,6 +5,7 @@ import cn.monstar.payment.config.WxPayConfig;
 import cn.monstar.payment.domain.util.encryption.SignUtils;
 import cn.monstar.payment.domain.util.xml.XStreamInitializer;
 import cn.monstar.payment.web.exception.wx.WxPayException;
+import com.google.common.base.Joiner;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
@@ -199,6 +200,35 @@ public abstract class AbstractWxPayBaseResponse {
             throw new WxPayException("结果业务代码异常：" + errMsg.toString());
         }
 
+    }
+
+    /**
+     * 获取xml中元素的值
+     */
+    protected String getXmlValue(String... path) {
+        Document doc = this.getXmlDoc();
+        String expression = String.format("/%s//text()", Joiner.on("/").join(path));
+        try {
+            return (String) XPathFactory
+                    .newInstance()
+                    .newXPath()
+                    .compile(expression)
+                    .evaluate(doc, XPathConstants.STRING);
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException("未找到相应路径的文本：" + expression);
+        }
+    }
+
+    /**
+     * 获取xml中元素的值，作为int值返回
+     */
+    protected Integer getXmlValueAsInt(String... path) {
+        String result = this.getXmlValue(path);
+        if (StringUtils.isBlank(result)) {
+            return null;
+        }
+
+        return Integer.valueOf(result);
     }
 
     public String getReturnCode() {

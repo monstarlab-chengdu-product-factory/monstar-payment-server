@@ -1,6 +1,8 @@
 package cn.monstar.payment.domain.service.wechat;
 
+import cn.monstar.payment.domain.util.wechat.request.WxPayOrderQueryRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
+import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
 import cn.monstar.payment.domain.util.wechat.response.WxPayUnifiedOrderResponese;
 
 /**
@@ -19,5 +21,13 @@ public interface WxPayService {
      * @return 微信统一下单结果
      */
     WxPayUnifiedOrderResponese wxUnifiedOrder(WxPayUnifiedOrderRequest request);
+
+    /**
+     * 微信支付订单的查询
+     *
+     * @param request 微信支付订单的查询
+     * @return 微信支付订单的查询结果
+     */
+    WxPayOrderQueryResponse wxOrderQuery(WxPayOrderQueryRequest request);
 
 }

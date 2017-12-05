@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @description 微信支付退款查询Request
  * @date 2017/11/27 下午5:16
  */
-public class WxPayRefundQueryRequest extends WxPayBaseRequest implements Serializable {
+public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements Serializable {
 
     /**
      * 微信订单号

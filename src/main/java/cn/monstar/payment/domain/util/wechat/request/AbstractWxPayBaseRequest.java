@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
  * @description 微信支付基础请求参数
  * @date 2017/11/27 下午4:45
  */
-public abstract class WxPayBaseRequest {
+public abstract class AbstractWxPayBaseRequest {
 
     /**
      * 公众账号ID

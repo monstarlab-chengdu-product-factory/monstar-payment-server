@@ -5,8 +5,10 @@ import cn.monstar.payment.config.MonstarConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.config.WxPayConfig;
 import cn.monstar.payment.domain.util.wechat.WxPayApiData;
+import cn.monstar.payment.domain.util.wechat.request.WxPayOrderQueryRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
 import cn.monstar.payment.domain.util.wechat.response.AbstractWxPayBaseResponse;
+import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
 import cn.monstar.payment.domain.util.wechat.response.WxPayUnifiedOrderResponese;
 import cn.monstar.payment.web.exception.wx.WxPayException;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +70,17 @@ public abstract class AbstractWxPayService implements WxPayService {
         String url = getPayUrl() + "/pay/unifiedorder";
         String resultContent = this.post(url, request.toXML(), false);
         WxPayUnifiedOrderResponese result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayUnifiedOrderResponese.class);
+        result.checkResult(wxConfig, request.getSignType(), true);
+        return result;
+    }
+
+    @Override
+    public WxPayOrderQueryResponse wxOrderQuery(WxPayOrderQueryRequest request) {
+        request.checkedAndSign(wxConfig);
+        String url = getPayUrl() + "/pay/orderquery";
+        String resultContent = this.post(url, request.toXML(), false);
+        WxPayOrderQueryResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayOrderQueryResponse.class);
+        result.composeCoupons();
         result.checkResult(wxConfig, request.getSignType(), true);
         return result;
     }
