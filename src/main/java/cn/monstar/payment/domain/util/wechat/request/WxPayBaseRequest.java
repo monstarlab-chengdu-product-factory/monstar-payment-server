@@ -85,6 +85,8 @@ public abstract class WxPayBaseRequest {
     }
 
     protected void checkedAndSign (WxConfig wxConfig) {
+        // check fileds
+        this.checkFields();
         // not null check
         if (StringUtils.isEmpty(wxConfig.getAppid())) {
             throw new RuntimeException("appid is not allowed to be empty");

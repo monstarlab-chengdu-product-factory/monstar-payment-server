@@ -23,4 +23,9 @@ public interface ConstantUtil {
      */
     String TRADE_APP = "APP";
 
+    /**
+     * 微信交易类型 H5
+     */
+    String TRADE_H5 = "MWEB";
+
 }

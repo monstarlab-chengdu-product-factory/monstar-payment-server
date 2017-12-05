@@ -34,7 +34,7 @@ public class HttpClientConfig {
     private String httpProxyHost;
 
     @Value("${httpProxyPort}")
-    private String httpProxyPort;
+    private int httpProxyPort;
 
     @Value("${httpProxyUsername}")
     private String httpProxyUsername;
@@ -74,11 +74,11 @@ public class HttpClientConfig {
         this.httpProxyHost = httpProxyHost;
     }
 
-    public String getHttpProxyPort() {
+    public int getHttpProxyPort() {
         return httpProxyPort;
     }
 
-    public void setHttpProxyPort(String httpProxyPort) {
+    public void setHttpProxyPort(int httpProxyPort) {
         this.httpProxyPort = httpProxyPort;
     }
 

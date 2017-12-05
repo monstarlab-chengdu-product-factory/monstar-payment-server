@@ -46,6 +46,14 @@ public class WxPayUnifiedOrderResponese extends AbstractWxPayBaseResponse{
     @XStreamAlias("code_url")
     private String codeUrl;
 
+    /**
+     * 支付跳转链接：
+     * mweb_url为拉起微信支付收银台的中间页面，可通过访问该url来拉起微信客户端，完成支付,mweb_url的有效期为5分钟。
+     * String(64)
+     */
+    @XStreamAlias("mweb_url")
+    private String mwebUrl;
+
     public String getDeviceInfo() {
         return deviceInfo;
     }
@@ -76,5 +84,13 @@ public class WxPayUnifiedOrderResponese extends AbstractWxPayBaseResponse{
 
     public void setCodeUrl(String codeUrl) {
         this.codeUrl = codeUrl;
+    }
+
+    public String getMwebUrl() {
+        return mwebUrl;
+    }
+
+    public void setMwebUrl(String mwebUrl) {
+        this.mwebUrl = mwebUrl;
     }
 }
