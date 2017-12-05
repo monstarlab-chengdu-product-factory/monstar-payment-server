@@ -52,7 +52,7 @@ public class RefundControllerTest {
             Assert.assertEquals(objectLinkedHashMap.get("orderMoney"), applyRefundForm.getOrderMoney());
             Assert.assertNotNull(objectLinkedHashMap.get("refundNo"));
         } else {
-          logger.info("state:{},message:{}", apiResult.getStatus(), apiResult.getMessage());
+            logger.info("state:{},message:{}", apiResult.getStatus(), apiResult.getMessage());
         }
     }
 

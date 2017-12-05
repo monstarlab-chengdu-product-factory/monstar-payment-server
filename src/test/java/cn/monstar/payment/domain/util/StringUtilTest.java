@@ -13,9 +13,9 @@ import static org.junit.Assert.*;
  */
 public class StringUtilTest {
 
-	@Test
-	public void uuidGenerator() throws Exception {
-		Assert.assertEquals(StringUtil.uuidGenerator().length(),32);
-	}
+    @Test
+    public void uuidGenerator() throws Exception {
+        Assert.assertEquals(StringUtil.uuidGenerator().length(), 32);
+    }
 
 }

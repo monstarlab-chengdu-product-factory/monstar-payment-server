@@ -30,6 +30,11 @@ public class WxPayConfig {
     @Autowired
     private HttpClientConfig httpClientConfig;
 
+    /**
+     * 初始化SSLContext
+     *
+     * @return
+     */
     public SSLContext initSSLContext() {
         if (StringUtils.isBlank(wxConfig.getMchId())) {
             throw new WxPayException(String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "mchId"));

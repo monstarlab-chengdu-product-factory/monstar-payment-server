@@ -10,7 +10,7 @@ import cn.monstar.payment.web.exception.wx.WxErrorException;
 import cn.monstar.payment.web.exception.wx.WxPayException;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author wangxianding
@@ -69,7 +69,6 @@ public abstract class WxPayBaseRequest {
     private String signType;
 
 
-
     /**
      * 检查请求参数内容，包括必填参数以及特殊约束
      */
@@ -84,26 +83,29 @@ public abstract class WxPayBaseRequest {
         this.checkConstraints();
     }
 
-    protected void checkedAndSign (WxConfig wxConfig) {
+    protected void checkedAndSign(WxConfig wxConfig) {
         // check fileds
         this.checkFields();
         // not null check
-        if (StringUtils.isEmpty(wxConfig.getAppid())) {
+        if (StringUtils.isBlank(wxConfig.getAppid())) {
             throw new RuntimeException("appid is not allowed to be empty");
-        }else if (StringUtils.isEmpty(wxConfig.getMchId())) {
+        } else if (StringUtils.isBlank(wxConfig.getMchId())) {
             throw new RuntimeException("mchId is not allowed to be empty");
-        }else if (StringUtils.isEmpty(wxConfig.getMchKey())) {
+        } else if (StringUtils.isBlank(wxConfig.getMchKey())) {
             throw new RuntimeException("mchKey is not allowed to be empty");
         }
         // config setting
-        if (StringUtils.isEmpty(this.appid)) {
+        if (StringUtils.isBlank(this.appid)) {
             setAppid(wxConfig.getAppid());
         }
-        if (StringUtils.isEmpty(this.mchId)) {
+        if (StringUtils.isBlank(this.mchId)) {
             setMchId(wxConfig.getMchId());
         }
-        if (StringUtils.isEmpty(this.nonceStr)) {
+        if (StringUtils.isBlank(this.nonceStr)) {
             setNonceStr(StringUtil.getNonceStr());
+        }
+        if (StringUtils.isBlank(this.signType)) {
+            setSignType(SignUtils.MD5);
         }
         // do sign
         setSign(SignUtils.createSign(this, wxConfig.getMchKey(), this.signType));

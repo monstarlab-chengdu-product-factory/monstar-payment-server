@@ -21,13 +21,14 @@ import java.util.TreeMap;
  */
 public class SignUtils {
 
-    private static final String MD5 = "MD5";
-    private static final String HMACSHA256 = "HMAC-SHA256";
+    public static final String MD5 = "MD5";
+    public static final String HMACSHA256 = "HMAC-SHA256";
 
     /**
      * 生成签名
-     * @param xmlBean 带有XStream的xmlbean
-     * @param signKey 签名key
+     *
+     * @param xmlBean  带有XStream的xmlbean
+     * @param signKey  签名key
      * @param signType 签名类型
      * @return
      */
@@ -37,12 +38,13 @@ public class SignUtils {
 
     /**
      * 生成签名
-     * @param param 签名的map
-     * @param signKey 签名key
+     *
+     * @param param    签名的map
+     * @param signKey  签名key
      * @param signType 签名类型
      * @return
      */
-    public static String createSign(Map<String, String> param, String signKey, String signType){
+    public static String createSign(Map<String, String> param, String signKey, String signType) {
         SortedMap<String, String> sortedMap = new TreeMap<>(param);
 
         //generator to sign StringBuilder
@@ -57,24 +59,25 @@ public class SignUtils {
 
         if (HMACSHA256.equalsIgnoreCase(signType)) {
             return hmacsha256(toSignBuilder.toString().getBytes(), signKey.getBytes());
-        }else{
+        } else {
             return DigestUtils.md5DigestAsHex(toSignBuilder.toString().getBytes()).toUpperCase();
         }
     }
 
     /**
      * HMAC-SHA256 加密
+     *
      * @param data 需要加密的数据
-     * @param key 加密的密钥
+     * @param key  加密的密钥
      * @return
      */
-    public static String hmacsha256(byte[] data, byte[] key){
+    public static String hmacsha256(byte[] data, byte[] key) {
         try {
             SecretKeySpec signingKey = new SecretKeySpec(key, "HmacSHA256");
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(signingKey);
             return byte2hex(mac.doFinal(data));
-        }catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
             e.printStackTrace();
@@ -82,10 +85,10 @@ public class SignUtils {
         return null;
     }
 
-    private static String byte2hex(byte[] b){
+    private static String byte2hex(byte[] b) {
         StringBuilder hs = new StringBuilder();
         String stmp;
-        for(int n = 0;b!=null && n<b.length;n++){
+        for (int n = 0; b != null && n < b.length; n++) {
             stmp = Integer.toHexString(b[n] & 0XFF);
             if (stmp.length() == 1) {
                 hs.append('0');
@@ -97,21 +100,23 @@ public class SignUtils {
 
     /**
      * 校验签名
+     *
      * @param xmlBean
      * @param signKey
      * @return
      */
-    public static Boolean checkSign(Object xmlBean, String signKey){
+    public static Boolean checkSign(Object xmlBean, String signKey) {
         return checkSign(BeanUtil.xmlBeanToMap(xmlBean), signKey);
     }
 
     /**
      * 校验签名
-     * @param param 需要校验的参数
+     *
+     * @param param   需要校验的参数
      * @param signKey
      * @return
      */
-    public static Boolean checkSign(Map<String, String> param, String signKey){
+    public static Boolean checkSign(Map<String, String> param, String signKey) {
         return createSign(param, signKey, null).equals(param.get("sign"));
     }
 

@@ -8,12 +8,24 @@ package cn.monstar.payment.domain.util.wechat;
  */
 public class WxPayApiData {
 
+    /**
+     * 请求的url
+     */
     private String url;
 
+    /**
+     * 请求字符串
+     */
     private String requestStr;
 
+    /**
+     * 响应字符串
+     */
     private String responseString;
 
+    /**
+     * 信息
+     */
     private String message;
 
     public WxPayApiData() {

@@ -258,9 +258,10 @@ public class WxPayUnifiedOrderRequest extends WxPayBaseRequest {
         }
     }
 
-    public WxPayUnifiedOrderRequest(){}
+    public WxPayUnifiedOrderRequest() {
+    }
 
-    public WxPayUnifiedOrderRequest(Builder builder){
+    public WxPayUnifiedOrderRequest(Builder builder) {
         setAppid(builder.appid);
         setMchId(builder.mchId);
         setDeviceInfo(builder.deviceInfo);

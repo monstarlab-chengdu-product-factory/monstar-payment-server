@@ -14,6 +14,7 @@ public interface WxPayService {
     /**
      * 微信支付统一下单接口
      * 详情请见：https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_1
+     *
      * @param request 微信统一下单对象
      * @return 微信统一下单结果
      */

@@ -16,7 +16,7 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
 
     /**
      * 订单总退款次数：
-     *   订单总共已发生的部分退款次数，当请求参数传入offset后有返回
+     * 订单总共已发生的部分退款次数，当请求参数传入offset后有返回
      * int
      * 是否必填: 是
      */

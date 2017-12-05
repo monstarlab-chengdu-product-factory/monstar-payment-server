@@ -55,9 +55,9 @@ public abstract class AbstractWxPayService implements WxPayService {
     @Autowired
     private MonstarConfig monstarConfig;
 
-    public String getPayUrl(){
+    public String getPayUrl() {
         if (this.monstarConfig.getSandboxnew()) {
-            return BASE_URL+"/sandboxnew";
+            return BASE_URL + "/sandboxnew";
         }
         return BASE_URL;
     }

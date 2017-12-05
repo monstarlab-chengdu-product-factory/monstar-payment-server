@@ -8,9 +8,9 @@ import cn.monstar.payment.web.exception.wx.BaseCustomerException;
  * @description
  * @date 2017/12/4 下午2:45
  */
-public class BusinessException extends BaseCustomerException{
+public class BusinessException extends BaseCustomerException {
 
-    public BusinessException(String message){
+    public BusinessException(String message) {
         super(message);
     }
 
