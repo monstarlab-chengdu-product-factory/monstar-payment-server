@@ -21,6 +21,4 @@ public interface BaseService<T, ID extends Serializable> {
     void delete(ID id);
 
     T findOne(ID id);
-
-    List<T> findAll();
 }

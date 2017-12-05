@@ -14,14 +14,14 @@ import java.util.List;
  * @description BaseServiceImpl
  * @date 2017/11/22 16:09
  */
-public abstract class BaseServiceImpl <T, ID extends Serializable, R extends BaseMapper<T, ID>> implements
+public abstract class BaseServiceImpl<T, ID extends Serializable, R extends BaseMapper<T, ID>> implements
         BaseService<T, ID> {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected R repository;
 
-    public abstract void setRepository(R repository) ;
+    public abstract void setRepository(R repository);
 
     @Override
     @Transactional(readOnly = false)
@@ -62,8 +62,4 @@ public abstract class BaseServiceImpl <T, ID extends Serializable, R extends Bas
         return repository.selectByPrimaryKey(id);
     }
 
-    @Override
-    public List<T> findAll() {
-        return repository.selectAll();
-    }
 }
