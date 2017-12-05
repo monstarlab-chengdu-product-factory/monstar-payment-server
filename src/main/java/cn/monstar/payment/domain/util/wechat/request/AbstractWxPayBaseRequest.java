@@ -102,7 +102,7 @@ public abstract class AbstractWxPayBaseRequest {
             setMchId(wxConfig.getMchId());
         }
         if (StringUtils.isBlank(this.nonceStr)) {
-            setNonceStr(StringUtil.getNonceStr());
+            setNonceStr(String.valueOf(System.currentTimeMillis()));
         }
         if (StringUtils.isBlank(this.signType)) {
             setSignType(SignUtils.MD5);
