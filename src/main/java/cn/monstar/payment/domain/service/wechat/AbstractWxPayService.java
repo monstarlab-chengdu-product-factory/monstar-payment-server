@@ -7,11 +7,9 @@ import cn.monstar.payment.config.WxPayConfig;
 import cn.monstar.payment.domain.util.wechat.WxPayApiData;
 import cn.monstar.payment.domain.util.wechat.request.WxPayCloseOrderRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayOrderQueryRequest;
+import cn.monstar.payment.domain.util.wechat.request.WxPayRefundRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
-import cn.monstar.payment.domain.util.wechat.response.AbstractWxPayBaseResponse;
-import cn.monstar.payment.domain.util.wechat.response.WxPayCloseOrderResponse;
-import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
-import cn.monstar.payment.domain.util.wechat.response.WxPayUnifiedOrderResponese;
+import cn.monstar.payment.domain.util.wechat.response.*;
 import cn.monstar.payment.web.exception.wx.WxPayException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.auth.AuthScope;
@@ -95,6 +93,17 @@ public abstract class AbstractWxPayService implements WxPayService {
         WxPayCloseOrderResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayCloseOrderResponse.class);
         result.checkResult(wxConfig, request.getSignType(), true);
         return result;
+    }
+
+    @Override
+    public WxPayRefundResponse wxSendRefund(WxPayRefundRequest request) {
+        request.checkedAndSign(wxConfig);
+        String url = getPayUrl() + "/secapi/pay/refund";
+        String resultContent = this.post(url, request.toXML(), true);
+        WxPayRefundResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayRefundResponse.class);
+        result.composeCoupons();
+        result.checkResult(wxConfig, request.getSignType(), true);
+        return null;
     }
 
     /**

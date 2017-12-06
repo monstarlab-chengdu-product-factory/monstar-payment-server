@@ -2,9 +2,11 @@ package cn.monstar.payment.domain.service.wechat;
 
 import cn.monstar.payment.domain.util.wechat.request.WxPayCloseOrderRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayOrderQueryRequest;
+import cn.monstar.payment.domain.util.wechat.request.WxPayRefundRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
 import cn.monstar.payment.domain.util.wechat.response.WxPayCloseOrderResponse;
 import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
+import cn.monstar.payment.domain.util.wechat.response.WxPayRefundResponse;
 import cn.monstar.payment.domain.util.wechat.response.WxPayUnifiedOrderResponese;
 
 /**
@@ -26,6 +28,7 @@ public interface WxPayService {
 
     /**
      * 微信支付订单的查询
+     * 详情见https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_2&index=2
      *
      * @param request 微信支付订单的查询
      * @return 微信支付订单的查询结果
@@ -34,10 +37,20 @@ public interface WxPayService {
 
     /**
      * 微信关闭订单接口
+     * 详情见https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_3&index=3
      *
      * @param request
      * @return
      */
     WxPayCloseOrderResponse wxCloseOrder(WxPayCloseOrderRequest request);
+
+    /**
+     * 申请退款
+     * 详情见https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_4&index=4
+     *
+     * @param request
+     * @return
+     */
+    WxPayRefundResponse wxSendRefund(WxPayRefundRequest request);
 
 }
