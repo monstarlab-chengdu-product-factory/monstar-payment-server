@@ -101,7 +101,7 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
                 refundRecord.setRefundChannel(this.getXmlValue("xml/refund_channel_" + i));
                 refundRecord.setRefundFee(this.getXmlValueAsInt("xml/refund_fee_" + i));
                 refundRecord.setSettlementRefundFee(this.getXmlValueAsInt("xml/settlement_refund_fee_" + i));
-                refundRecord.setCouponType(this.getXmlValue("xml/coupon_type_" + i));
+                refundRecord.setRefundSuccessTime(this.getXmlValue("xml/refund_success_time_" + i));
                 refundRecord.setCouponRefundFee(this.getXmlValueAsInt("xml/coupon_refund_fee_" + i));
                 refundRecord.setCouponRefundCount(this.getXmlValueAsInt("xml/coupon_refund_count_" + i));
                 refundRecord.setRefundStatus(this.getXmlValue("xml/refund_status_" + i));
@@ -116,7 +116,8 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
                     coupons.add(
                             new RefundRecord.RefundCoupon(
                                     this.getXmlValue("xml/coupon_refund_id_" + i + "_" + j),
-                                    this.getXmlValueAsInt("xml/coupon_refund_fee_" + i + "_" + j)
+                                    this.getXmlValueAsInt("xml/coupon_refund_fee_" + i + "_" + j),
+                                    this.getXmlValue("xml/coupon_type_" + i + "_" + j)
                             )
                     );
                 }
@@ -264,25 +265,6 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
         private Integer settlementRefundFee;
 
         /**
-         * 退款资金来源
-         * REFUND_SOURCE_RECHARGE_FUNDS
-         * REFUND_SOURCE_RECHARGE_FUNDS---可用余额退款/基本账户, REFUND_SOURCE_UNSETTLED_FUNDS---未结算资金退款
-         * String(30)
-         * 是否必填：否
-         */
-        @XStreamAlias("refund_account")
-        private String refundAccount;
-
-        /**
-         * 代金券类型
-         * CASH--充值代金券 , NO_CASH---非充值代金券。订单使用代金券时有返回（取值：CASH、NO_CASH）。$n为下标,从0开始编号，举例：coupon_type_$0
-         * int
-         * 是否必填否
-         */
-        @XStreamAlias("coupon_type")
-        private String couponType;
-
-        /**
          * 代金券退款金额
          * 代金券退款金额<=退款金额，退款金额-代金券或立减优惠退款金额为现金，说明详见代金券或立减优惠
          * int
@@ -315,27 +297,57 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
          */
         @XStreamAlias("refund_status")
         private String refundStatus;
+
+        /**
+         * 退款资金来源
+         * REFUND_SOURCE_RECHARGE_FUNDS
+         * REFUND_SOURCE_RECHARGE_FUNDS---可用余额退款/基本账户, REFUND_SOURCE_UNSETTLED_FUNDS---未结算资金退款
+         * String(30)
+         * 是否必填：否
+         */
+        @XStreamAlias("refund_account")
+        private String refundAccount;
+
         /**
          * 退款入账账户
-         * 招商银行信用卡0403
-         * 取当前退款单的退款入账方，1）退回银行卡：{银行名称}{卡类型}{卡尾号}，2）退回支付用户零钱:支付用户零钱
+         * 取当前退款单的退款入账方
+         * 1）退回银行卡：
+         * {银行名称}{卡类型}{卡尾号}
+         * 2）退回支付用户零钱:
+         * 支付用户零钱
+         * 3）退还商户:
+         * 商户基本账户
+         * 商户结算银行账户
+         * 4）退回支付用户零钱通:
+         * 支付用户零钱通
          * 是否必填：是
          * String(64)
          */
         @XStreamAlias("refund_recv_accout")
         private String refundRecvAccount;
 
+        /**
+         * 退款成功时间
+         * 退款成功时间，当退款状态为退款成功时有返回
+         * String(20)
+         * 是否必填：否
+         */
+        @XStreamAlias("refund_success_time")
+        private String refundSuccessTime;
+
         public RefundRecord() {
         }
 
-        public RefundRecord(String outRefundNo, String refundId, String refundChannel, Integer refundFee, Integer settlementRefundFee, String refundAccount, String couponType, Integer couponRefundFee, Integer couponRefundCount, List<RefundCoupon> refundCoupons, String refundStatus, String refundRecvAccount) {
+        public RefundRecord(String outRefundNo, String refundId, String refundChannel, Integer refundFee, Integer settlementRefundFee,
+                            String refundAccount, Integer couponRefundFee, Integer couponRefundCount, List<RefundCoupon> refundCoupons,
+                            String refundStatus, String refundRecvAccount, String refundSuccessTime) {
             this.outRefundNo = outRefundNo;
             this.refundId = refundId;
             this.refundChannel = refundChannel;
             this.refundFee = refundFee;
             this.settlementRefundFee = settlementRefundFee;
             this.refundAccount = refundAccount;
-            this.couponType = couponType;
+            this.refundSuccessTime = refundSuccessTime;
             this.couponRefundFee = couponRefundFee;
             this.couponRefundCount = couponRefundCount;
             this.refundCoupons = refundCoupons;
@@ -391,14 +403,6 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
             this.refundAccount = refundAccount;
         }
 
-        public String getCouponType() {
-            return couponType;
-        }
-
-        public void setCouponType(String couponType) {
-            this.couponType = couponType;
-        }
-
         public Integer getCouponRefundFee() {
             return couponRefundFee;
         }
@@ -439,6 +443,14 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
             this.refundRecvAccount = refundRecvAccount;
         }
 
+        public String getRefundSuccessTime() {
+            return refundSuccessTime;
+        }
+
+        public void setRefundSuccessTime(String refundSuccessTime) {
+            this.refundSuccessTime = refundSuccessTime;
+        }
+
         public static class RefundCoupon {
 
 
@@ -452,6 +464,17 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
             private String couponRefundId;
 
             /**
+             * 代金券类型
+             * CASH--充值代金券
+             * NO_CASH---非充值优惠券
+             * 开通免充值券功能，并且订单使用了优惠券后有返回（取值：CASH、NO_CASH）
+             * String(100)
+             * 是否必填：否
+             */
+            @XStreamAlias("coupon_type")
+            private String couponType;
+
+            /**
              * 单个退款代金券支付金额
              * 单个退款代金券支付金额, $n为下标，$m为下标，从0开始编号
              * Int
@@ -463,7 +486,7 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
             public RefundCoupon() {
             }
 
-            public RefundCoupon(String couponRefundId, Integer couponRefundFee) {
+            public RefundCoupon(String couponRefundId, Integer couponRefundFee, String couponType) {
                 this.couponRefundId = couponRefundId;
                 this.couponRefundFee = couponRefundFee;
             }
@@ -482,6 +505,14 @@ public class WxPayRefundQueryResponse extends AbstractWxPayBaseResponse implemen
 
             public void setCouponRefundFee(Integer couponRefundFee) {
                 this.couponRefundFee = couponRefundFee;
+            }
+
+            public String getCouponType() {
+                return couponType;
+            }
+
+            public void setCouponType(String couponType) {
+                this.couponType = couponType;
             }
         }
 
