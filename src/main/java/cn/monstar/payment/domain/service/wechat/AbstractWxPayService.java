@@ -4,7 +4,9 @@ import cn.monstar.payment.config.HttpClientConfig;
 import cn.monstar.payment.config.MonstarConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.config.WxPayConfig;
+import cn.monstar.payment.domain.util.encryption.SignUtils;
 import cn.monstar.payment.domain.util.wechat.WxPayApiData;
+import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
 import cn.monstar.payment.domain.util.wechat.request.*;
 import cn.monstar.payment.domain.util.wechat.response.*;
 import cn.monstar.payment.web.exception.wx.WxPayException;
@@ -68,6 +70,20 @@ public abstract class AbstractWxPayService implements WxPayService {
         String resultContent = this.post(url, request.toXML(), false);
         WxPayUnifiedOrderResponese result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayUnifiedOrderResponese.class);
         result.checkResult(wxConfig, request.getSignType(), true);
+        return result;
+    }
+
+    @Override
+    public WxPayNotifyRequest parseNofifyResult(String notifyString) {
+        if (StringUtils.isBlank(notifyString)) {
+            throw new WxPayException("需要解析的支付结果不能为空");
+        }
+        //执行解析
+        WxPayNotifyRequest result = AbstractWxPayBaseResponse.fromXML(notifyString, WxPayNotifyRequest.class);
+        //校验签名
+        if (!SignUtils.checkSign(result, wxConfig.getMchKey())) {
+            throw new WxPayException("签名不正确");
+        }
         return result;
     }
 

@@ -1,6 +1,8 @@
 package cn.monstar.payment.domain.service.wechat;
 
-import cn.monstar.payment.domain.util.wechat.request.*;
+import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
+import cn.monstar.payment.domain.util.wechat.request.WxPayRefundRequest;
+import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
 import cn.monstar.payment.domain.util.wechat.response.*;
 
 /**
@@ -19,6 +21,14 @@ public interface WxPayService {
      * @return 微信统一下单结果
      */
     WxPayUnifiedOrderResponese wxUnifiedOrder(WxPayUnifiedOrderRequest request);
+
+    /**
+     * 解析支付结果通知
+     *
+     * @param notifyString 支付结果通知字符串
+     * @return 支付结果
+     */
+    WxPayNotifyRequest parseNofifyResult(String notifyString);
 
     /**
      * 微信支付订单的查询
@@ -52,12 +62,13 @@ public interface WxPayService {
      * 退款查询
      * 详情见https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_5&index=5
      *
-     * @param transactionId
-     * @param outTradeNo
-     * @param outRefundNo
-     * @param refundId
+     * @param transactionId 微信单号
+     * @param outTradeNo    商户单号
+     * @param outRefundNo   商户退款单号
+     * @param refundId      微信退款单号
      * @return
      */
     WxPayRefundQueryResponse wxRefundQuery(String transactionId, String outTradeNo, String outRefundNo, String refundId);
+
 
 }

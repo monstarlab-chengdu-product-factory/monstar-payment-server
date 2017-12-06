@@ -6,6 +6,7 @@ import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.domain.util.encryption.SignUtils;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
 import cn.monstar.payment.domain.util.xml.XStreamInitializer;
+import cn.monstar.payment.domain.util.xml.XmlUtil;
 import cn.monstar.payment.web.exception.wx.WxErrorException;
 import cn.monstar.payment.web.exception.wx.WxPayException;
 import com.thoughtworks.xstream.XStream;
@@ -112,9 +113,7 @@ public abstract class AbstractWxPayBaseRequest {
     }
 
     public String toXML() {
-        XStream xstream = XStreamInitializer.getInstance();
-        xstream.processAnnotations(this.getClass());
-        return xstream.toXML(this);
+        return XmlUtil.toXML(this);
     }
 
     /**
