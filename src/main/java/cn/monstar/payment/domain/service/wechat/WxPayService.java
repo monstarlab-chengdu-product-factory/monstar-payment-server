@@ -1,13 +1,7 @@
 package cn.monstar.payment.domain.service.wechat;
 
-import cn.monstar.payment.domain.util.wechat.request.WxPayCloseOrderRequest;
-import cn.monstar.payment.domain.util.wechat.request.WxPayOrderQueryRequest;
-import cn.monstar.payment.domain.util.wechat.request.WxPayRefundRequest;
-import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
-import cn.monstar.payment.domain.util.wechat.response.WxPayCloseOrderResponse;
-import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
-import cn.monstar.payment.domain.util.wechat.response.WxPayRefundResponse;
-import cn.monstar.payment.domain.util.wechat.response.WxPayUnifiedOrderResponese;
+import cn.monstar.payment.domain.util.wechat.request.*;
+import cn.monstar.payment.domain.util.wechat.response.*;
 
 /**
  * @author wangxianding
@@ -52,5 +46,14 @@ public interface WxPayService {
      * @return
      */
     WxPayRefundResponse wxSendRefund(WxPayRefundRequest request);
+
+    /**
+     * 退款查询
+     * 详情见https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_5&index=5
+     *
+     * @param request
+     * @return
+     */
+    WxPayRefundQueryResponse wxRefundQuery(WxPayRefundQueryRequest request);
 
 }

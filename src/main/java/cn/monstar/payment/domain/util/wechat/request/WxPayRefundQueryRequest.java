@@ -1,6 +1,13 @@
 package cn.monstar.payment.domain.util.wechat.request;
 
+import cn.monstar.payment.config.WxConfig;
+import cn.monstar.payment.web.exception.wx.WxPayException;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author wangxianding
@@ -8,6 +15,7 @@ import java.io.Serializable;
  * @description 微信支付退款查询Request
  * @date 2017/11/27 下午5:16
  */
+@XStreamAlias("xml")
 public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements Serializable {
 
     /**
@@ -18,6 +26,7 @@ public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements
      * String(32)
      * 是否必填: 四选一
      */
+    @XStreamAlias("transaction_id")
     private String transactionId;
 
     /**
@@ -28,6 +37,7 @@ public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements
      * String(32)
      * 是否必填: 四选一
      */
+    @XStreamAlias("out_trade_no")
     private String outTradeNo;
 
     /**
@@ -38,6 +48,7 @@ public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements
      * String(64)
      * 是否必填: 四选一
      */
+    @XStreamAlias("out_refund_no")
     private String outRefundNo;
 
     /**
@@ -48,6 +59,7 @@ public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements
      * String(32)
      * 是否必填: 四选一
      */
+    @XStreamAlias("refund_id")
     private String refundId;
 
     /**
@@ -58,11 +70,27 @@ public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements
      * 15
      * 是否必填: 否
      */
+    @XStreamAlias("offset")
     private Integer offset;
 
     @Override
-    protected void checkConstraints() {
+    public void checkedAndSign(WxConfig wxConfig) {
+        super.checkedAndSign(wxConfig);
+    }
 
+    @Override
+    protected void checkConstraints() {
+        List<String> params = Arrays.asList(transactionId, outTradeNo, outRefundNo, refundId);
+        int count = 0;
+        for (String param : params) {
+            if (StringUtils.isNotBlank(param)) {
+                count++;
+                if (count > 2) {
+                    throw new WxPayException("transaction_id,out_trade_no,out_refund_no和refund_id只能任填一个");
+                }
+                continue;
+            }
+        }
     }
 
     public String getTransactionId() {
