@@ -84,16 +84,6 @@ public abstract class AbstractWxPayBaseRequest {
     }
 
     protected void checkedAndSign(WxConfig wxConfig) {
-        // check fileds
-        this.checkFields();
-        // not null check
-        if (StringUtils.isBlank(wxConfig.getAppid())) {
-            throw new RuntimeException("appid is not allowed to be empty");
-        } else if (StringUtils.isBlank(wxConfig.getMchId())) {
-            throw new RuntimeException("mchId is not allowed to be empty");
-        } else if (StringUtils.isBlank(wxConfig.getMchKey())) {
-            throw new RuntimeException("mchKey is not allowed to be empty");
-        }
         // config setting
         if (StringUtils.isBlank(this.appid)) {
             setAppid(wxConfig.getAppid());
@@ -106,6 +96,16 @@ public abstract class AbstractWxPayBaseRequest {
         }
         if (StringUtils.isBlank(this.signType)) {
             setSignType(SignUtils.MD5);
+        }
+        // check fileds
+        this.checkFields();
+        // not null check
+        if (StringUtils.isBlank(wxConfig.getAppid())) {
+            throw new RuntimeException("appid is not allowed to be empty");
+        } else if (StringUtils.isBlank(wxConfig.getMchId())) {
+            throw new RuntimeException("mchId is not allowed to be empty");
+        } else if (StringUtils.isBlank(wxConfig.getMchKey())) {
+            throw new RuntimeException("mchKey is not allowed to be empty");
         }
         // do sign
         setSign(SignUtils.createSign(this, wxConfig.getMchKey(), this.signType));

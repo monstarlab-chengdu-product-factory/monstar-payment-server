@@ -72,7 +72,11 @@ public abstract class AbstractWxPayService implements WxPayService {
     }
 
     @Override
-    public WxPayOrderQueryResponse wxOrderQuery(WxPayOrderQueryRequest request) {
+    public WxPayOrderQueryResponse wxOrderQuery(String transactionId, String outTradeNo) {
+        WxPayOrderQueryRequest request = new WxPayOrderQueryRequest();
+        request.setOutTradeNo(outTradeNo);
+        request.setTransactionId(transactionId);
+
         request.checkedAndSign(wxConfig);
         String url = getPayUrl() + "/pay/orderquery";
         String resultContent = this.post(url, request.toXML(), false);
@@ -83,7 +87,10 @@ public abstract class AbstractWxPayService implements WxPayService {
     }
 
     @Override
-    public WxPayCloseOrderResponse wxCloseOrder(WxPayCloseOrderRequest request) {
+    public WxPayCloseOrderResponse wxCloseOrder(String outTradeNo) {
+        WxPayCloseOrderRequest request = new WxPayCloseOrderRequest();
+        request.setOutTradeNo(outTradeNo);
+
         request.checkedAndSign(wxConfig);
         String url = getPayUrl() + "/pay/closeorder";
         String resultContent = this.post(url, request.toXML(), false);
@@ -104,8 +111,15 @@ public abstract class AbstractWxPayService implements WxPayService {
     }
 
     @Override
-    public WxPayRefundQueryResponse wxRefundQuery(WxPayRefundQueryRequest request) {
+    public WxPayRefundQueryResponse wxRefundQuery(String transactionId, String outTradeNo, String outRefundNo, String refundId) {
+        WxPayRefundQueryRequest request = new WxPayRefundQueryRequest();
+        request.setTransactionId(transactionId);
+        request.setOutRefundNo(outRefundNo);
+        request.setRefundId(refundId);
+        request.setOutTradeNo(outTradeNo);
+
         request.checkedAndSign(wxConfig);
+
         String url = getPayUrl() + "/pay/refundquery";
         String resultContent = this.post(url, request.toXML(), false);
         WxPayRefundQueryResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayRefundQueryResponse.class);
