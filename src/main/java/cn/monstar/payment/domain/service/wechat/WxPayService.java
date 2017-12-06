@@ -24,7 +24,7 @@ public interface WxPayService {
      * 微信支付订单的查询
      * 详情见https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_2&index=2
      *
-     * @param outTradeNo 商户订单号
+     * @param outTradeNo    商户订单号
      * @param transactionId 微信订单号
      * @return 微信支付订单的查询结果
      */
@@ -51,6 +51,7 @@ public interface WxPayService {
     /**
      * 退款查询
      * 详情见https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_5&index=5
+     *
      * @param transactionId
      * @param outTradeNo
      * @param outRefundNo
