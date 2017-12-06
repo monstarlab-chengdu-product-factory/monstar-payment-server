@@ -70,5 +70,12 @@ public interface WxPayService {
      */
     WxPayRefundQueryResponse wxRefundQuery(String transactionId, String outTradeNo, String outRefundNo, String refundId);
 
+    /**
+     * 长链接转换为短链接
+     * @param longUrl 长链接
+     * @return
+     */
+    WxPayShortUrlResponse wxLongUrlToShortUrl(String longUrl);
+
 
 }

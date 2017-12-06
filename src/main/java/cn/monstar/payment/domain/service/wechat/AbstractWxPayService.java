@@ -4,6 +4,7 @@ import cn.monstar.payment.config.HttpClientConfig;
 import cn.monstar.payment.config.MonstarConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.config.WxPayConfig;
+import cn.monstar.payment.domain.util.UrlUtil;
 import cn.monstar.payment.domain.util.encryption.SignUtils;
 import cn.monstar.payment.domain.util.wechat.WxPayApiData;
 import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.net.ssl.SSLContext;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -141,6 +143,26 @@ public abstract class AbstractWxPayService implements WxPayService {
         WxPayRefundQueryResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayRefundQueryResponse.class);
         result.composeRefundRecords();
         result.checkResult(wxConfig, request.getSignType(), true);
+        return result;
+    }
+
+    @Override
+    public WxPayShortUrlResponse wxLongUrlToShortUrl(String longUrl) {
+        WxPayShortUrlRequst requst = new WxPayShortUrlRequst();
+        requst.setLongUrl(longUrl);
+
+        requst.checkedAndSign(wxConfig);
+        //需要传输encode后的链接
+        String longUrlencode = UrlUtil.encode(longUrl, null);
+        if (StringUtils.isBlank(longUrlencode)) {
+            logger.error("长链接encode失败");
+            throw new WxPayException("长链接encode失败");
+        }
+        requst.setLongUrl(longUrlencode);
+
+        String url = getPayUrl() + "/tools/shorturl";
+        String resultContent = this.post(url, requst.toXML(), false);
+        WxPayShortUrlResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayShortUrlResponse.class);
         return result;
     }
 
