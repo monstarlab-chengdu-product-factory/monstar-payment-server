@@ -59,11 +59,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-autoconfigure")
     compile("org.springframework.boot:spring-boot-configuration-processor")
 
-    compile("org.thymeleaf:thymeleaf:3.0.6.RELEASE")
-    compile("org.thymeleaf:thymeleaf-spring4:3.0.6.RELEASE")
-    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.2.2")
-    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.2.RELEASE")
-
     compile("com.alibaba:fastjson:1.2.40")
     compile("joda-time:joda-time:2.9.9")
     compile("org.springframework.boot:spring-boot-starter-aop")
