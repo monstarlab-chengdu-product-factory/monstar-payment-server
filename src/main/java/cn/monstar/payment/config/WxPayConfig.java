@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
 import java.io.*;
@@ -19,6 +20,7 @@ import java.security.KeyStore;
  * @description
  * @date 2017/12/4 上午10:26
  */
+@Component
 @ConditionalOnClass(value = {WxConfig.class, HttpClientConfig.class})
 public class WxPayConfig {
 

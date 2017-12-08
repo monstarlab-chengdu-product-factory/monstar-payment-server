@@ -5,11 +5,9 @@ import cn.monstar.payment.config.MonstarConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.config.WxPayConfig;
 import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
-import cn.monstar.payment.domain.model.mybatis.gen.TRefund;
 import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.domain.util.UrlUtil;
-import cn.monstar.payment.domain.util.encryption.SignUtils;
-import cn.monstar.payment.domain.util.wechat.WxPayApiData;
+import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
 import cn.monstar.payment.domain.util.wechat.request.*;
 import cn.monstar.payment.domain.util.wechat.response.*;
@@ -34,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.net.ssl.SSLContext;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -47,7 +44,6 @@ public abstract class AbstractWxPayService implements WxPayService {
 
     protected final String BASE_URL = "https://api.mch.weixin.qq.com";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected static ThreadLocal<WxPayApiData> wxPayApiData = new ThreadLocal<>();
 
     @Autowired
     private WxConfig wxConfig;
@@ -86,7 +82,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         //执行解析
         WxPayNotifyRequest result = AbstractWxPayBaseResponse.fromXML(notifyString, WxPayNotifyRequest.class);
         //校验签名
-        if (!SignUtils.checkSign(result, wxConfig.getMchKey())) {
+        if (!WxSignUtils.checkSign(result, wxConfig.getMchKey())) {
             throw new WxPayException("签名不正确");
         }
         return result;
@@ -224,7 +220,6 @@ public abstract class AbstractWxPayService implements WxPayService {
                 try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
                     String responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                     this.logger.info("\n【请求地址】：{}\n【请求数据】：{}\n【响应数据】：{}", url, requestStr, responseString);
-                    wxPayApiData.set(new WxPayApiData(url, requestStr, responseString, null));
                     return responseString;
                 }
             } finally {
@@ -232,7 +227,6 @@ public abstract class AbstractWxPayService implements WxPayService {
             }
         } catch (Exception e) {
             this.logger.error("\n【请求地址】：{}\n【请求数据】：{}\n【异常信息】：{}", url, requestStr, e.getMessage());
-            wxPayApiData.set(new WxPayApiData(url, requestStr, null, e.getMessage()));
             throw new WxPayException(e.getMessage());
         }
     }

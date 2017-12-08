@@ -1,8 +1,7 @@
 package cn.monstar.payment.domain.util.wechat.response;
 
 import cn.monstar.payment.config.WxConfig;
-import cn.monstar.payment.config.WxPayConfig;
-import cn.monstar.payment.domain.util.encryption.SignUtils;
+import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.xml.XStreamInitializer;
 import cn.monstar.payment.web.exception.wx.WxPayException;
 import com.google.common.base.Joiner;
@@ -172,7 +171,7 @@ public abstract class AbstractWxPayBaseResponse {
      */
     public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess) throws WxPayException {
         Map<String, String> map = toMap();
-        if (StringUtils.isNotBlank(this.sign) && !SignUtils.checkSign(map, wxConfig.getMchKey())) {
+        if (StringUtils.isNotBlank(this.sign) && !WxSignUtils.checkSign(map, wxConfig.getMchKey())) {
             throw new WxPayException("签名校验失败");
         }
 

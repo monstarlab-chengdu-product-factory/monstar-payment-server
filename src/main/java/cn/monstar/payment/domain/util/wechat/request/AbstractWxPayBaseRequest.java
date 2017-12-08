@@ -2,14 +2,11 @@ package cn.monstar.payment.domain.util.wechat.request;
 
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.domain.util.BeanUtil;
-import cn.monstar.payment.domain.util.StringUtil;
-import cn.monstar.payment.domain.util.encryption.SignUtils;
+import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
-import cn.monstar.payment.domain.util.xml.XStreamInitializer;
 import cn.monstar.payment.domain.util.xml.XmlUtil;
 import cn.monstar.payment.web.exception.wx.WxErrorException;
 import cn.monstar.payment.web.exception.wx.WxPayException;
-import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
 
@@ -96,7 +93,7 @@ public abstract class AbstractWxPayBaseRequest {
             setNonceStr(String.valueOf(System.currentTimeMillis()));
         }
         if (StringUtils.isBlank(this.signType)) {
-            setSignType(SignUtils.MD5);
+            setSignType(WxSignUtils.MD5);
         }
         // check fileds
         this.checkFields();
@@ -109,7 +106,7 @@ public abstract class AbstractWxPayBaseRequest {
             throw new RuntimeException("mchKey is not allowed to be empty");
         }
         // do sign
-        setSign(SignUtils.createSign(this, wxConfig.getMchKey(), this.signType));
+        setSign(WxSignUtils.createSign(this, wxConfig.getMchKey(), this.signType));
     }
 
     public String toXML() {

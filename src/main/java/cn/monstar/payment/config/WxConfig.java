@@ -1,6 +1,7 @@
 package cn.monstar.payment.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Component;
  * @description 微信配置
  * @date 2017/11/29 下午3:49
  */
+@Component
 @ConfigurationProperties(prefix = "wx")
+@PropertySource("classpath:application-app.yml")
 public class WxConfig {
 
     /**

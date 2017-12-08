@@ -1,6 +1,7 @@
 package cn.monstar.payment.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix = "monstar")
+@PropertySource("classpath:application-app.yml")
 public class MonstarConfig {
 
     /**

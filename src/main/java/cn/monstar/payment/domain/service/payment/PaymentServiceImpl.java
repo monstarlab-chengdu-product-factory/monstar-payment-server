@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2017/11/27 15:35
  */
 @Service
-@Transactional
 public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPaymentMapper> implements PaymentService {
 
     @Autowired
