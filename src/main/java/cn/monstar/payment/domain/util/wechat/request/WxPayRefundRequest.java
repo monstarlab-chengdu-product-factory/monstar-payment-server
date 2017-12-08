@@ -96,6 +96,25 @@ public class WxPayRefundRequest extends AbstractWxPayBaseRequest implements Seri
     @XStreamAlias("refund_account")
     private String refundAccount;
 
+    public WxPayRefundRequest() {
+    }
+
+    public WxPayRefundRequest(Builder builder) {
+        setAppid(builder.appid);
+        setMchId(builder.mchId);
+        setOutRefundNo(builder.outRefundNo);
+        setOutTradeNo(builder.outTradeNo);
+        setRefundAccount(builder.refundAccount);
+        setRefundDesc(builder.refundDesc);
+        setRefundFee(builder.refundFee);
+        setRefundFeeType(builder.refundFeeType);
+        setTotalFee(builder.totalFee);
+        setTransactionId(builder.transactionId);
+        setNonceStr(builder.nonceStr);
+        setSignType(builder.signType);
+    }
+
+
     @Override
     public void checkedAndSign(WxConfig wxConfig) {
         super.checkedAndSign(wxConfig);
@@ -171,5 +190,94 @@ public class WxPayRefundRequest extends AbstractWxPayBaseRequest implements Seri
 
     public void setRefundAccount(String refundAccount) {
         this.refundAccount = refundAccount;
+    }
+
+    public static class Builder {
+
+        private String appid;
+        private String mchId;
+        private String nonceStr;
+        private String sign;
+        private String signType;
+        private String transactionId;
+        private String outTradeNo;
+        private String outRefundNo;
+        private Integer totalFee;
+        private Integer refundFee;
+        private String refundFeeType;
+        private String refundDesc;
+        private String refundAccount;
+
+        public Builder() {
+        }
+
+        public WxPayRefundRequest newBuiler(){
+            return new WxPayRefundRequest(this);
+        }
+
+        public Builder setAppid(String appid) {
+            this.appid = appid;
+            return this;
+        }
+
+        public Builder setMchId(String mchId) {
+            this.mchId = mchId;
+            return this;
+        }
+
+        public Builder setNonceStr(String nonceStr) {
+            this.nonceStr = nonceStr;
+            return this;
+        }
+
+        public Builder setSign(String sign) {
+            this.sign = sign;
+            return this;
+        }
+
+        public Builder setSignType(String signType) {
+            this.signType = signType;
+            return this;
+        }
+
+        public Builder setTransactionId(String transactionId) {
+            this.transactionId = transactionId;
+            return this;
+        }
+
+        public Builder setOutTradeNo(String outTradeNo) {
+            this.outTradeNo = outTradeNo;
+            return this;
+        }
+
+        public Builder setOutRefundNo(String outRefundNo) {
+            this.outRefundNo = outRefundNo;
+            return this;
+        }
+
+        public Builder setTotalFee(Integer totalFee) {
+            this.totalFee = totalFee;
+            return this;
+        }
+
+        public Builder setRefundFee(Integer refundFee) {
+            this.refundFee = refundFee;
+            return this;
+        }
+
+        public Builder setRefundFeeType(String refundFeeType) {
+            this.refundFeeType = refundFeeType;
+            return this;
+        }
+
+        public Builder setRefundDesc(String refundDesc) {
+            this.refundDesc = refundDesc;
+            return this;
+        }
+
+        public Builder setRefundAccount(String refundAccount) {
+            this.refundAccount = refundAccount;
+            return this;
+        }
     }
 }

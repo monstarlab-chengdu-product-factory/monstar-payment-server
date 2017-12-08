@@ -16,18 +16,18 @@ import java.util.Date;
  */
 public class ApplyRefundResultDto extends TRefund implements Serializable {
 
-
-    private int refundState;
+    private String paymentNo;
 
     public ApplyRefundResultDto() {
         super();
     }
 
-    public ApplyRefundResultDto(BigDecimal orderMoney, BigDecimal refundMoney, String refundDescription) {
+    public ApplyRefundResultDto(BigDecimal orderMoney, BigDecimal refundMoney, String refundDescription, String paymentNo) {
         super();
         setOrderMoney(orderMoney);
         setRefundMoney(refundMoney);
         setRefundDescription(refundDescription);
+        this.paymentNo = paymentNo;
     }
 
     @JsonIgnore
@@ -64,5 +64,12 @@ public class ApplyRefundResultDto extends TRefund implements Serializable {
         return super.getRefundDescription();
     }
 
+    @JsonIgnore
+    public String getPaymentNo() {
+        return paymentNo;
+    }
 
+    public void setPaymentNo(String paymentNo) {
+        this.paymentNo = paymentNo;
+    }
 }

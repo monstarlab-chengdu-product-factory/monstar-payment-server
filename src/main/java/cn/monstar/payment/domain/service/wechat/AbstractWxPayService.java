@@ -4,6 +4,9 @@ import cn.monstar.payment.config.HttpClientConfig;
 import cn.monstar.payment.config.MonstarConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.config.WxPayConfig;
+import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
+import cn.monstar.payment.domain.model.mybatis.gen.TRefund;
+import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.domain.util.UrlUtil;
 import cn.monstar.payment.domain.util.encryption.SignUtils;
 import cn.monstar.payment.domain.util.wechat.WxPayApiData;
@@ -115,6 +118,16 @@ public abstract class AbstractWxPayService implements WxPayService {
         WxPayCloseOrderResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayCloseOrderResponse.class);
         result.checkResult(wxConfig, request.getSignType(), true);
         return result;
+    }
+
+    @Override
+    public WxPayRefundResponse wxSendRefund(ApplyRefundResultDto applyRefundResultDto) {
+        WxPayRefundRequest.Builder builder = new WxPayRefundRequest.Builder();
+        builder.setOutTradeNo(applyRefundResultDto.getPaymentNo())
+                .setRefundDesc(applyRefundResultDto.getRefundDescription())
+                .setRefundFee(StringUtil.yuanToFee(applyRefundResultDto.getRefundMoney().toString()))
+                .setTotalFee(StringUtil.yuanToFee(applyRefundResultDto.getOrderMoney().toString()));
+        return this.wxSendRefund(builder.newBuiler());
     }
 
     @Override

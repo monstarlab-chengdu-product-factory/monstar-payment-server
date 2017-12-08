@@ -1,5 +1,6 @@
 package cn.monstar.payment.domain.service.wechat;
 
+import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
 import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayRefundRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
@@ -59,6 +60,14 @@ public interface WxPayService {
     WxPayRefundResponse wxSendRefund(WxPayRefundRequest request);
 
     /**
+     * 申请退款
+     *
+     * @param applyRefundResultDto 退款实体
+     * @return
+     */
+    WxPayRefundResponse wxSendRefund(ApplyRefundResultDto applyRefundResultDto);
+
+    /**
      * 退款查询
      * 详情见https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_5&index=5
      *
@@ -72,6 +81,7 @@ public interface WxPayService {
 
     /**
      * 长链接转换为短链接
+     *
      * @param longUrl 长链接
      * @return
      */

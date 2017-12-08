@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author wangxianding
  * @version 1.0
- * @description
+ * @description 微信支付服务
  * @date 2017/12/5 上午10:32
  */
 @Service
