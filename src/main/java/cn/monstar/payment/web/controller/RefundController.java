@@ -44,12 +44,13 @@ public class RefundController extends BaseController {
 
     /**
      * 退款查询
-     * @param queryRefundForm
+     *
+     * @param queryRefundForm 退款查询Form
      * @param bindingResult
      * @return
      */
     @PostMapping("/query")
-    public APIResult queryRefund(@RequestBody @Valid QueryRefundForm queryRefundForm, BindingResult bindingResult){
+    public APIResult queryRefund(@RequestBody @Valid QueryRefundForm queryRefundForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return APIResult.failure().setMessage(bindingResult.getFieldError().getField() + bindingResult.getFieldError().getDefaultMessage());
         }

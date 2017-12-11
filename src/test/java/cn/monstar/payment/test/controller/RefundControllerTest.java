@@ -29,7 +29,9 @@ public class RefundControllerTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-
+    /**
+     * 申请退款测试
+     */
     @Test
     public void submitRefunds() {
         ApplyRefundForm applyRefundForm = new ApplyRefundForm();
@@ -56,6 +58,9 @@ public class RefundControllerTest {
         }
     }
 
+    /**
+     * 退款查询测试
+     */
     @Test
     public void queryRefund() {
         QueryRefundForm queryRefundForm = new QueryRefundForm();
