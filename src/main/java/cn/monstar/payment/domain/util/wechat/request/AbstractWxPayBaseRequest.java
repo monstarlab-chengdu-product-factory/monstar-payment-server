@@ -1,12 +1,12 @@
 package cn.monstar.payment.domain.util.wechat.request;
 
+import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.domain.util.BeanUtil;
 import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
 import cn.monstar.payment.domain.util.xml.XmlUtil;
-import cn.monstar.payment.web.exception.wx.WxErrorException;
-import cn.monstar.payment.web.exception.wx.WxPayException;
+import cn.monstar.payment.web.exception.BusinessException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
 
@@ -70,18 +70,15 @@ public abstract class AbstractWxPayBaseRequest {
     /**
      * 检查请求参数内容，包括必填参数以及特殊约束
      */
-    protected void checkFields() {
-        try {
-            BeanUtil.checkRequiredFields(this);
-        } catch (WxErrorException e) {
-            throw new WxPayException(e.getMessage());
+    private void checkFields(MessageConfig messageConfig) {
+        if (!BeanUtil.checkRequiredFields(this)) {
+            throw new BusinessException(messageConfig.getE00008());
         }
-
         //check other parameters
-        this.checkConstraints();
+        this.checkConstraints(messageConfig);
     }
 
-    protected void checkedAndSign(WxConfig wxConfig) {
+    protected void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
         // config setting
         if (StringUtils.isBlank(this.appid)) {
             setAppid(wxConfig.getAppid());
@@ -96,15 +93,7 @@ public abstract class AbstractWxPayBaseRequest {
             setSignType(WxSignUtils.MD5);
         }
         // check fileds
-        this.checkFields();
-        // not null check
-        if (StringUtils.isBlank(wxConfig.getAppid())) {
-            throw new RuntimeException("appid is not allowed to be empty");
-        } else if (StringUtils.isBlank(wxConfig.getMchId())) {
-            throw new RuntimeException("mchId is not allowed to be empty");
-        } else if (StringUtils.isBlank(wxConfig.getMchKey())) {
-            throw new RuntimeException("mchKey is not allowed to be empty");
-        }
+        this.checkFields(messageConfig);
         // do sign
         setSign(WxSignUtils.createSign(this, wxConfig.getMchKey(), this.signType));
     }
@@ -116,7 +105,7 @@ public abstract class AbstractWxPayBaseRequest {
     /**
      * 检查约束情况
      */
-    protected abstract void checkConstraints();
+    protected abstract void checkConstraints(MessageConfig messageConfig);
 
     public String getAppid() {
         return appid;

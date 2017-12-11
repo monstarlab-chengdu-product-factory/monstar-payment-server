@@ -1,9 +1,9 @@
 package cn.monstar.payment.domain.service.refund;
 
+import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.MonstarConfig;
 import cn.monstar.payment.domain.dao.mybatis.TRefundMapper;
 import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
-import cn.monstar.payment.domain.model.enums.ExceptionEnum;
 import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
 import cn.monstar.payment.domain.model.enums.RefundStatusEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
@@ -30,8 +30,10 @@ import java.util.Date;
  * @date 2017/11/27 15:36
  */
 @Service
-@Transactional
 public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMapper> implements RefundService {
+
+    @Autowired
+    private MessageConfig messageConfig;
 
     @Autowired
     private PaymentService paymentService;
@@ -48,6 +50,7 @@ public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMap
         super.repository = repository;
     }
 
+    @Transactional
     @Override
     public ApplyRefundResultDto refundApplication(ApplyRefundForm applyRefundForm) {
         ApplyRefundResultDto applyRefundResultDto = null;
@@ -56,12 +59,12 @@ public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMap
         TPayment tPayment = paymentService.findByPaymentNo(applyRefundForm.getPaymentNo());
         // 构建refund
         if (tPayment == null) {
-            throw new BusinessException(String.format(ExceptionEnum.PAYMENT_NOT_FOUND.getLabel(), applyRefundForm.getPaymentNo()));
+            throw new BusinessException(String.format(messageConfig.getE00002(), applyRefundForm.getPaymentNo()));
         }
 
         if (tPayment.getPaymentStatus() == PaymentStatusEnum.UNPAID || tPayment.getPaymentStatus() == PaymentStatusEnum.PAYMENTFAILURE) {
             // 付款单状态不正确
-            throw new BusinessException(String.format(ExceptionEnum.PAYMENT_STATUS_ERROR.getLabel(), applyRefundForm.getPaymentNo()));
+            throw new BusinessException(String.format(messageConfig.getE00002(), applyRefundForm.getPaymentNo()));
         }
 
         applyRefundResultDto = new ApplyRefundResultDto(new BigDecimal(applyRefundForm.getOrderMoney()), new BigDecimal(applyRefundForm.getRefundMoney()),

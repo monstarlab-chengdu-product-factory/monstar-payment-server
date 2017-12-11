@@ -1,7 +1,8 @@
 package cn.monstar.payment.domain.util.wechat.request;
 
+import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.WxConfig;
-import cn.monstar.payment.web.exception.wx.WxPayException;
+import cn.monstar.payment.web.exception.BusinessException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
 
@@ -74,21 +75,20 @@ public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements
     private Integer offset;
 
     @Override
-    public void checkedAndSign(WxConfig wxConfig) {
-        super.checkedAndSign(wxConfig);
+    public void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
+        super.checkedAndSign(wxConfig, messageConfig);
     }
 
     @Override
-    protected void checkConstraints() {
+    protected void checkConstraints(MessageConfig messageConfig) {
         List<String> params = Arrays.asList(transactionId, outTradeNo, outRefundNo, refundId);
         int count = 0;
         for (String param : params) {
             if (StringUtils.isNotBlank(param)) {
                 count++;
                 if (count > 2) {
-                    throw new WxPayException("transaction_id,out_trade_no,out_refund_no和refund_id只能任填一个");
+                    throw new BusinessException(messageConfig.getE00010());
                 }
-                continue;
             }
         }
     }

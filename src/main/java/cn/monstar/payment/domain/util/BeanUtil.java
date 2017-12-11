@@ -1,8 +1,6 @@
 package cn.monstar.payment.domain.util;
 
-import cn.monstar.payment.domain.model.enums.ExceptionEnum;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
-import cn.monstar.payment.web.exception.wx.WxErrorException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
 
@@ -56,7 +54,8 @@ public class BeanUtil {
      * 检查微信接口请求数据必填参数
      * @param object 微信请求参数
      */
-    public static void checkRequiredFields(Object object){
+    public static Boolean checkRequiredFields(Object object){
+        Boolean flag = true;
         List<Field> fields = Arrays.asList(object.getClass().getDeclaredFields());
         if (!object.getClass().getSuperclass().getName().equalsIgnoreCase("Object")) {
             fields.addAll(Arrays.asList(object.getClass().getSuperclass().getDeclaredFields()));
@@ -71,7 +70,8 @@ public class BeanUtil {
                     String value = field.get(object).toString();
                     field.setAccessible(isAccessible);
                     if (StringUtils.isBlank(value)){
-                        throw new WxErrorException(ExceptionEnum.PARAMREQUIRED.getEnumValue(),String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), field.getName()));
+                        flag = false;
+                        break;
                     }
                     continue;
                 }
@@ -79,8 +79,9 @@ public class BeanUtil {
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            flag = false;
         }
-
+        return flag;
     }
 
 }

@@ -1,5 +1,6 @@
 package cn.monstar.payment.domain.util.wechat.request;
 
+import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -28,12 +29,12 @@ public class WxPayShortUrlRequst extends AbstractWxPayBaseRequest implements Ser
     private String longUrl;
 
     @Override
-    public void checkedAndSign(WxConfig wxConfig) {
-        super.checkedAndSign(wxConfig);
+    public void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
+        super.checkedAndSign(wxConfig, messageConfig);
     }
 
     @Override
-    protected void checkConstraints() {
+    protected void checkConstraints(MessageConfig messageConfig) {
     }
 
     public String getLongUrl() {

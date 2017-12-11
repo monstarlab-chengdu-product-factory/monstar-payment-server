@@ -1,7 +1,5 @@
 package cn.monstar.payment.config;
 
-import cn.monstar.payment.domain.model.enums.ExceptionEnum;
-import cn.monstar.payment.web.exception.wx.WxPayException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
@@ -32,6 +30,9 @@ public class WxPayConfig {
     @Autowired
     private HttpClientConfig httpClientConfig;
 
+    @Autowired
+    private MessageConfig messageConfig;
+
     /**
      * 初始化SSLContext
      *
@@ -39,16 +40,16 @@ public class WxPayConfig {
      */
     public SSLContext initSSLContext() {
         if (StringUtils.isBlank(wxConfig.getMchId())) {
-            throw new WxPayException(String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "mchId"));
+            throw new RuntimeException(String.format(messageConfig.getE00004(), "mchId"));
         }
 
         if (StringUtils.isBlank(wxConfig.getKeyPath())) {
-            throw new WxPayException(String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "keyPath"));
+            throw new RuntimeException(String.format(messageConfig.getE00004(), "keyPath"));
         }
         InputStream inputStream;
         final String prefix = "classpath:";
-        String fileHasProblemMsg = "证书文件【" + wxConfig.getKeyPath() + "】有问题，请核实！";
-        String fileNotFoundMsg = "证书文件【" + wxConfig.getKeyPath() + "】不存在，请核实！";
+        String fileHasProblemMsg = String.format(messageConfig.getE00011(), wxConfig.getKeyPath());
+        String fileNotFoundMsg = String.format(messageConfig.getE00012(), wxConfig.getKeyPath());
         if (wxConfig.getKeyPath().startsWith(prefix)) {
             String path = StringUtils.removeFirst(wxConfig.getKeyPath(), prefix);
             if (!path.startsWith("/")) {
@@ -57,20 +58,20 @@ public class WxPayConfig {
             inputStream = WxPayConfig.class.getResourceAsStream(path);
             if (inputStream == null) {
                 logger.error(fileNotFoundMsg);
-                throw new WxPayException(fileNotFoundMsg);
+                throw new RuntimeException(fileNotFoundMsg);
             }
         } else {
             try {
                 File file = new File(wxConfig.getKeyPath());
                 if (!file.exists()) {
                     logger.error(fileNotFoundMsg);
-                    throw new WxPayException(fileNotFoundMsg);
+                    throw new RuntimeException(fileNotFoundMsg);
                 }
                 inputStream = new FileInputStream(file);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 logger.error(fileHasProblemMsg + "{}", e);
-                throw new WxPayException(fileHasProblemMsg);
+                throw new RuntimeException(fileHasProblemMsg);
             }
         }
 
@@ -83,7 +84,7 @@ public class WxPayConfig {
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("初始化 SSLContext 出现错误:{}", e.getMessage());
-            throw new WxPayException("初始化 SSLContext 出现错误:" + e.getMessage());
+            throw new RuntimeException(String.format(messageConfig.getE00013(), e.getMessage()));
         } finally {
             if (inputStream != null) {
                 try {

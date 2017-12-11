@@ -1,12 +1,9 @@
 package cn.monstar.payment.domain.util.wechat.request;
 
+import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.WxConfig;
-import cn.monstar.payment.domain.model.enums.ExceptionEnum;
-import cn.monstar.payment.domain.util.constant.ConstantUtil;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
-import cn.monstar.payment.web.exception.wx.WxPayException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import org.springframework.util.StringUtils;
 
 /**
  * @author wangxianding
@@ -217,44 +214,13 @@ public class WxPayUnifiedOrderRequest extends AbstractWxPayBaseRequest {
     private String sceneInfo;
 
     @Override
-    public void checkedAndSign(WxConfig wxConfig) {
-        if (StringUtils.isEmpty(wxConfig.getNotifyUrl())) {
-            throw new RuntimeException("notifyUrl is not allowed to be empty");
-        }
-        super.checkedAndSign(wxConfig);
+    public void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
+        super.checkedAndSign(wxConfig, messageConfig);
     }
 
     @Override
-    protected void checkConstraints() {
-        //检查交易类型
-        switch (this.tradeType) {
-            case ConstantUtil.WX_TRADE_APP:
-                break;
-            /**
-             * trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识
-             */
-            case ConstantUtil.WX_TRADE_JSAPI:
-                if (StringUtils.isEmpty(this.openid)) {
-                    throw new WxPayException(String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "openid"));
-                }
-                break;
-            /**
-             * trade_type=NATIVE时（即扫码支付），此参数必传。此参数为二维码中包含的商品ID，商户自行定义。
-             */
-            case ConstantUtil.WX_TRADE_NATIVE:
-                if (StringUtils.isEmpty(this.productId)) {
-                    throw new WxPayException(String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "product_id"));
-                }
-                break;
-            /**
-             * 该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报,H5支付不建议在APP端使用，针对场景1，2请接入APP支付，不然可能会出现兼容性问题
-             */
-            case ConstantUtil.WX_TRADE_H5:
-                if (StringUtils.isEmpty(this.sceneInfo)) {
-                    throw new WxPayException(String.format(ExceptionEnum.PARAMREQUIRED.getLabel(), "scene_info"));
-                }
-                break;
-        }
+    protected void checkConstraints(MessageConfig messageConfig) {
+
     }
 
     public WxPayUnifiedOrderRequest() {

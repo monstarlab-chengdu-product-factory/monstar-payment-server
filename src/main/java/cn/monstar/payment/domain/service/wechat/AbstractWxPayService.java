@@ -1,17 +1,15 @@
 package cn.monstar.payment.domain.service.wechat;
 
-import cn.monstar.payment.config.HttpClientConfig;
-import cn.monstar.payment.config.MonstarConfig;
-import cn.monstar.payment.config.WxConfig;
-import cn.monstar.payment.config.WxPayConfig;
+import cn.monstar.payment.config.*;
 import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
 import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.domain.util.UrlUtil;
+import cn.monstar.payment.domain.util.constant.WxConstantUtil;
 import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
 import cn.monstar.payment.domain.util.wechat.request.*;
 import cn.monstar.payment.domain.util.wechat.response.*;
-import cn.monstar.payment.web.exception.wx.WxPayException;
+import cn.monstar.payment.web.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -49,6 +47,9 @@ public abstract class AbstractWxPayService implements WxPayService {
     private WxConfig wxConfig;
 
     @Autowired
+    private MessageConfig messageConfig;
+
+    @Autowired
     private HttpClientConfig httpClientConfig;
 
     @Autowired
@@ -66,7 +67,36 @@ public abstract class AbstractWxPayService implements WxPayService {
 
     @Override
     public WxPayUnifiedOrderResponese wxUnifiedOrder(WxPayUnifiedOrderRequest request) {
-        request.checkedAndSign(wxConfig);
+        //检查交易类型
+        switch (request.getTradeType()) {
+            case WxConstantUtil.WX_TRADE_APP:
+                break;
+            /**
+             * trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识
+             */
+            case WxConstantUtil.WX_TRADE_JSAPI:
+                if (StringUtils.isBlank(request.getOpenid())) {
+                    throw new BusinessException(String.format(messageConfig.getE00004(), "openid"));
+                }
+                break;
+            /**
+             * trade_type=NATIVE时（即扫码支付），此参数必传。此参数为二维码中包含的商品ID，商户自行定义。
+             */
+            case WxConstantUtil.WX_TRADE_NATIVE:
+                if (org.springframework.util.StringUtils.isEmpty(request.getProductId())) {
+                    throw new BusinessException(String.format(messageConfig.getE00004(), "product_id"));
+                }
+                break;
+            /**
+             * 该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报,H5支付不建议在APP端使用，针对场景1，2请接入APP支付，不然可能会出现兼容性问题
+             */
+            case WxConstantUtil.WX_TRADE_H5:
+                if (org.springframework.util.StringUtils.isEmpty(request.getSceneInfo())) {
+                    throw new BusinessException(String.format(messageConfig.getE00004(), "scene_info"));
+                }
+                break;
+        }
+        request.checkedAndSign(wxConfig, messageConfig);
         String url = getPayUrl() + "/pay/unifiedorder";
         String resultContent = this.post(url, request.toXML(), false);
         WxPayUnifiedOrderResponese result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayUnifiedOrderResponese.class);
@@ -77,13 +107,13 @@ public abstract class AbstractWxPayService implements WxPayService {
     @Override
     public WxPayNotifyRequest parseNofifyResult(String notifyString) {
         if (StringUtils.isBlank(notifyString)) {
-            throw new WxPayException("需要解析的支付结果不能为空");
+            throw new BusinessException(messageConfig.getE00006());
         }
         //执行解析
         WxPayNotifyRequest result = AbstractWxPayBaseResponse.fromXML(notifyString, WxPayNotifyRequest.class);
         //校验签名
         if (!WxSignUtils.checkSign(result, wxConfig.getMchKey())) {
-            throw new WxPayException("签名不正确");
+            throw new BusinessException(messageConfig.getE00007());
         }
         return result;
     }
@@ -94,7 +124,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         request.setOutTradeNo(outTradeNo);
         request.setTransactionId(transactionId);
 
-        request.checkedAndSign(wxConfig);
+        request.checkedAndSign(wxConfig, messageConfig);
         String url = getPayUrl() + "/pay/orderquery";
         String resultContent = this.post(url, request.toXML(), false);
         WxPayOrderQueryResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayOrderQueryResponse.class);
@@ -108,7 +138,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         WxPayCloseOrderRequest request = new WxPayCloseOrderRequest();
         request.setOutTradeNo(outTradeNo);
 
-        request.checkedAndSign(wxConfig);
+        request.checkedAndSign(wxConfig,messageConfig);
         String url = getPayUrl() + "/pay/closeorder";
         String resultContent = this.post(url, request.toXML(), false);
         WxPayCloseOrderResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayCloseOrderResponse.class);
@@ -128,7 +158,7 @@ public abstract class AbstractWxPayService implements WxPayService {
 
     @Override
     public WxPayRefundResponse wxSendRefund(WxPayRefundRequest request) {
-        request.checkedAndSign(wxConfig);
+        request.checkedAndSign(wxConfig,messageConfig);
         String url = getPayUrl() + "/secapi/pay/refund";
         String resultContent = this.post(url, request.toXML(), true);
         WxPayRefundResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayRefundResponse.class);
@@ -145,7 +175,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         request.setRefundId(refundId);
         request.setOutTradeNo(outTradeNo);
 
-        request.checkedAndSign(wxConfig);
+        request.checkedAndSign(wxConfig, messageConfig);
 
         String url = getPayUrl() + "/pay/refundquery";
         String resultContent = this.post(url, request.toXML(), false);
@@ -160,12 +190,12 @@ public abstract class AbstractWxPayService implements WxPayService {
         WxPayShortUrlRequst requst = new WxPayShortUrlRequst();
         requst.setLongUrl(longUrl);
 
-        requst.checkedAndSign(wxConfig);
+        requst.checkedAndSign(wxConfig, messageConfig);
         //需要传输encode后的链接
         String longUrlencode = UrlUtil.encode(longUrl, null);
         if (StringUtils.isBlank(longUrlencode)) {
-            logger.error("长链接encode失败");
-            throw new WxPayException("长链接encode失败");
+            logger.error(messageConfig.getE00005());
+            throw new BusinessException(messageConfig.getE00005());
         }
         requst.setLongUrl(longUrlencode);
 
@@ -183,7 +213,7 @@ public abstract class AbstractWxPayService implements WxPayService {
      * @param useKey     是否使用证书
      * @return 返回请求结果字符串
      */
-    protected String post(String url, String requestStr, boolean useKey) throws WxPayException {
+    protected String post(String url, String requestStr, boolean useKey) throws BusinessException {
         try {
             HttpClientBuilder httpClientBuilder = HttpClients.custom();
             if (useKey) {
@@ -219,15 +249,15 @@ public abstract class AbstractWxPayService implements WxPayService {
                 httpPost.setEntity(new StringEntity(new String(requestStr.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1)));
                 try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
                     String responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-                    this.logger.info("\n【请求地址】：{}\n【请求数据】：{}\n【响应数据】：{}", url, requestStr, responseString);
+                    this.logger.info(messageConfig.getI00001(), url, requestStr, responseString);
                     return responseString;
                 }
             } finally {
                 httpPost.releaseConnection();
             }
         } catch (Exception e) {
-            this.logger.error("\n【请求地址】：{}\n【请求数据】：{}\n【异常信息】：{}", url, requestStr, e.getMessage());
-            throw new WxPayException(e.getMessage());
+            this.logger.error(messageConfig.getI00001(), url, requestStr, e.getMessage());
+            throw new BusinessException(e.getMessage());
         }
     }
 

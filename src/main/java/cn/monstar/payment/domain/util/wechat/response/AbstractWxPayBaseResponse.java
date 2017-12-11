@@ -3,7 +3,7 @@ package cn.monstar.payment.domain.util.wechat.response;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.xml.XStreamInitializer;
-import cn.monstar.payment.web.exception.wx.WxPayException;
+import cn.monstar.payment.web.exception.BusinessException;
 import com.google.common.base.Joiner;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -141,7 +141,7 @@ public abstract class AbstractWxPayBaseResponse {
      */
     public Map<String, String> toMap() {
         if (StringUtils.isBlank(this.xmlString)) {
-            throw new WxPayException("xmlString有问题，请核实");
+            return null;
         }
         Map<String, String> result = new HashMap<>();
         Document doc = this.getXmlDoc();
@@ -154,11 +154,11 @@ public abstract class AbstractWxPayBaseResponse {
             for (int i = 0; i < len; i++) {
                 result.put(list.item(i).getNodeName(), list.item(i).getTextContent());
             }
+            return result;
         } catch (XPathExpressionException e) {
             e.printStackTrace();
-            throw new WxPayException("非法的xml文本内容：" + xmlString);
+            return null;
         }
-        return result;
     }
 
     /**
@@ -167,12 +167,12 @@ public abstract class AbstractWxPayBaseResponse {
      * @param wxConfig     微信配置
      * @param signType     签名类型
      * @param checkSuccess 是否检查结果
-     * @throws WxPayException
+     * @throws BusinessException
      */
-    public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess) throws WxPayException {
+    public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess) throws BusinessException {
         Map<String, String> map = toMap();
         if (StringUtils.isNotBlank(this.sign) && !WxSignUtils.checkSign(map, wxConfig.getMchKey())) {
-            throw new WxPayException("签名校验失败");
+            throw new BusinessException("签名校验失败");
         }
 
         if (checkSuccess) {
@@ -196,9 +196,8 @@ public abstract class AbstractWxPayBaseResponse {
             if (StringUtils.isNotBlank(this.errCodeDes)) {
                 errMsg.append(",错误码描述：").append(this.errCodeDes);
             }
-            throw new WxPayException("结果业务代码异常：" + errMsg.toString());
+            throw new BusinessException("结果业务代码异常：" + errMsg.toString());
         }
-
     }
 
     /**
@@ -328,7 +327,7 @@ public abstract class AbstractWxPayBaseResponse {
             return this.xmlDoc;
         } catch (SAXException | IOException | ParserConfigurationException e) {
             e.printStackTrace();
-            throw new WxPayException("非法的xml文本内容：" + xmlString);
+            throw null;
         }
     }
 

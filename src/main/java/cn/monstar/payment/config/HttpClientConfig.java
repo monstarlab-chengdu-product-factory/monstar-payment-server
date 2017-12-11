@@ -1,6 +1,5 @@
 package cn.monstar.payment.config;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
@@ -49,22 +48,16 @@ public class HttpClientConfig {
         return httpConnectionTimeout;
     }
 
-    public void setHttpConnectionTimeout(String httpConnectionTimeout) {
-        if (StringUtils.isBlank(httpConnectionTimeout)) {
-            httpConnectionTimeout = "5000";
-        }
-        this.httpConnectionTimeout = Integer.valueOf(httpConnectionTimeout);
+    public void setHttpConnectionTimeout(int httpConnectionTimeout) {
+        this.httpConnectionTimeout = httpConnectionTimeout;
     }
 
     public int getHttpTimeout() {
         return httpTimeout;
     }
 
-    public void setHttpTimeout(String httpTimeout) {
-        if (StringUtils.isBlank(httpTimeout)) {
-            httpTimeout = "10000";
-        }
-        this.httpTimeout = Integer.valueOf(httpTimeout);
+    public void setHttpTimeout(int httpTimeout) {
+        this.httpTimeout = httpTimeout;
     }
 
     public SSLContext getSslContext() {
@@ -87,11 +80,8 @@ public class HttpClientConfig {
         return httpProxyPort;
     }
 
-    public void setHttpProxyPort(String httpProxyPort) {
-        if (!StringUtils.isBlank(httpProxyPort)) {
-            httpProxyPort = "0";
-        }
-        this.httpProxyPort = Integer.valueOf(httpProxyPort);
+    public void setHttpProxyPort(int httpProxyPort) {
+        this.httpProxyPort = httpProxyPort;
     }
 
     public String getHttpProxyUsername() {

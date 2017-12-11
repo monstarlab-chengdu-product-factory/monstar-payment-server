@@ -1,7 +1,6 @@
 package cn.monstar.payment.web.exception;
 
 import cn.monstar.payment.domain.model.dto.APIResult;
-import cn.monstar.payment.web.exception.wx.WxPayException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,19 +15,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-	/**
-	 * 微信支付异常
-	 *
-	 * @param e
-	 * @param response
-	 * @return
-	 */
-	@ExceptionHandler(WxPayException.class)
-	@ResponseBody
-	public APIResult exceptionHandler(WxPayException e, HttpServletResponse response) {
-		return APIResult.failure().setMessage(e.getMessage());
-	}
 
 	@ExceptionHandler(BusinessException.class)
 	@ResponseBody
