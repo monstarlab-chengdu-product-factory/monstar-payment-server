@@ -4,6 +4,7 @@ import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.MonstarConfig;
 import cn.monstar.payment.domain.dao.mybatis.TRefundMapper;
 import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
+import cn.monstar.payment.domain.model.dto.QueryRefundDto;
 import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
 import cn.monstar.payment.domain.model.enums.RefundStatusEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
@@ -14,6 +15,7 @@ import cn.monstar.payment.domain.service.wechat.WxPayService;
 import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.domain.util.wechat.response.WxPayRefundResponse;
 import cn.monstar.payment.web.controller.form.ApplyRefundForm;
+import cn.monstar.payment.web.controller.form.QueryRefundForm;
 import cn.monstar.payment.web.exception.BusinessException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,4 +112,11 @@ public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMap
         return applyRefundResultDto;
     }
 
+    @Override
+    public QueryRefundDto queryRefund(QueryRefundForm queryRefundForm) {
+        QueryRefundDto queryRefundDto = new QueryRefundDto();
+        queryRefundDto.setOutRefundNo(queryRefundForm.getRefundNo());
+        queryRefundDto.setRefundStatus(RefundStatusEnum.REFUNDCLOSE);
+        return queryRefundDto;
+    }
 }

@@ -3,6 +3,7 @@ package cn.monstar.payment.test.controller;
 import cn.monstar.payment.config.TestsConfiguration;
 import cn.monstar.payment.domain.model.dto.APIResult;
 import cn.monstar.payment.web.controller.form.ApplyRefundForm;
+import cn.monstar.payment.web.controller.form.QueryRefundForm;
 import com.alibaba.fastjson.JSON;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 import java.util.LinkedHashMap;
 
@@ -54,6 +54,29 @@ public class RefundControllerTest {
         } else {
             logger.info("state:{},message:{}", apiResult.getStatus(), apiResult.getMessage());
         }
+    }
+
+    @Test
+    public void queryRefund() {
+        QueryRefundForm queryRefundForm = new QueryRefundForm();
+        queryRefundForm.setPaymentNo("12345678901234567890123456789012");
+        queryRefundForm.setRefundNo("12345678901234567890123456789012");
+
+        String uri = "/payment/refunds/query";
+        ResponseEntity<APIResult> responseEntity = testRestTemplate.postForEntity(uri, queryRefundForm, APIResult.class);
+
+        Assert.assertNotNull(responseEntity);
+        Assert.assertNotNull(responseEntity.getBody());
+
+        APIResult apiResult = responseEntity.getBody();
+        if (apiResult.getStatus() == 0) {
+            LinkedHashMap<String, Object> objectLinkedHashMap = (LinkedHashMap<String, Object>) apiResult.getData();
+            Assert.assertNotNull(objectLinkedHashMap.get("outRefundNo"));
+            Assert.assertNotNull(objectLinkedHashMap.get("refundStatus"));
+        } else {
+            logger.info("state:{},message:{}", apiResult.getStatus(), apiResult.getMessage());
+        }
+
     }
 
 }
