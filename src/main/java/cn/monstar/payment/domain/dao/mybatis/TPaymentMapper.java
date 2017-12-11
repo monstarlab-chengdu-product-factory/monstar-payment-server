@@ -3,6 +3,7 @@ package cn.monstar.payment.domain.dao.mybatis;
 import cn.monstar.payment.domain.dao.BaseMapper;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author zhangshuai
@@ -12,4 +13,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TPaymentMapper extends BaseMapper<TPayment, Long> {
+
+    /**
+     * 根据付款流水号获取付款记录
+     *
+     * @param paymentNo
+     * @return
+     */
+    TPayment findByPaymentNo(@Param("paymentNo") String paymentNo);
 }

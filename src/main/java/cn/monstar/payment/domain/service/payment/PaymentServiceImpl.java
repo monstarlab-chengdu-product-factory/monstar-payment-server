@@ -20,4 +20,9 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     public void setRepository(TPaymentMapper repository) {
         super.repository = repository;
     }
+
+    @Override
+    public TPayment findByPaymentNo(String paymentNo) {
+        return super.repository.findByPaymentNo(paymentNo);
+    }
 }
