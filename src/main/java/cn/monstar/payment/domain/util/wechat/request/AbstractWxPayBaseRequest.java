@@ -72,7 +72,7 @@ public abstract class AbstractWxPayBaseRequest {
      */
     private void checkFields(MessageConfig messageConfig) {
         if (!BeanUtil.checkRequiredFields(this)) {
-            throw new BusinessException(messageConfig.getE00008());
+            throw new BusinessException(messageConfig.E00008);
         }
         //check other parameters
         this.checkConstraints(messageConfig);

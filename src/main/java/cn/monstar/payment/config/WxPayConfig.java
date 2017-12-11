@@ -40,16 +40,16 @@ public class WxPayConfig {
      */
     public SSLContext initSSLContext() {
         if (StringUtils.isBlank(wxConfig.getMchId())) {
-            throw new RuntimeException(String.format(messageConfig.getE00004(), "mchId"));
+            throw new RuntimeException(String.format(messageConfig.E00004, "mchId"));
         }
 
         if (StringUtils.isBlank(wxConfig.getKeyPath())) {
-            throw new RuntimeException(String.format(messageConfig.getE00004(), "keyPath"));
+            throw new RuntimeException(String.format(messageConfig.E00004, "keyPath"));
         }
         InputStream inputStream;
         final String prefix = "classpath:";
-        String fileHasProblemMsg = String.format(messageConfig.getE00011(), wxConfig.getKeyPath());
-        String fileNotFoundMsg = String.format(messageConfig.getE00012(), wxConfig.getKeyPath());
+        String fileHasProblemMsg = String.format(messageConfig.E00011, wxConfig.getKeyPath());
+        String fileNotFoundMsg = String.format(messageConfig.E00012, wxConfig.getKeyPath());
         if (wxConfig.getKeyPath().startsWith(prefix)) {
             String path = StringUtils.removeFirst(wxConfig.getKeyPath(), prefix);
             if (!path.startsWith("/")) {
@@ -84,7 +84,7 @@ public class WxPayConfig {
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("初始化 SSLContext 出现错误:{}", e.getMessage());
-            throw new RuntimeException(String.format(messageConfig.getE00013(), e.getMessage()));
+            throw new RuntimeException(String.format(messageConfig.E00013, e.getMessage()));
         } finally {
             if (inputStream != null) {
                 try {

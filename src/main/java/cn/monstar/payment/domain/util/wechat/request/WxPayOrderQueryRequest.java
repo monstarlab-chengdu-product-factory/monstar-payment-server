@@ -37,7 +37,7 @@ public class WxPayOrderQueryRequest extends AbstractWxPayBaseRequest {
     protected void checkConstraints(MessageConfig messageConfig) {
         if (StringUtils.isAllBlank(this.transactionId, this.outTradeNo)
                 || StringUtils.isNoneBlank(this.transactionId, this.outTradeNo)) {
-            throw new BusinessException(messageConfig.getE00009());
+            throw new BusinessException(messageConfig.E00009);
         }
     }
 

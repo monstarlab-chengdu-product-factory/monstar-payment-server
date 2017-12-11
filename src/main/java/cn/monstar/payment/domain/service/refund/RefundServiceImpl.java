@@ -59,12 +59,12 @@ public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMap
         TPayment tPayment = paymentService.findByPaymentNo(applyRefundForm.getPaymentNo());
         // 构建refund
         if (tPayment == null) {
-            throw new BusinessException(String.format(messageConfig.getE00002(), applyRefundForm.getPaymentNo()));
+            throw new BusinessException(String.format(messageConfig.E00002, applyRefundForm.getPaymentNo()));
         }
 
         if (tPayment.getPaymentStatus() == PaymentStatusEnum.UNPAID || tPayment.getPaymentStatus() == PaymentStatusEnum.PAYMENTFAILURE) {
             // 付款单状态不正确
-            throw new BusinessException(String.format(messageConfig.getE00002(), applyRefundForm.getPaymentNo()));
+            throw new BusinessException(String.format(messageConfig.E00002, applyRefundForm.getPaymentNo()));
         }
 
         applyRefundResultDto = new ApplyRefundResultDto(new BigDecimal(applyRefundForm.getOrderMoney()), new BigDecimal(applyRefundForm.getRefundMoney()),

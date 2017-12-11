@@ -87,7 +87,7 @@ public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements
             if (StringUtils.isNotBlank(param)) {
                 count++;
                 if (count > 2) {
-                    throw new BusinessException(messageConfig.getE00010());
+                    throw new BusinessException(messageConfig.E00010);
                 }
             }
         }

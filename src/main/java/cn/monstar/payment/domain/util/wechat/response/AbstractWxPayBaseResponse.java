@@ -1,5 +1,6 @@
 package cn.monstar.payment.domain.util.wechat.response;
 
+import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.xml.XStreamInitializer;
@@ -169,10 +170,10 @@ public abstract class AbstractWxPayBaseResponse {
      * @param checkSuccess 是否检查结果
      * @throws BusinessException
      */
-    public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess) throws BusinessException {
+    public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess, MessageConfig messageConfig) throws BusinessException {
         Map<String, String> map = toMap();
         if (StringUtils.isNotBlank(this.sign) && !WxSignUtils.checkSign(map, wxConfig.getMchKey())) {
-            throw new BusinessException("签名校验失败");
+            throw new BusinessException(messageConfig.E00007);
         }
 
         if (checkSuccess) {

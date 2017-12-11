@@ -76,7 +76,7 @@ public abstract class AbstractWxPayService implements WxPayService {
              */
             case WxConstantUtil.WX_TRADE_JSAPI:
                 if (StringUtils.isBlank(request.getOpenid())) {
-                    throw new BusinessException(String.format(messageConfig.getE00004(), "openid"));
+                    throw new BusinessException(String.format(messageConfig.E00004, "openid"));
                 }
                 break;
             /**
@@ -84,7 +84,7 @@ public abstract class AbstractWxPayService implements WxPayService {
              */
             case WxConstantUtil.WX_TRADE_NATIVE:
                 if (org.springframework.util.StringUtils.isEmpty(request.getProductId())) {
-                    throw new BusinessException(String.format(messageConfig.getE00004(), "product_id"));
+                    throw new BusinessException(String.format(messageConfig.E00004, "product_id"));
                 }
                 break;
             /**
@@ -92,7 +92,7 @@ public abstract class AbstractWxPayService implements WxPayService {
              */
             case WxConstantUtil.WX_TRADE_H5:
                 if (org.springframework.util.StringUtils.isEmpty(request.getSceneInfo())) {
-                    throw new BusinessException(String.format(messageConfig.getE00004(), "scene_info"));
+                    throw new BusinessException(String.format(messageConfig.E00004, "scene_info"));
                 }
                 break;
         }
@@ -100,20 +100,20 @@ public abstract class AbstractWxPayService implements WxPayService {
         String url = getPayUrl() + "/pay/unifiedorder";
         String resultContent = this.post(url, request.toXML(), false);
         WxPayUnifiedOrderResponese result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayUnifiedOrderResponese.class);
-        result.checkResult(wxConfig, request.getSignType(), true);
+        result.checkResult(wxConfig, request.getSignType(), true, messageConfig);
         return result;
     }
 
     @Override
     public WxPayNotifyRequest parseNofifyResult(String notifyString) {
         if (StringUtils.isBlank(notifyString)) {
-            throw new BusinessException(messageConfig.getE00006());
+            throw new BusinessException(messageConfig.E00006);
         }
         //执行解析
         WxPayNotifyRequest result = AbstractWxPayBaseResponse.fromXML(notifyString, WxPayNotifyRequest.class);
         //校验签名
         if (!WxSignUtils.checkSign(result, wxConfig.getMchKey())) {
-            throw new BusinessException(messageConfig.getE00007());
+            throw new BusinessException(messageConfig.E00007);
         }
         return result;
     }
@@ -129,7 +129,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         String resultContent = this.post(url, request.toXML(), false);
         WxPayOrderQueryResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayOrderQueryResponse.class);
         result.composeCoupons();
-        result.checkResult(wxConfig, request.getSignType(), true);
+        result.checkResult(wxConfig, request.getSignType(), true, messageConfig);
         return result;
     }
 
@@ -142,7 +142,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         String url = getPayUrl() + "/pay/closeorder";
         String resultContent = this.post(url, request.toXML(), false);
         WxPayCloseOrderResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayCloseOrderResponse.class);
-        result.checkResult(wxConfig, request.getSignType(), true);
+        result.checkResult(wxConfig, request.getSignType(), true, messageConfig);
         return result;
     }
 
@@ -163,7 +163,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         String resultContent = this.post(url, request.toXML(), true);
         WxPayRefundResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayRefundResponse.class);
         result.composeCoupons();
-        result.checkResult(wxConfig, request.getSignType(), true);
+        result.checkResult(wxConfig, request.getSignType(), true, messageConfig);
         return result;
     }
 
@@ -181,7 +181,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         String resultContent = this.post(url, request.toXML(), false);
         WxPayRefundQueryResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayRefundQueryResponse.class);
         result.composeRefundRecords();
-        result.checkResult(wxConfig, request.getSignType(), true);
+        result.checkResult(wxConfig, request.getSignType(), true, messageConfig);
         return result;
     }
 
@@ -194,8 +194,8 @@ public abstract class AbstractWxPayService implements WxPayService {
         //需要传输encode后的链接
         String longUrlencode = UrlUtil.encode(longUrl, null);
         if (StringUtils.isBlank(longUrlencode)) {
-            logger.error(messageConfig.getE00005());
-            throw new BusinessException(messageConfig.getE00005());
+            logger.error(messageConfig.E00005);
+            throw new BusinessException(messageConfig.E00005);
         }
         requst.setLongUrl(longUrlencode);
 
@@ -230,18 +230,18 @@ public abstract class AbstractWxPayService implements WxPayService {
             HttpPost httpPost = new HttpPost(url);
 
             httpPost.setConfig(RequestConfig.custom()
-                    .setConnectionRequestTimeout(httpClientConfig.getHttpConnectionTimeout())
-                    .setConnectTimeout(httpClientConfig.getHttpConnectionTimeout())
-                    .setSocketTimeout(httpClientConfig.getHttpTimeout())
+                    .setConnectionRequestTimeout(httpClientConfig.httpConnectionTimeout)
+                    .setConnectTimeout(httpClientConfig.httpConnectionTimeout)
+                    .setSocketTimeout(httpClientConfig.httpTimeout)
                     .build());
 
-            if (StringUtils.isNotBlank(httpClientConfig.getHttpProxyHost())
-                    && httpClientConfig.getHttpProxyPort() > 0) {
+            if (StringUtils.isNotBlank(httpClientConfig.httpProxyHost)
+                    && httpClientConfig.httpProxyPort > 0) {
                 // 使用代理服务器 需要用户认证的代理服务器
                 CredentialsProvider provider = new BasicCredentialsProvider();
                 provider.setCredentials(
-                        new AuthScope(httpClientConfig.getHttpProxyHost(), httpClientConfig.getHttpProxyPort()),
-                        new UsernamePasswordCredentials(httpClientConfig.getHttpProxyUsername(), httpClientConfig.getHttpProxyPassword()));
+                        new AuthScope(httpClientConfig.httpProxyHost, httpClientConfig.httpProxyPort),
+                        new UsernamePasswordCredentials(httpClientConfig.httpProxyUsername, httpClientConfig.httpProxyPassword));
                 httpClientBuilder.setDefaultCredentialsProvider(provider);
             }
 
@@ -249,14 +249,14 @@ public abstract class AbstractWxPayService implements WxPayService {
                 httpPost.setEntity(new StringEntity(new String(requestStr.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1)));
                 try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
                     String responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-                    this.logger.info(messageConfig.getI00001(), url, requestStr, responseString);
+                    this.logger.info(messageConfig.E00001, url, requestStr, responseString);
                     return responseString;
                 }
             } finally {
                 httpPost.releaseConnection();
             }
         } catch (Exception e) {
-            this.logger.error(messageConfig.getI00001(), url, requestStr, e.getMessage());
+            this.logger.error(messageConfig.I00001, url, requestStr, e.getMessage());
             throw new BusinessException(e.getMessage());
         }
     }
