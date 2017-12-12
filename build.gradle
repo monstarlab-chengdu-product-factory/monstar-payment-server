@@ -69,6 +69,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.flywaydb:flyway-core")
 
+    compile files("lib/alipay-sdk-java20170307171631.jar")
+    compile files("lib/commons-logging-1.1.1.jar")
+
 //    compile("org.apache.httpcomponents:httpclient:4.4") {
 //        exclude(module: "commons-logging")
 //    }
