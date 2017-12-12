@@ -12,7 +12,7 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 @PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
-public class ApplicationConfig {
+public class AlipayConfig {
 
     @Value("${alipay.server_url}")
     public String alipayServerUrl;

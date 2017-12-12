@@ -1,6 +1,6 @@
 package cn.monstar.payment.web.controller;
 
-import cn.monstar.payment.config.ApplicationConfig;
+import cn.monstar.payment.config.AlipayConfig;
 import cn.monstar.payment.domain.model.dto.APIResult;
 import cn.monstar.payment.domain.model.dto.PayDto;
 import cn.monstar.payment.domain.model.enums.AccessTypeEnum;
@@ -32,72 +32,40 @@ public class PaymentsController extends BaseController {
     private PaymentService paymentService;
 
     @Autowired
-    private ApplicationConfig applicationConfig;
+    private AlipayConfig alipayConfig;
 
     /**
-     * alipay notify
+     * 手机H5支付
      *
-     * @param request
+     * @param payForm
      * @return
      */
-    @RequestMapping(value = "/alipay/notify", method = {RequestMethod.GET, RequestMethod.POST})
-    public String handleAlipayNotify(HttpServletRequest request) {
-        logger.info("get alipay notify");
-        Map<String, String> paramMap = getAllRequestParam(request);
-        try {
-            boolean verifyResult = AlipaySignature.rsaCheckV1(paramMap, applicationConfig.alipayPublicKey, AlipayConstants.CHARSET_UTF8, AlipayConstants.SIGN_TYPE_RSA2);
-            if (verifyResult) {
-                String appId = paramMap.get("app_id");
-                String paymentNo = paramMap.get("out_trade_no");
-                String outTradeNo = paramMap.get("trade_no");
-                String orderMoney = paramMap.get("total_amount");
-                if (applicationConfig.alipayId.equals(appId) && paymentService.paymentCorrectCheck(paymentNo, new BigDecimal(orderMoney))) {
-                    paymentService.updateToFinish(paymentNo, outTradeNo);
-                    return "success";
-                }
-            }
-        } catch (AlipayApiException e) {
-            e.printStackTrace();
-        }
-        return "failure";
-    }
-
     @PostMapping("/wapPay")
     public APIResult wapPay(@RequestBody PayForm payForm) {
         PayDto payDto = paymentService.createPayment(payForm, AccessTypeEnum.H5);
         return APIResult.success().setData(payDto);
     }
 
+    /**
+     * PC网站支付
+     *
+     * @param payForm
+     * @return
+     */
     @PostMapping("/pagePay")
     public APIResult pagePay(@RequestBody PayForm payForm) {
         PayDto payDto = paymentService.createPayment(payForm, AccessTypeEnum.QRCODE);
         return APIResult.success().setData(payDto);
     }
 
+    /**
+     * 支付状态查询
+     *
+     * @param paymentNo
+     * @return
+     */
     @PostMapping("/query")
     public APIResult query(@RequestParam(value = "paymentNo") String paymentNo) {
         return APIResult.success().setData(paymentService.paymentQuery(paymentNo));
-    }
-
-    /**
-     * get param
-     *
-     * @param request
-     * @return
-     */
-    private Map<String, String> getAllRequestParam(HttpServletRequest request) {
-        Map<String, String> res = new HashMap<>();
-        Enumeration<?> temp = request.getParameterNames();
-        if (null != temp) {
-            while (temp.hasMoreElements()) {
-                String en = (String) temp.nextElement();
-                String value = request.getParameter(en);
-                res.put(en, value);
-                if (null == res.get(en) || "".equals(res.get(en))) {
-                    res.remove(en);
-                }
-            }
-        }
-        return res;
     }
 }
