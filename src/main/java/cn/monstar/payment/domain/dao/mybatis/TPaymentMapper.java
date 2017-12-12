@@ -19,6 +19,7 @@ public interface TPaymentMapper extends BaseMapper<TPayment, Long> {
 
     /**
      * find payment info by paymentNo
+     * 根据付款流水号获取付款记录
      *
      * @param paymentNo
      * @return

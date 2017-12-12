@@ -1,7 +1,6 @@
 package cn.monstar.payment.web.exception;
 
-import cn.monstar.payment.domain.model.dto.APIResultDto;
-import cn.monstar.payment.domain.util.APIResultDtoUtil;
+import cn.monstar.payment.domain.model.dto.APIResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,30 +16,23 @@ import javax.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	/**
-	 * 无效参数异常
-	 *
-	 * @param e
-	 * @param response
-	 * @return
-	 */
-	@ExceptionHandler(InvalidParamException.class)
+	@ExceptionHandler(BusinessException.class)
 	@ResponseBody
-	public APIResultDto exceptionHandler(InvalidParamException e, HttpServletResponse response) {
-		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
+	public APIResult exceptionHandler(BusinessException e, HttpServletResponse response) {
+		return APIResult.failure().setMessage(e.getMessage());
 	}
 
+
 	/**
-	 * 必填参数异常
-	 *
+	 * 统一异常处理
 	 * @param e
 	 * @param response
 	 * @return
 	 */
-	@ExceptionHandler(ParamRequiredException.class)
+	@ExceptionHandler(Exception.class)
 	@ResponseBody
-	public APIResultDto exceptionHandler(ParamRequiredException e, HttpServletResponse response) {
-		return APIResultDtoUtil.failure(e.getCode(), e.getMessage());
+	public APIResult exceptionHandler(Exception e, HttpServletResponse response) {
+		return APIResult.failure().setMessage(e.getMessage());
 	}
 
 }

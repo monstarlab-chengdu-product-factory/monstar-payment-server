@@ -48,4 +48,11 @@ public interface PaymentService extends BaseService<TPayment, Long> {
      */
     void updateToFinish(String paymentNo, String outTradeNo);
 
+    /**
+     * 根据付款流水号获取付款记录
+     *
+     * @param paymentNo
+     * @return
+     */
+    TPayment findByPaymentNo(String paymentNo);
 }

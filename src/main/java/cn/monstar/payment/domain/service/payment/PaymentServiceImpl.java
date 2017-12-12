@@ -8,6 +8,7 @@ import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
 import cn.monstar.payment.domain.service.BaseServiceImpl;
 import cn.monstar.payment.domain.service.alipay.AlipayService;
+import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.web.controller.form.PayForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,12 +125,17 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     }
 
     private String getPaymentNo() {
-        Random random = new Random();
-        return new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + random.nextInt(10) + random.nextInt(10) + random.nextInt(10);
+        String randomNum = StringUtil.getRandomString(3, StringUtil.RANDOM_ONLY_NUMBER);
+        return (new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + randomNum);
     }
 
     @Override
     public void updateToFinish(String paymentNo, String outTradeNo) {
         super.repository.updateToFinish(paymentNo, outTradeNo);
+    }
+
+    @Override
+    public TPayment findByPaymentNo(String paymentNo) {
+        return super.repository.findByPaymentNo(paymentNo);
     }
 }

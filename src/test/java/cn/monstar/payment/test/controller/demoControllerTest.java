@@ -8,6 +8,7 @@
 package cn.monstar.payment.test.controller;
 
 import cn.monstar.payment.config.TestsConfiguration;
+import cn.monstar.payment.domain.model.dto.APIResult;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,7 @@ public class demoControllerTest {
 
     @Test
     public void testDemo() {
-        String rs = this.restTemplate.getForObject("/test1", String.class);
-        Assert.assertEquals(rs, "test");
+        APIResult rs = this.restTemplate.getForObject("/order", APIResult.class);
+        Assert.assertEquals(rs.getStatus(), 0);
     }
 }

@@ -231,7 +231,7 @@
     where payment_id = #{paymentId,jdbcType=BIGINT}
   </update>
 
-  <select id="findByPaymentNo" parameterType="String" resultMap="BaseResultMap">
+  <select id="findByPaymentNo" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
     FROM t_payment

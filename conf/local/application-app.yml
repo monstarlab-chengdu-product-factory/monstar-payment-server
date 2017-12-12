@@ -1,0 +1,20 @@
+# monstar config
+monstar:
+    sandboxnew: true
+
+# wechat pay config
+wx:
+    appid:
+    mchId:
+    mchKey:
+    mchCertPath:
+    notifyUrl:
+
+httpClient:
+    httpConnectionTimeout: 5000
+    httpTimeout: 10000
+    httpProxyHost:
+    # 0 disable
+    httpProxyPort: 0
+    httpProxyUsername:
+    httpProxyPassword:
