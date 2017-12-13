@@ -55,12 +55,12 @@ public class AlipayServiceImpl implements AlipayService {
 
         TPayment tPayment = tPaymentMapper.findByPaymentNo(paymentNo);
 
-        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.alipayServerUrl, alipayConfig.alipayId,
-                alipayConfig.alipayPrivateKey,
+        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getServerUrl(), alipayConfig.getAlipayId(),
+                alipayConfig.getPrivateKey(),
                 AlipayConstants.FORMAT_JSON, AlipayConstants.CHARSET_UTF8,
-                alipayConfig.alipayPublicKey, AlipayConstants.SIGN_TYPE_RSA2);
+                alipayConfig.getPublicKey(), AlipayConstants.SIGN_TYPE_RSA2);
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();
-        alipayRequest.setNotifyUrl(alipayConfig.alipayNotifyUrl);
+        alipayRequest.setNotifyUrl(alipayConfig.getNotifyUrl());
 //        alipayRequest.setReturnUrl("");
         StringBuilder builder = new StringBuilder();
         builder = builder.append("{\"out_trade_no\":\"")
@@ -81,12 +81,12 @@ public class AlipayServiceImpl implements AlipayService {
 
         TPayment tPayment = tPaymentMapper.findByPaymentNo(paymentNo);
 
-        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.alipayServerUrl, alipayConfig.alipayId,
-                alipayConfig.alipayPrivateKey,
+        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getServerUrl(), alipayConfig.getAlipayId(),
+                alipayConfig.getPrivateKey(),
                 AlipayConstants.FORMAT_JSON, AlipayConstants.CHARSET_UTF8,
-                alipayConfig.alipayPublicKey, AlipayConstants.SIGN_TYPE_RSA2);
+                alipayConfig.getPublicKey(), AlipayConstants.SIGN_TYPE_RSA2);
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
-        alipayRequest.setNotifyUrl(alipayConfig.alipayNotifyUrl);
+        alipayRequest.setNotifyUrl(alipayConfig.getNotifyUrl());
 //        alipayRequest.setReturnUrl("");
         StringBuilder builder = new StringBuilder();
         builder = builder.append("{\"out_trade_no\":\"")
@@ -107,10 +107,10 @@ public class AlipayServiceImpl implements AlipayService {
 
         TPayment tPayment = tPaymentMapper.findByPaymentNo(paymentNo);
 
-        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.alipayServerUrl, alipayConfig.alipayId,
-                alipayConfig.alipayPrivateKey,
+        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getServerUrl(), alipayConfig.getAlipayId(),
+                alipayConfig.getPrivateKey(),
                 AlipayConstants.FORMAT_JSON, AlipayConstants.CHARSET_UTF8,
-                alipayConfig.alipayPublicKey, AlipayConstants.SIGN_TYPE_RSA2);
+                alipayConfig.getPublicKey(), AlipayConstants.SIGN_TYPE_RSA2);
         AlipayTradeQueryRequest alipayRequest = new AlipayTradeQueryRequest();
         StringBuilder builder = new StringBuilder();
         builder = builder.append("{\"out_trade_no\":\"")
@@ -151,10 +151,10 @@ public class AlipayServiceImpl implements AlipayService {
         TRefund tRefund = tRefundMapper.findByRefundNo(refundNo);
         TPayment tPayment = tPaymentMapper.selectByPrimaryKey(tRefund.getPaymentId());
 
-        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.alipayServerUrl, alipayConfig.alipayId,
-                alipayConfig.alipayPrivateKey,
+        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getServerUrl(), alipayConfig.getAlipayId(),
+                alipayConfig.getPrivateKey(),
                 AlipayConstants.FORMAT_JSON, AlipayConstants.CHARSET_UTF8,
-                alipayConfig.alipayPublicKey, AlipayConstants.SIGN_TYPE_RSA2);
+                alipayConfig.getPublicKey(), AlipayConstants.SIGN_TYPE_RSA2);
         AlipayTradeRefundRequest alipayRequest = new AlipayTradeRefundRequest();
         StringBuilder builder = new StringBuilder();
         builder = builder.append("{\"out_trade_no\":\"")
@@ -185,10 +185,10 @@ public class AlipayServiceImpl implements AlipayService {
         TRefund tRefund = tRefundMapper.findByRefundNo(refundNo);
         TPayment tPayment = tPaymentMapper.selectByPrimaryKey(tRefund.getPaymentId());
 
-        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.alipayServerUrl, alipayConfig.alipayId,
-                alipayConfig.alipayPrivateKey,
+        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getServerUrl(), alipayConfig.getAlipayId(),
+                alipayConfig.getPrivateKey(),
                 AlipayConstants.FORMAT_JSON, AlipayConstants.CHARSET_UTF8,
-                alipayConfig.alipayPublicKey, AlipayConstants.SIGN_TYPE_RSA2);
+                alipayConfig.getPublicKey(), AlipayConstants.SIGN_TYPE_RSA2);
         AlipayTradeFastpayRefundQueryRequest alipayRequest = new AlipayTradeFastpayRefundQueryRequest();
         StringBuilder builder = new StringBuilder();
         builder = builder.append("{\"trade_no\":\"")

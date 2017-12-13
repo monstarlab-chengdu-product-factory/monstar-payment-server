@@ -3,6 +3,7 @@ package cn.monstar.payment.test.controller;
 import cn.monstar.payment.config.TestsConfiguration;
 import cn.monstar.payment.domain.model.dto.APIResult;
 import cn.monstar.payment.domain.model.dto.PayDto;
+import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
 import cn.monstar.payment.domain.model.enums.PaymentTypeEnum;
 import cn.monstar.payment.web.controller.form.PayForm;
 import com.alibaba.fastjson.JSON;
@@ -47,9 +48,9 @@ public class PaymentControllerTest {
         payForm.setOrderMoney(new BigDecimal(1));
         payForm.setPaymentType(PaymentTypeEnum.ALIPAY);
         payForm.setGoodsInfo("testgoods");
-        payForm.setDescription("AAAA");
-        payForm.setGoodsDetails("BBB");
-        payForm.setUserNo("w24324");
+        payForm.setDescription("description");
+        payForm.setGoodsDetails("detail");
+        payForm.setUserNo("a12345");
         APIResult response = testRestTemplate.postForObject("/payment/wapPay", payForm, APIResult.class);
         Map<String, String> map = (Map)response.getData();
 
@@ -58,10 +59,10 @@ public class PaymentControllerTest {
         param.add("paymentNo", paymentNo);
         APIResult response2 = testRestTemplate.postForObject("/payment/query", param, APIResult.class);
         Map<String, String> map2 = (Map)response2.getData();
-        Assert.assertEquals("UNPAID", map2.get("paymentStatus"));
-        Assert.assertEquals("AAAA", map2.get("description"));
-        Assert.assertEquals("ALIPAY", map2.get("paymentType"));
-        Assert.assertEquals(1.00, map2.get("orderMoney"));
-        Assert.assertEquals("testgoods", map2.get("goodsInfo"));
+        Assert.assertEquals(PaymentStatusEnum.UNPAID.name(), map2.get("paymentStatus"));
+        Assert.assertEquals(payForm.getDescription(), map2.get("description"));
+        Assert.assertEquals(payForm.getPaymentType().name(), map2.get("paymentType"));
+        Assert.assertEquals(1.0, map2.get("orderMoney"));
+        Assert.assertEquals(payForm.getGoodsInfo(), map2.get("goodsInfo"));
     }
 }
