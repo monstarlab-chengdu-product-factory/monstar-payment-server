@@ -232,9 +232,25 @@
   </update>
 
   <select id="findByPaymentNo" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
+    SELECT
     <include refid="Base_Column_List" />
-    from t_payment
-    where payment_no = #{paymentNo,jdbcType=VARCHAR}
+    FROM t_payment
+    WHERE payment_no = #{paymentNo,jdbcType=VARCHAR}
   </select>
+
+  <select id="paymentCorrectCheck" resultType="java.lang.Integer">
+    SELECT COUNT(1)
+    FROM t_payment
+    WHERE
+      payment_no = #{paymentNo,jdbcType=VARCHAR}
+      AND order_money = #{orderMoney,jdbcType=DECIMAL}
+  </select>
+
+  <update id="updateToFinish">
+    UPDATE t_payment
+    SET
+      payment_status = ${@cn.monstar.payment.domain.model.enums.PaymentStatusEnum@PAID.enumValue},
+      out_trade_no = #{outTradeNo,jdbcType=VARCHAR}
+    WHERE payment_no = #{paymentNo,jdbcType=VARCHAR}
+  </update>
 </mapper>
