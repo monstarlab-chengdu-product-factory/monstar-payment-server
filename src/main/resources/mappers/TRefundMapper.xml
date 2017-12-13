@@ -195,4 +195,11 @@
       cre_dt = #{creDt,jdbcType=TIMESTAMP}
     where refund_id = #{refundId,jdbcType=BIGINT}
   </update>
+
+  <select id="findByRefundNo" parameterType="String" resultType="cn.monstar.payment.domain.model.mybatis.gen.TRefund">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM t_refund
+    WHERE refund_no = #{refundNo,jdbcType=VARCHAR}
+  </select>
 </mapper>
