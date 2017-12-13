@@ -1,22 +1,12 @@
 package cn.monstar.payment.web.controller;
 
-import cn.monstar.payment.config.AlipayConfig;
 import cn.monstar.payment.domain.model.dto.APIResult;
 import cn.monstar.payment.domain.model.dto.PayDto;
 import cn.monstar.payment.domain.model.enums.AccessTypeEnum;
 import cn.monstar.payment.domain.service.payment.PaymentService;
 import cn.monstar.payment.web.controller.form.PayForm;
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayConstants;
-import com.alipay.api.internal.util.AlipaySignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author liuyiqian
@@ -30,9 +20,6 @@ public class PaymentsController extends BaseController {
 
     @Autowired
     private PaymentService paymentService;
-
-    @Autowired
-    private AlipayConfig alipayConfig;
 
     /**
      * 手机H5支付
