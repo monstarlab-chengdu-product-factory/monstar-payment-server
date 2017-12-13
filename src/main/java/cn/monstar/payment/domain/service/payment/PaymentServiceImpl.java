@@ -1,15 +1,18 @@
 package cn.monstar.payment.domain.service.payment;
 
+import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.domain.dao.mybatis.TPaymentMapper;
 import cn.monstar.payment.domain.model.dto.PayDto;
 import cn.monstar.payment.domain.model.dto.PayQueryDto;
 import cn.monstar.payment.domain.model.enums.AccessTypeEnum;
 import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
+import cn.monstar.payment.domain.model.enums.PaymentTypeEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
 import cn.monstar.payment.domain.service.BaseServiceImpl;
 import cn.monstar.payment.domain.service.alipay.AlipayService;
 import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.web.controller.form.PayForm;
+import cn.monstar.payment.web.exception.BusinessException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * @author zhangshuai
@@ -30,6 +32,9 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
 
     @Autowired
     private AlipayService alipayService;
+
+    @Autowired
+    private MessageConfig messageConfig;
 
     @Autowired
     @Override
@@ -50,7 +55,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
         Date now = new Date();
         TPayment tPayment = new TPayment();
         tPayment.setPaymentNo(getPaymentNo());
-        tPayment.setPaymentType(payForm.getPaymentType());
+        tPayment.setPaymentType(PaymentTypeEnum.valueOf(payForm.getPaymentType()));
         tPayment.setPaymentStatus(PaymentStatusEnum.UNPAID);
         tPayment.setOrderMoney(payForm.getOrderMoney());
         tPayment.setGoodsInfo(payForm.getGoodsInfo());
@@ -68,8 +73,8 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
             try {
                 tPayment.setOrderCreDt(simpleDateFormat.parse(payForm.getOrderCreDt()));
             }catch (Exception e) {
-                logger.error("日期格式不正确");
                 e.printStackTrace();
+                throw new BusinessException(messageConfig.E00015);
             }
         } else {
             tPayment.setOrderCreDt(now);
@@ -81,7 +86,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
         super.repository.insertSelective(tPayment);
         PayDto payDto = new PayDto();
         payDto.setPaymentNo(tPayment.getPaymentNo());
-        switch (payForm.getPaymentType()) {
+        switch (tPayment.getPaymentType()) {
             case WECHAT:
                 break;
             case ALIPAY:
@@ -106,6 +111,9 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     @Override
     public PayQueryDto paymentQuery(String paymentNo) {
         TPayment tPayment = super.repository.findByPaymentNo(paymentNo);
+        if(tPayment == null) {
+            throw new BusinessException(String.format(messageConfig.E00002, paymentNo));
+        }
         if (tPayment.getPaymentStatus() != PaymentStatusEnum.PAID) {
             switch (tPayment.getPaymentType()) {
                 case WECHAT:

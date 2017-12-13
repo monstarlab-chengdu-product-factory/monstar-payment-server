@@ -1,6 +1,7 @@
 package cn.monstar.payment.web.exception;
 
 import cn.monstar.payment.domain.model.dto.APIResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,16 @@ public class GlobalExceptionHandler {
 		return APIResult.failure().setMessage(e.getMessage());
 	}
 
+	/**
+	 * MethodArgumentNotValidException异常
+	 * @param e
+	 * @return
+	 */
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseBody
+	public APIResult exceptionHandler(MethodArgumentNotValidException e) {
+		return APIResult.failure().setMessage(e.getBindingResult().getFieldError().getField() + e.getBindingResult().getFieldError().getDefaultMessage());
+	}
 
 	/**
 	 * 统一异常处理

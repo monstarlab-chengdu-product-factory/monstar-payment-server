@@ -1,7 +1,6 @@
 package cn.monstar.payment.web.controller.form;
 
-import cn.monstar.payment.domain.model.enums.PaymentTypeEnum;
-
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,7 +25,8 @@ public class PayForm implements Serializable {
      * 支付类型
      */
     @NotNull
-    private PaymentTypeEnum paymentType;
+    @Max(value = 3, message = "错误")
+    private Integer paymentType;
 
     /**
      * 商品标题
@@ -67,11 +67,11 @@ public class PayForm implements Serializable {
         this.orderMoney = orderMoney;
     }
 
-    public PaymentTypeEnum getPaymentType() {
+    public Integer getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(PaymentTypeEnum paymentType) {
+    public void setPaymentType(Integer paymentType) {
         this.paymentType = paymentType;
     }
 

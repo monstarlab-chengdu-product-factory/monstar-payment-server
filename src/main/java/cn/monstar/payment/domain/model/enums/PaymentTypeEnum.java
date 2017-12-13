@@ -22,6 +22,16 @@ public enum PaymentTypeEnum implements BaseEnum {
         this.label = label;
     }
 
+    public static PaymentTypeEnum valueOf(Integer value) {
+        PaymentTypeEnum[] enums = values();
+        for (PaymentTypeEnum role : enums) {
+            if (role.enumValue == value) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Illegal value");
+    }
+
     @Override
     public int getEnumValue() {
         return this.enumValue;
