@@ -1,6 +1,7 @@
 package cn.monstar.payment.domain.service.wechat;
 
 import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
+import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
 import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayRefundRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
@@ -13,6 +14,16 @@ import cn.monstar.payment.domain.util.wechat.response.*;
  * @date 2017/12/4 上午9:36
  */
 public interface WxPayService {
+
+    /**
+     * 微信支付查询
+     * @param paymentNo 付款单号
+     * @return
+     */
+    TPayment tradeQuery(String paymentNo);
+
+
+    //////////// 以下是调用微信的接口 ////////////////////
 
     /**
      * 微信支付统一下单接口

@@ -69,12 +69,12 @@ public abstract class AbstractWxPayService implements WxPayService {
     public WxPayUnifiedOrderResponese wxUnifiedOrder(WxPayUnifiedOrderRequest request) {
         //检查交易类型
         switch (request.getTradeType()) {
-            case WxConstantUtil.WX_TRADE_APP:
+            case WxConstantUtil.TRADE_APP:
                 break;
             /**
              * trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识
              */
-            case WxConstantUtil.WX_TRADE_JSAPI:
+            case WxConstantUtil.TRADE_JSAPI:
                 if (StringUtils.isBlank(request.getOpenid())) {
                     throw new BusinessException(String.format(messageConfig.E00004, "openid"));
                 }
@@ -82,7 +82,7 @@ public abstract class AbstractWxPayService implements WxPayService {
             /**
              * trade_type=NATIVE时（即扫码支付），此参数必传。此参数为二维码中包含的商品ID，商户自行定义。
              */
-            case WxConstantUtil.WX_TRADE_NATIVE:
+            case WxConstantUtil.TRADE_NATIVE:
                 if (org.springframework.util.StringUtils.isEmpty(request.getProductId())) {
                     throw new BusinessException(String.format(messageConfig.E00004, "product_id"));
                 }
@@ -90,7 +90,7 @@ public abstract class AbstractWxPayService implements WxPayService {
             /**
              * 该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报,H5支付不建议在APP端使用，针对场景1，2请接入APP支付，不然可能会出现兼容性问题
              */
-            case WxConstantUtil.WX_TRADE_H5:
+            case WxConstantUtil.TRADE_H5:
                 if (org.springframework.util.StringUtils.isEmpty(request.getSceneInfo())) {
                     throw new BusinessException(String.format(messageConfig.E00004, "scene_info"));
                 }
