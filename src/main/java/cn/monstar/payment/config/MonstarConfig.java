@@ -19,7 +19,7 @@ public class MonstarConfig {
     /**
      * 是否启用沙箱环境
      */
-    @Value("${sanboxnew}")
+    @Value("${sandboxnew}")
     public boolean sandboxnew;
 
 }

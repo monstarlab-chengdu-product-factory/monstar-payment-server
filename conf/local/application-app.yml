@@ -1,10 +1,10 @@
 # monstar config
 monstar:
-    sanboxnew: true
+    sandboxnew: true
 
 # wechat pay config
 wx:
-    appid:
+    appid: 
     mchId:
     mchKey:
     keyPath:
