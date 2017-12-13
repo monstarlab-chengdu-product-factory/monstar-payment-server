@@ -1,13 +1,13 @@
 # monstar config
 monstar:
-    sandboxnew: true
+    sanboxnew: true
 
 # wechat pay config
 wx:
     appid:
     mchId:
     mchKey:
-    mchCertPath:
+    keyPath:
     notifyUrl:
 
 httpClient:

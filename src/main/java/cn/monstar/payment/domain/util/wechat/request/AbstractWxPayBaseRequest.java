@@ -81,10 +81,10 @@ public abstract class AbstractWxPayBaseRequest {
     protected void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
         // config setting
         if (StringUtils.isBlank(this.appid)) {
-            setAppid(wxConfig.getAppid());
+            setAppid(wxConfig.appid);
         }
         if (StringUtils.isBlank(this.mchId)) {
-            setMchId(wxConfig.getMchId());
+            setMchId(wxConfig.mchId);
         }
         if (StringUtils.isBlank(this.nonceStr)) {
             setNonceStr(String.valueOf(System.currentTimeMillis()));
@@ -95,7 +95,7 @@ public abstract class AbstractWxPayBaseRequest {
         // check fileds
         this.checkFields(messageConfig);
         // do sign
-        setSign(WxSignUtils.createSign(this, wxConfig.getMchKey(), this.signType));
+        setSign(WxSignUtils.createSign(this, wxConfig.mchKey, this.signType));
     }
 
     public String toXML() {

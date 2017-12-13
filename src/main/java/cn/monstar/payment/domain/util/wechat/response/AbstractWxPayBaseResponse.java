@@ -172,7 +172,7 @@ public abstract class AbstractWxPayBaseResponse {
      */
     public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess, MessageConfig messageConfig) throws BusinessException {
         Map<String, String> map = toMap();
-        if (StringUtils.isNotBlank(this.sign) && !WxSignUtils.checkSign(map, wxConfig.getMchKey())) {
+        if (StringUtils.isNotBlank(this.sign) && !WxSignUtils.checkSign(map, wxConfig.mchKey)) {
             throw new BusinessException(messageConfig.E00007);
         }
 

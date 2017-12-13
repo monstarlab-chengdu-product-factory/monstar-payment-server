@@ -39,19 +39,19 @@ public class WxPayConfig {
      * @return
      */
     public SSLContext initSSLContext() {
-        if (StringUtils.isBlank(wxConfig.getMchId())) {
+        if (StringUtils.isBlank(wxConfig.mchId)) {
             throw new RuntimeException(String.format(messageConfig.E00004, "mchId"));
         }
 
-        if (StringUtils.isBlank(wxConfig.getKeyPath())) {
+        if (StringUtils.isBlank(wxConfig.keyPath)) {
             throw new RuntimeException(String.format(messageConfig.E00004, "keyPath"));
         }
         InputStream inputStream;
         final String prefix = "classpath:";
-        String fileHasProblemMsg = String.format(messageConfig.E00011, wxConfig.getKeyPath());
-        String fileNotFoundMsg = String.format(messageConfig.E00012, wxConfig.getKeyPath());
-        if (wxConfig.getKeyPath().startsWith(prefix)) {
-            String path = StringUtils.removeFirst(wxConfig.getKeyPath(), prefix);
+        String fileHasProblemMsg = String.format(messageConfig.E00011, wxConfig.keyPath);
+        String fileNotFoundMsg = String.format(messageConfig.E00012, wxConfig.keyPath);
+        if (wxConfig.keyPath.startsWith(prefix)) {
+            String path = StringUtils.removeFirst(wxConfig.keyPath, prefix);
             if (!path.startsWith("/")) {
                 path = "/" + path;
             }
@@ -62,7 +62,7 @@ public class WxPayConfig {
             }
         } else {
             try {
-                File file = new File(wxConfig.getKeyPath());
+                File file = new File(wxConfig.keyPath);
                 if (!file.exists()) {
                     logger.error(fileNotFoundMsg);
                     throw new RuntimeException(fileNotFoundMsg);
@@ -77,7 +77,7 @@ public class WxPayConfig {
 
         try {
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            char[] partnerId2charArray = wxConfig.getMchId().toCharArray();
+            char[] partnerId2charArray = wxConfig.mchId.toCharArray();
             keyStore.load(inputStream, partnerId2charArray);
             httpClientConfig.setSslContext(SSLContexts.custom().loadKeyMaterial(keyStore, partnerId2charArray).build());
             return httpClientConfig.getSslContext();

@@ -8,6 +8,7 @@ import cn.monstar.payment.domain.util.constant.WxConstantUtil;
 import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author wangxianding
@@ -21,9 +22,10 @@ public class WxPayServiceImpl extends AbstractWxPayService {
     @Autowired
     private PaymentService paymentService;
 
+    @Transactional
     @Override
     public TPayment tradeQuery(String paymentNo) {
-        logger.info("微信交易查询:{}", paymentNo);
+        logger.info("create trade query of wechatpay request. paymentNo is :{}", paymentNo);
         TPayment payment = paymentService.findByPaymentNo(paymentNo);
 
         if (payment == null) {
@@ -51,6 +53,7 @@ public class WxPayServiceImpl extends AbstractWxPayService {
                     break;
                 case WxConstantUtil.TRADE_STATE_SUCCESS:
                     payment.setPaymentStatus(PaymentStatusEnum.PAID);
+                    payment.setOutTradeNo(wxPayOrderQueryResponse.getTransactionId());
                     break;
                 default:
                     break;

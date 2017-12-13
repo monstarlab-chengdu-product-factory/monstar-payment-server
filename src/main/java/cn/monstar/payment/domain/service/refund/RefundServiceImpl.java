@@ -81,7 +81,7 @@ public class RefundServiceImpl extends BaseServiceImpl<TRefund, Long, TRefundMap
 
 
         String outRefundNo = null;
-        if (monstarConfig.getSandboxnew()) {
+        if (monstarConfig.sandboxnew) {
             outRefundNo = StringUtil.uuidGenerator();
             refund.setOutRefundNo(outRefundNo);
             refund.setRefundStatus(RefundStatusEnum.REFUNDPROCESSING);

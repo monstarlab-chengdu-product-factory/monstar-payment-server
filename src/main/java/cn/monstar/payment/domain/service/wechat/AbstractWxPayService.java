@@ -59,7 +59,7 @@ public abstract class AbstractWxPayService implements WxPayService {
     private MonstarConfig monstarConfig;
 
     public String getPayUrl() {
-        if (this.monstarConfig.getSandboxnew()) {
+        if (this.monstarConfig.sandboxnew) {
             return BASE_URL + "/sandboxnew";
         }
         return BASE_URL;
@@ -112,7 +112,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         //执行解析
         WxPayNotifyRequest result = AbstractWxPayBaseResponse.fromXML(notifyString, WxPayNotifyRequest.class);
         //校验签名
-        if (!WxSignUtils.checkSign(result, wxConfig.getMchKey())) {
+        if (!WxSignUtils.checkSign(result, wxConfig.mchKey)) {
             throw new BusinessException(messageConfig.E00007);
         }
         return result;
