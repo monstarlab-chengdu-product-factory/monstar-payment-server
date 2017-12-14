@@ -1,11 +1,17 @@
 package cn.monstar.payment.domain.service.wechat;
 
+import cn.monstar.payment.domain.model.dto.PaymentDto;
 import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
 import cn.monstar.payment.domain.model.enums.PaymentTypeEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
+import cn.monstar.payment.domain.service.bill.BillService;
 import cn.monstar.payment.domain.service.payment.PaymentService;
 import cn.monstar.payment.domain.util.constant.WxConstantUtil;
 import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +28,15 @@ public class WxPayServiceImpl extends AbstractWxPayService {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private BillService billService;
+
     @Transactional
     @Override
     public TPayment tradeQuery(String paymentNo) {
         logger.info("create trade query of wechatpay request. paymentNo is :{}", paymentNo);
         TPayment payment = paymentService.findByPaymentNo(paymentNo);
+        TPayment tmpPayment = null;
 
         if (payment == null) {
             return null;
@@ -43,25 +53,38 @@ public class WxPayServiceImpl extends AbstractWxPayService {
         }
         // 同步获取微信服务器交易结果
         try {
+            tmpPayment = new TPayment();
             WxPayOrderQueryResponse wxPayOrderQueryResponse = this.wxOrderQuery(null, paymentNo);
             switch (wxPayOrderQueryResponse.getTradeType()) {
                 case WxConstantUtil.TRADE_STATE_CLOSED:
-                    payment.setPaymentStatus(PaymentStatusEnum.CLOSED);
+                    tmpPayment.setPaymentStatus(PaymentStatusEnum.CLOSED);
                     break;
                 case WxConstantUtil.TRADE_STATE_PAYERROR:
-                    payment.setPaymentStatus(PaymentStatusEnum.PAYMENTFAILURE);
+                    tmpPayment.setPaymentStatus(PaymentStatusEnum.PAYMENTFAILURE);
                     break;
                 case WxConstantUtil.TRADE_STATE_SUCCESS:
-                    payment.setPaymentStatus(PaymentStatusEnum.PAID);
-                    payment.setOutTradeNo(wxPayOrderQueryResponse.getTransactionId());
+                    tmpPayment.setPaymentStatus(PaymentStatusEnum.PAID);
+                    tmpPayment.setOutTradeNo(wxPayOrderQueryResponse.getTransactionId());
                     break;
                 default:
                     break;
             }
-            paymentService.update(payment);
+            tmpPayment.setPaymentId(payment.getPaymentId());
+            paymentService.update(tmpPayment);
+
+            // 记入流水
+            if (tmpPayment.getPaymentStatus() == PaymentStatusEnum.PAID) {
+                DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("yyyyMMddHHmmss");
+                DateTime dateTime = DateTime.parse(wxPayOrderQueryResponse.getTimeEnd(), dateTimeFormat);
+
+                PaymentDto paymentDto = new PaymentDto();
+                BeanUtils.copyProperties(tmpPayment, paymentDto);
+                paymentDto.setTimeEnd(dateTime.toDate());
+                billService.updatePaymentBill(paymentDto);
+            }
             return payment;
         } catch (Exception e) {
-            logger.error("微信交易查询，获取微信服务器数据失败{}", e.getMessage());
+            logger.error("Query the failure of WeChat payment transaction:{}", e.getMessage());
             return null;
         }
     }
