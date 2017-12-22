@@ -12,7 +12,7 @@ import cn.monstar.payment.domain.service.BaseServiceImpl;
 import cn.monstar.payment.domain.service.alipay.AlipayService;
 import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.web.controller.form.PayForm;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

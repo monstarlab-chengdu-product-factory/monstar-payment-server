@@ -2,7 +2,7 @@ package cn.monstar.payment.domain.util.wechat.request;
 
 import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.WxConfig;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
 

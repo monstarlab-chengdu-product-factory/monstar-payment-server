@@ -4,7 +4,7 @@ import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.xml.XStreamInitializer;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import com.google.common.base.Joiner;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
