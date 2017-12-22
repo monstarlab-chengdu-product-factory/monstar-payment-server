@@ -9,7 +9,7 @@ import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
 import cn.monstar.payment.domain.util.wechat.request.*;
 import cn.monstar.payment.domain.util.wechat.response.*;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -138,7 +138,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         WxPayCloseOrderRequest request = new WxPayCloseOrderRequest();
         request.setOutTradeNo(outTradeNo);
 
-        request.checkedAndSign(wxConfig,messageConfig);
+        request.checkedAndSign(wxConfig, messageConfig);
         String url = getPayUrl() + "/pay/closeorder";
         String resultContent = this.post(url, request.toXML(), false);
         WxPayCloseOrderResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayCloseOrderResponse.class);
@@ -158,7 +158,7 @@ public abstract class AbstractWxPayService implements WxPayService {
 
     @Override
     public WxPayRefundResponse wxSendRefund(WxPayRefundRequest request) {
-        request.checkedAndSign(wxConfig,messageConfig);
+        request.checkedAndSign(wxConfig, messageConfig);
         String url = getPayUrl() + "/secapi/pay/refund";
         String resultContent = this.post(url, request.toXML(), true);
         WxPayRefundResponse result = AbstractWxPayBaseResponse.fromXML(resultContent, WxPayRefundResponse.class);
@@ -260,6 +260,5 @@ public abstract class AbstractWxPayService implements WxPayService {
             throw new BusinessException(e.getMessage());
         }
     }
-
 
 }

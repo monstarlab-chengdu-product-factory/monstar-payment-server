@@ -6,7 +6,7 @@ import cn.monstar.payment.domain.util.BeanUtil;
 import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
 import cn.monstar.payment.domain.util.xml.XmlUtil;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
 

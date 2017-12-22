@@ -1,12 +1,17 @@
 package cn.monstar.payment.web.controller;
 
 import cn.monstar.payment.domain.model.dto.APIResult;
+import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
+import cn.monstar.payment.domain.service.payment.PaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @author zhangshuai
@@ -15,7 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2017/11/22 16:09
  */
 @Controller("/order")
-public class TestController extends BaseController {
+public class DemoController extends BaseController {
+
+    @Autowired
+    private PaymentService paymentService;
 
     @PutMapping("/{dad}")
     @ResponseBody
@@ -35,6 +43,8 @@ public class TestController extends BaseController {
     @GetMapping
     @ResponseBody
     public APIResult toTest4() {
+        TPayment payment = paymentService.findOne(1L);
+        logger.debug("debug test");
         return APIResult.success();
     }
 

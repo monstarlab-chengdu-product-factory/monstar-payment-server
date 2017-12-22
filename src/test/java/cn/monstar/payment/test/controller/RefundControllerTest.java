@@ -29,7 +29,6 @@ public class RefundControllerTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-
     @Test
     public void submitRefunds() {
         ApplyRefundForm applyRefundForm = new ApplyRefundForm();
