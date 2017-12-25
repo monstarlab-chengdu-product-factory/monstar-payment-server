@@ -1,6 +1,7 @@
 package cn.monstar.payment.domain.service.wechat;
 
 import cn.monstar.payment.domain.model.dto.ApplyRefundResultDto;
+import cn.monstar.payment.domain.model.enums.AccessTypeEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
 import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
 import cn.monstar.payment.domain.util.wechat.request.WxPayRefundRequest;
@@ -98,5 +99,11 @@ public interface WxPayService {
      */
     WxPayShortUrlResponse wxLongUrlToShortUrl(String longUrl);
 
-
+    /**
+     * 创建支付
+     * @param paymentNo 付款号
+     * @param accessType 支付类型
+     * @return
+     */
+    String createPay(String paymentNo, AccessTypeEnum accessType);
 }

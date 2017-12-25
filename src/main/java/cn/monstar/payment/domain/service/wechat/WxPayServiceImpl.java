@@ -1,13 +1,16 @@
 package cn.monstar.payment.domain.service.wechat;
 
 import cn.monstar.payment.domain.model.dto.PaymentDto;
+import cn.monstar.payment.domain.model.enums.AccessTypeEnum;
 import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
 import cn.monstar.payment.domain.model.enums.PaymentTypeEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
 import cn.monstar.payment.domain.service.bill.BillService;
 import cn.monstar.payment.domain.service.payment.PaymentService;
 import cn.monstar.payment.domain.util.constant.WxConstantUtil;
+import cn.monstar.payment.domain.util.wechat.request.WxPayUnifiedOrderRequest;
 import cn.monstar.payment.domain.util.wechat.response.WxPayOrderQueryResponse;
+import cn.monstar.payment.domain.util.wechat.response.WxPayUnifiedOrderResponese;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -86,6 +89,24 @@ public class WxPayServiceImpl extends AbstractWxPayService {
         } catch (Exception e) {
             logger.error("Query the failure of WeChat payment transaction:{}", e.getMessage());
             return null;
+        }
+    }
+
+    @Override
+    public String createPay(String paymentNo, AccessTypeEnum accessType) {
+        TPayment payment = paymentService.findByPaymentNo(paymentNo);
+        WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest.Builder()
+                .setOutTradeNo(paymentNo)
+                .setBody(payment.getDescription())
+                .setSpbillCreateIp(payment.getClientIp())
+                .setTradeType(accessType == AccessTypeEnum.QRCODE ? WxConstantUtil.TRADE_NATIVE : WxConstantUtil.TRADE_H5)
+                .setProductId(accessType == AccessTypeEnum.QRCODE ? paymentNo : "")
+                .newBuiler();
+        WxPayUnifiedOrderResponese responese = this.wxUnifiedOrder(request);
+        if (accessType == AccessTypeEnum.H5) {
+            return responese.getMwebUrl();
+        } else {
+            return responese.getCodeUrl();
         }
     }
 }
