@@ -75,19 +75,19 @@ public class WxPayRefundQueryRequest extends AbstractWxPayBaseRequest implements
     private Integer offset;
 
     @Override
-    public void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
-        super.checkedAndSign(wxConfig, messageConfig);
+    public void checkedAndSign(WxConfig wxConfig) {
+        super.checkedAndSign(wxConfig);
     }
 
     @Override
-    protected void checkConstraints(MessageConfig messageConfig) {
+    protected void checkConstraints() {
         List<String> params = Arrays.asList(transactionId, outTradeNo, outRefundNo, refundId);
         int count = 0;
         for (String param : params) {
             if (StringUtils.isNotBlank(param)) {
                 count++;
                 if (count > 2) {
-                    throw new BusinessException(messageConfig.E00010);
+                    throw new BusinessException(MessageConfig.E00010);
                 }
             }
         }

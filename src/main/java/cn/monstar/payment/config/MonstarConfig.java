@@ -1,5 +1,6 @@
 package cn.monstar.payment.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -18,13 +19,7 @@ public class MonstarConfig {
     /**
      * 是否启用沙箱环境
      */
-    private boolean sandboxnew;
+    @Value("${sandboxnew}")
+    public boolean sandboxnew;
 
-    public void setSandboxnew(Boolean sandboxnew) {
-        this.sandboxnew = sandboxnew;
-    }
-
-    public Boolean getSandboxnew() {
-        return sandboxnew;
-    }
 }

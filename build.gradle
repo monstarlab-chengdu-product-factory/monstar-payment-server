@@ -80,6 +80,8 @@ dependencies {
         exclude(module: "commons-logging")
     }
 
+    compile('com.google.zxing:core:3.3.1')
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework.boot:spring-boot-test-autoconfigure")
     testCompile("org.springframework.security:spring-security-test")

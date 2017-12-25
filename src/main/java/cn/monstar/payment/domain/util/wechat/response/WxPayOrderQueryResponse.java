@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author wangxianding
  * @version 1.0
- * @description
+ * @description 微信支付交易订单查询结果
  * @date 2017/12/5 下午1:18
  */
 @XStreamAlias("xml")
