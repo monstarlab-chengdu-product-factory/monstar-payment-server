@@ -28,6 +28,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.net.ssl.SSLContext;
 import java.nio.charset.StandardCharsets;
@@ -55,6 +57,9 @@ public abstract class AbstractWxPayService implements WxPayService {
     @Autowired
     private MonstarConfig monstarConfig;
 
+    @Autowired
+    private MessageSource messageSource;
+
     public String getPayUrl() {
         if (this.monstarConfig.sandboxnew) {
             return BASE_URL + "/sandboxnew";
@@ -73,7 +78,7 @@ public abstract class AbstractWxPayService implements WxPayService {
              */
             case WxConstantUtil.TRADE_JSAPI:
                 if (StringUtils.isBlank(request.getOpenid())) {
-                    throw new BusinessException(MessageConfig.E00004,new String[]{"openid"});
+                    throw new BusinessException(MessageConfig.E00004, new String[]{"openid" });
                 }
                 break;
             /**
@@ -81,7 +86,7 @@ public abstract class AbstractWxPayService implements WxPayService {
              */
             case WxConstantUtil.TRADE_NATIVE:
                 if (org.springframework.util.StringUtils.isEmpty(request.getProductId())) {
-                    throw new BusinessException(MessageConfig.E00004, new String[]{"product_id"});
+                    throw new BusinessException(MessageConfig.E00004, new String[]{"product_id" });
                 }
                 break;
             /**
@@ -89,7 +94,7 @@ public abstract class AbstractWxPayService implements WxPayService {
              */
             case WxConstantUtil.TRADE_H5:
                 if (org.springframework.util.StringUtils.isEmpty(request.getSceneInfo())) {
-                    throw new BusinessException(MessageConfig.E00004, new String[]{"scene_info"});
+                    throw new BusinessException(MessageConfig.E00004, new String[]{"scene_info" });
                 }
                 break;
             default:
@@ -193,7 +198,7 @@ public abstract class AbstractWxPayService implements WxPayService {
         //需要传输encode后的链接
         String longUrlencode = UrlUtil.encode(longUrl, null);
         if (StringUtils.isBlank(longUrlencode)) {
-            logger.error(MessageConfig.E00005);
+            logger.error(messageSource.getMessage(MessageConfig.E00005, new String[]{}, LocaleContextHolder.getLocale()));
             throw new BusinessException(MessageConfig.E00005);
         }
         requst.setLongUrl(longUrlencode);
@@ -222,7 +227,7 @@ public abstract class AbstractWxPayService implements WxPayService {
                 }
 
                 SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
-                        new String[]{"TLSv1"}, null, new DefaultHostnameVerifier());
+                        new String[]{"TLSv1" }, null, new DefaultHostnameVerifier());
                 httpClientBuilder.setSSLSocketFactory(sslsf);
             }
 
@@ -248,14 +253,14 @@ public abstract class AbstractWxPayService implements WxPayService {
                 httpPost.setEntity(new StringEntity(new String(requestStr.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1)));
                 try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
                     String responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-                    this.logger.info(MessageConfig.E00001, url, requestStr, responseString);
+                    this.logger.info(messageSource.getMessage(MessageConfig.I00001, new String[]{url, requestStr, responseString}, LocaleContextHolder.getLocale()));
                     return responseString;
                 }
             } finally {
                 httpPost.releaseConnection();
             }
         } catch (Exception e) {
-            this.logger.error(MessageConfig.I00001, url, requestStr, e.getMessage());
+            this.logger.error(messageSource.getMessage(MessageConfig.I00001, new String[]{url, requestStr, e.getMessage()}, LocaleContextHolder.getLocale()));
             throw new BusinessException(e.getMessage());
         }
     }
