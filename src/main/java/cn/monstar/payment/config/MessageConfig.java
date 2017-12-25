@@ -56,6 +56,9 @@ public class MessageConfig {
     @Value("${E00014}")
     public String E00014;
 
+    @Value("${E00015}")
+    public String E00015;
+
     @Value("${I00001}")
     public String I00001;
 

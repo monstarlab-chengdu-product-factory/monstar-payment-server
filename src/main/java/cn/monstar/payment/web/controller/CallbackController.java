@@ -43,13 +43,13 @@ public class CallbackController extends BaseController {
         logger.info("get alipay notify");
         Map<String, String> paramMap = getAllRequestParam(request);
         try {
-            boolean verifyResult = AlipaySignature.rsaCheckV1(paramMap, alipayConfig.getPublicKey(), AlipayConstants.CHARSET_UTF8, AlipayConstants.SIGN_TYPE_RSA2);
+            boolean verifyResult = AlipaySignature.rsaCheckV1(paramMap, alipayConfig.publicKey, AlipayConstants.CHARSET_UTF8, AlipayConstants.SIGN_TYPE_RSA2);
             if (verifyResult) {
                 String appId = paramMap.get("app_id");
                 String paymentNo = paramMap.get("out_trade_no");
                 String outTradeNo = paramMap.get("trade_no");
                 String orderMoney = paramMap.get("total_amount");
-                if (alipayConfig.getAlipayId().equals(appId) && paymentService.paymentCorrectCheck(paymentNo, new BigDecimal(orderMoney))) {
+                if (alipayConfig.alipayId.equals(appId) && paymentService.paymentCorrectCheck(paymentNo, new BigDecimal(orderMoney))) {
                     paymentService.updateToFinish(paymentNo, outTradeNo);
                     return "success";
                 }

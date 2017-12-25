@@ -9,7 +9,7 @@ import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.wechat.notify.WxPayNotifyRequest;
 import cn.monstar.payment.domain.util.wechat.request.*;
 import cn.monstar.payment.domain.util.wechat.response.*;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -262,6 +262,5 @@ public abstract class AbstractWxPayService implements WxPayService {
             throw new BusinessException(e.getMessage());
         }
     }
-
 
 }
