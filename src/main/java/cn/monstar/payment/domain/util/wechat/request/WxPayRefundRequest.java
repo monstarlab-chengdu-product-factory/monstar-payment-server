@@ -117,15 +117,15 @@ public class WxPayRefundRequest extends AbstractWxPayBaseRequest implements Seri
 
 
     @Override
-    public void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
-        super.checkedAndSign(wxConfig, messageConfig);
+    public void checkedAndSign(WxConfig wxConfig) {
+        super.checkedAndSign(wxConfig);
     }
 
     @Override
-    protected void checkConstraints(MessageConfig messageConfig) {
+    protected void checkConstraints() {
         if (StringUtils.isAllBlank(this.transactionId, this.outTradeNo)
                 || StringUtils.isNoneBlank(this.transactionId, this.outTradeNo)) {
-            throw new BusinessException(messageConfig.E00009);
+            throw new BusinessException(MessageConfig.E00009);
         }
     }
 

@@ -170,12 +170,12 @@ public abstract class AbstractWxPayBaseResponse {
      * @param checkSuccess 是否检查结果
      * @throws BusinessException
      */
-    public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess, MessageConfig messageConfig) throws BusinessException {
+    public void checkResult(WxConfig wxConfig, String signType, Boolean checkSuccess) throws BusinessException {
         Map<String, String> map = toMap();
         if (StringUtils.isNotBlank(this.sign) && !WxSignUtils.checkSign(map, wxConfig.mchKey)) {
-            throw new BusinessException(messageConfig.E00007);
+            throw new BusinessException(MessageConfig.E00007);
         }
-
+        // TODO
         if (checkSuccess) {
             StringBuilder errMsg = new StringBuilder();
             if (StringUtils.isNotBlank(this.resultCode)) {
@@ -214,7 +214,7 @@ public abstract class AbstractWxPayBaseResponse {
                     .compile(expression)
                     .evaluate(doc, XPathConstants.STRING);
         } catch (XPathExpressionException e) {
-            throw new RuntimeException("未找到相应路径的文本：" + expression);
+            throw new RuntimeException(MessageConfig.E00014 + expression);
         }
     }
 

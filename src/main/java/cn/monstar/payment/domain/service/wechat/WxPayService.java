@@ -17,11 +17,26 @@ import cn.monstar.payment.domain.util.wechat.response.*;
 public interface WxPayService {
 
     /**
+     * 创建支付
+     * @param paymentNo 付款号
+     * @param accessType 支付类型
+     * @param clientIp 客户端ip
+     * @return
+     */
+    String createPay(String paymentNo, AccessTypeEnum accessType, String clientIp);
+
+    /**
      * 微信支付查询
      * @param paymentNo 付款单号
      * @return
      */
     TPayment tradeQuery(String paymentNo);
+
+    /**
+     * 关闭付款订单
+     * @param paymentNo 付款订单号
+     */
+    void closeOrder(String paymentNo);
 
 
     //////////// 以下是调用微信的接口 ////////////////////
@@ -99,11 +114,5 @@ public interface WxPayService {
      */
     WxPayShortUrlResponse wxLongUrlToShortUrl(String longUrl);
 
-    /**
-     * 创建支付
-     * @param paymentNo 付款号
-     * @param accessType 支付类型
-     * @return
-     */
-    String createPay(String paymentNo, AccessTypeEnum accessType);
+
 }

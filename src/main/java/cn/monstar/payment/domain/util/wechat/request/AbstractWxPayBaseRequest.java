@@ -70,15 +70,15 @@ public abstract class AbstractWxPayBaseRequest {
     /**
      * 检查请求参数内容，包括必填参数以及特殊约束
      */
-    private void checkFields(MessageConfig messageConfig) {
+    private void checkFields() {
         if (!BeanUtil.checkRequiredFields(this)) {
-            throw new BusinessException(messageConfig.E00008);
+            throw new BusinessException(MessageConfig.E00008);
         }
         //check other parameters
-        this.checkConstraints(messageConfig);
+        this.checkConstraints();
     }
 
-    protected void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
+    protected void checkedAndSign(WxConfig wxConfig) {
         // config setting
         if (StringUtils.isBlank(this.appid)) {
             setAppid(wxConfig.appid);
@@ -93,7 +93,7 @@ public abstract class AbstractWxPayBaseRequest {
             setSignType(WxSignUtils.MD5);
         }
         // check fileds
-        this.checkFields(messageConfig);
+        this.checkFields();
         // do sign
         setSign(WxSignUtils.createSign(this, wxConfig.mchKey, this.signType));
     }
@@ -105,7 +105,7 @@ public abstract class AbstractWxPayBaseRequest {
     /**
      * 检查约束情况
      */
-    protected abstract void checkConstraints(MessageConfig messageConfig);
+    protected abstract void checkConstraints();
 
     public String getAppid() {
         return appid;
