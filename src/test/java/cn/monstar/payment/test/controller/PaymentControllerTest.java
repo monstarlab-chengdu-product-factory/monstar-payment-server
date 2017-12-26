@@ -38,25 +38,26 @@ public class PaymentControllerTest {
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void wapPayTest() {
+    public void payTest() {
         PayForm payForm = new PayForm();
         payForm.setOrderMoney(new BigDecimal(1));
-        payForm.setPaymentType(PaymentTypeEnum.ALIPAY);
+        payForm.setPaymentType(PaymentTypeEnum.ALIPAY.getEnumValue());
         payForm.setGoodsInfo("testgoods");
         payForm.setDescription("description");
         payForm.setGoodsDetails("detail");
         payForm.setUserNo("a12345");
-        APIResult response = testRestTemplate.postForObject("/payment/wapPay", payForm, APIResult.class);
+        APIResult response = testRestTemplate.postForObject("/payment/create", payForm, APIResult.class);
         Map<String, String> map = (Map)response.getData();
 
         String paymentNo = map.get("paymentNo");
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
         param.add("paymentNo", paymentNo);
+        testRestTemplate.postForObject("/payment/pay", param, String.class);
         APIResult response2 = testRestTemplate.postForObject("/payment/query", param, APIResult.class);
         Map<String, String> map2 = (Map)response2.getData();
-        Assert.assertEquals(PaymentStatusEnum.UNPAID.name(), map2.get("paymentStatus"));
+        Assert.assertEquals(PaymentStatusEnum.UNPAID.getEnumValue(), map2.get("paymentStatus"));
         Assert.assertEquals(payForm.getDescription(), map2.get("description"));
-        Assert.assertEquals(payForm.getPaymentType().name(), map2.get("paymentType"));
+        Assert.assertEquals(payForm.getPaymentType(), map2.get("paymentType"));
         Assert.assertEquals(1.0, map2.get("orderMoney"));
         Assert.assertEquals(payForm.getGoodsInfo(), map2.get("goodsInfo"));
     }

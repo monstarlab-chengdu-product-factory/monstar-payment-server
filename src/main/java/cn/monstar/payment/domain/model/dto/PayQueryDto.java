@@ -24,7 +24,7 @@ public class PayQueryDto implements Serializable {
     /**
      * 订单状态
      */
-    private PaymentStatusEnum paymentStatus;
+    private Integer paymentStatus;
 
     /**
      * 附加数据
@@ -34,7 +34,7 @@ public class PayQueryDto implements Serializable {
     /**
      * 支付类型
      */
-    private PaymentTypeEnum paymentType;
+    private Integer paymentType;
 
     /**
      * 支付金额
@@ -54,11 +54,11 @@ public class PayQueryDto implements Serializable {
         this.paymentNo = paymentNo;
     }
 
-    public PaymentStatusEnum getPaymentStatus() {
+    public Integer getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(PaymentStatusEnum paymentStatus) {
+    public void setPaymentStatus(Integer paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
@@ -70,11 +70,11 @@ public class PayQueryDto implements Serializable {
         this.description = description;
     }
 
-    public PaymentTypeEnum getPaymentType() {
+    public Integer getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(PaymentTypeEnum paymentType) {
+    public void setPaymentType(Integer paymentType) {
         this.paymentType = paymentType;
     }
 

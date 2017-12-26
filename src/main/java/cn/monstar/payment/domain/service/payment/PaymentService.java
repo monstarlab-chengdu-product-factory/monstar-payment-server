@@ -32,9 +32,20 @@ public interface PaymentService extends BaseService<TPayment, Long> {
      *
      * @param payForm
      */
-    PayDto createPayment(PayForm payForm, AccessTypeEnum accessType);
+    PayDto createPayment(PayForm payForm);
 
     /**
+     * 付款请求
+     *
+     * @param paymentNo
+     * @param accessType
+     * @return
+     */
+    String payRequest(String paymentNo, AccessTypeEnum accessType);
+
+    /**
+     * 支付状态查询
+     *
      * @param paymentNo
      * @return
      */

@@ -51,7 +51,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     }
 
     @Override
-    public PayDto createPayment(PayForm payForm, AccessTypeEnum accessType) {
+    public PayDto createPayment(PayForm payForm) {
         Date now = new Date();
         TPayment tPayment = new TPayment();
         tPayment.setPaymentNo(getPaymentNo());
@@ -86,15 +86,27 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
         super.repository.insertSelective(tPayment);
         PayDto payDto = new PayDto();
         payDto.setPaymentNo(tPayment.getPaymentNo());
+        return payDto;
+    }
+
+    @Override
+    public String payRequest(String paymentNo, AccessTypeEnum accessType) {
+        TPayment tPayment = super.repository.findByPaymentNo(paymentNo);
+        if(tPayment == null) {
+            throw new BusinessException(String.format(messageConfig.E00002, paymentNo));
+        }
+        if(tPayment.getPaymentStatus() != PaymentStatusEnum.UNPAID) {
+            throw new BusinessException(String.format(messageConfig.E00003, paymentNo));
+        }
         switch (tPayment.getPaymentType()) {
             case WECHAT:
                 break;
             case ALIPAY:
                 try {
                     if (accessType == AccessTypeEnum.H5) {
-                        payDto.setHtmlStr(alipayService.tradeWapPay(tPayment.getPaymentNo()));
+                        return alipayService.tradeWapPay(paymentNo);
                     } else {
-                        payDto.setHtmlStr(alipayService.tradePagePay(tPayment.getPaymentNo()));
+                        return alipayService.tradePagePay(paymentNo);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -105,7 +117,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
             case UNIONPAY:
                 break;
         }
-        return payDto;
+        return "";
     }
 
     @Override
@@ -129,6 +141,8 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
         }
         PayQueryDto payQueryDto = new PayQueryDto();
         BeanUtils.copyProperties(tPayment, payQueryDto);
+        payQueryDto.setPaymentType(tPayment.getPaymentType().getEnumValue());
+        payQueryDto.setPaymentStatus(tPayment.getPaymentStatus().getEnumValue());
         return payQueryDto;
     }
 

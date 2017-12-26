@@ -62,7 +62,7 @@ public class AlipayServiceImpl implements AlipayService {
                 alipayConfig.publicKey, AlipayConstants.SIGN_TYPE_RSA2);
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();
         alipayRequest.setNotifyUrl(alipayConfig.notifyUrl);
-//        alipayRequest.setReturnUrl("");
+        alipayRequest.setReturnUrl(alipayConfig.returnUrl);
         StringBuilder builder = new StringBuilder();
         builder = builder.append("{\"out_trade_no\":\"")
                 .append(tPayment.getPaymentNo()).append("\",")
@@ -88,7 +88,7 @@ public class AlipayServiceImpl implements AlipayService {
                 alipayConfig.publicKey, AlipayConstants.SIGN_TYPE_RSA2);
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
         alipayRequest.setNotifyUrl(alipayConfig.notifyUrl);
-//        alipayRequest.setReturnUrl("");
+        alipayRequest.setReturnUrl(alipayConfig.returnUrl);
         StringBuilder builder = new StringBuilder();
         builder = builder.append("{\"out_trade_no\":\"")
                 .append(tPayment.getPaymentNo()).append("\",")
@@ -123,7 +123,6 @@ public class AlipayServiceImpl implements AlipayService {
             alipayResponse = alipayClient.execute(alipayRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BusinessException("system error");
         }
         if (alipayResponse.isSuccess()) {
             switch (alipayResponse.getTradeStatus()) {
