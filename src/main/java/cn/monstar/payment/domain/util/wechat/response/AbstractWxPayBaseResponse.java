@@ -175,7 +175,7 @@ public abstract class AbstractWxPayBaseResponse {
         if (StringUtils.isNotBlank(this.sign) && !WxSignUtils.checkSign(map, wxConfig.mchKey)) {
             throw new BusinessException(MessageConfig.E00007);
         }
-        // TODO
+
         if (checkSuccess) {
             StringBuilder errMsg = new StringBuilder();
             if (StringUtils.isNotBlank(this.resultCode)) {
@@ -197,7 +197,7 @@ public abstract class AbstractWxPayBaseResponse {
             if (StringUtils.isNotBlank(this.errCodeDes)) {
                 errMsg.append(",错误码描述：").append(this.errCodeDes);
             }
-            throw new BusinessException("结果业务代码异常：" + errMsg.toString());
+            throw new BusinessException(MessageConfig.E00016, new String[]{errMsg.toString()});
         }
     }
 

@@ -38,6 +38,8 @@ public interface MessageConfig {
 
     String E00015 = "E00015";
 
+    String E00016 = "E00016";
+
     String I00001 = "I00001";
 
 }
