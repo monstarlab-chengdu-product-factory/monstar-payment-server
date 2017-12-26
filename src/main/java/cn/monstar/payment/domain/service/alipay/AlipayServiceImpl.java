@@ -7,7 +7,7 @@ import cn.monstar.payment.domain.model.enums.PaymentStatusEnum;
 import cn.monstar.payment.domain.model.enums.RefundStatusEnum;
 import cn.monstar.payment.domain.model.mybatis.gen.TPayment;
 import cn.monstar.payment.domain.model.mybatis.gen.TRefund;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayConstants;
 import com.alipay.api.DefaultAlipayClient;
@@ -30,16 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AlipayServiceImpl implements AlipayService {
 
-    private Logger logger = LoggerFactory.getLogger(AlipayServiceImpl.class);
-
     private static final String WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
-
     private static final String TRADE_CLOSED = "TRADE_CLOSED";
-
     private static final String TRADE_SUCCESS = "TRADE_SUCCESS";
-
     private static final String TRADE_FINISHED = "TRADE_FINISHED";
-
+    private Logger logger = LoggerFactory.getLogger(AlipayServiceImpl.class);
     @Autowired
     private TPaymentMapper tPaymentMapper;
 

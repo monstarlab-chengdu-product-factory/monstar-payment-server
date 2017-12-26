@@ -12,7 +12,7 @@ import cn.monstar.payment.domain.service.BaseServiceImpl;
 import cn.monstar.payment.domain.service.alipay.AlipayService;
 import cn.monstar.payment.domain.util.StringUtil;
 import cn.monstar.payment.web.controller.form.PayForm;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +32,6 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
 
     @Autowired
     private AlipayService alipayService;
-
-    @Autowired
-    private MessageConfig messageConfig;
 
     @Autowired
     @Override
@@ -74,7 +71,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
                 tPayment.setOrderCreDt(simpleDateFormat.parse(payForm.getOrderCreDt()));
             }catch (Exception e) {
                 e.printStackTrace();
-                throw new BusinessException(messageConfig.E00015);
+                throw new BusinessException(MessageConfig.E00015);
             }
         } else {
             tPayment.setOrderCreDt(now);
@@ -93,10 +90,10 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     public String payRequest(String paymentNo, AccessTypeEnum accessType) {
         TPayment tPayment = super.repository.findByPaymentNo(paymentNo);
         if(tPayment == null) {
-            throw new BusinessException(String.format(messageConfig.E00002, paymentNo));
+            throw new BusinessException(String.format(MessageConfig.E00002, paymentNo));
         }
         if(tPayment.getPaymentStatus() != PaymentStatusEnum.UNPAID) {
-            throw new BusinessException(String.format(messageConfig.E00003, paymentNo));
+            throw new BusinessException(String.format(MessageConfig.E00003, paymentNo));
         }
         switch (tPayment.getPaymentType()) {
             case WECHAT:
@@ -124,7 +121,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     public PayQueryDto paymentQuery(String paymentNo) {
         TPayment tPayment = super.repository.findByPaymentNo(paymentNo);
         if(tPayment == null) {
-            throw new BusinessException(String.format(messageConfig.E00002, paymentNo));
+            throw new BusinessException(String.format(MessageConfig.E00002, paymentNo));
         }
         if (tPayment.getPaymentStatus() != PaymentStatusEnum.PAID) {
             switch (tPayment.getPaymentType()) {

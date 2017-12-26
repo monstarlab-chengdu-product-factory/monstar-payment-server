@@ -6,7 +6,7 @@ import cn.monstar.payment.domain.util.BeanUtil;
 import cn.monstar.payment.domain.util.encryption.WxSignUtils;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
 import cn.monstar.payment.domain.util.xml.XmlUtil;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
 
@@ -70,21 +70,21 @@ public abstract class AbstractWxPayBaseRequest {
     /**
      * 检查请求参数内容，包括必填参数以及特殊约束
      */
-    private void checkFields(MessageConfig messageConfig) {
+    private void checkFields() {
         if (!BeanUtil.checkRequiredFields(this)) {
-            throw new BusinessException(messageConfig.E00008);
+            throw new BusinessException(MessageConfig.E00008);
         }
         //check other parameters
-        this.checkConstraints(messageConfig);
+        this.checkConstraints();
     }
 
-    protected void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
+    protected void checkedAndSign(WxConfig wxConfig) {
         // config setting
         if (StringUtils.isBlank(this.appid)) {
-            setAppid(wxConfig.getAppid());
+            setAppid(wxConfig.appid);
         }
         if (StringUtils.isBlank(this.mchId)) {
-            setMchId(wxConfig.getMchId());
+            setMchId(wxConfig.mchId);
         }
         if (StringUtils.isBlank(this.nonceStr)) {
             setNonceStr(String.valueOf(System.currentTimeMillis()));
@@ -93,9 +93,9 @@ public abstract class AbstractWxPayBaseRequest {
             setSignType(WxSignUtils.MD5);
         }
         // check fileds
-        this.checkFields(messageConfig);
+        this.checkFields();
         // do sign
-        setSign(WxSignUtils.createSign(this, wxConfig.getMchKey(), this.signType));
+        setSign(WxSignUtils.createSign(this, wxConfig.mchKey, this.signType));
     }
 
     public String toXML() {
@@ -105,7 +105,7 @@ public abstract class AbstractWxPayBaseRequest {
     /**
      * 检查约束情况
      */
-    protected abstract void checkConstraints(MessageConfig messageConfig);
+    protected abstract void checkConstraints();
 
     public String getAppid() {
         return appid;

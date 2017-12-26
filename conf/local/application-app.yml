@@ -7,7 +7,7 @@ wx:
     appid:
     mchId:
     mchKey:
-    mchCertPath:
+    keyPath:
     notifyUrl:
 
 httpClient:

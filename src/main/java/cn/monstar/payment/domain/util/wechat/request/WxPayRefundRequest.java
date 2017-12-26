@@ -3,7 +3,7 @@ package cn.monstar.payment.domain.util.wechat.request;
 import cn.monstar.payment.config.MessageConfig;
 import cn.monstar.payment.config.WxConfig;
 import cn.monstar.payment.domain.util.wechat.annotation.Required;
-import cn.monstar.payment.web.exception.BusinessException;
+import cn.monstar.payment.web.error.exception.BusinessException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.StringUtils;
 
@@ -117,15 +117,15 @@ public class WxPayRefundRequest extends AbstractWxPayBaseRequest implements Seri
 
 
     @Override
-    public void checkedAndSign(WxConfig wxConfig, MessageConfig messageConfig) {
-        super.checkedAndSign(wxConfig, messageConfig);
+    public void checkedAndSign(WxConfig wxConfig) {
+        super.checkedAndSign(wxConfig);
     }
 
     @Override
-    protected void checkConstraints(MessageConfig messageConfig) {
+    protected void checkConstraints() {
         if (StringUtils.isAllBlank(this.transactionId, this.outTradeNo)
                 || StringUtils.isNoneBlank(this.transactionId, this.outTradeNo)) {
-            throw new BusinessException(messageConfig.E00009);
+            throw new BusinessException(MessageConfig.E00009);
         }
     }
 

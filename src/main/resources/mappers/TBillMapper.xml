@@ -184,4 +184,13 @@
       up_dt = #{upDt,jdbcType=TIMESTAMP}
     where bill_id = #{billId,jdbcType=BIGINT}
   </update>
+
+  <select id="findByPaymentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_bill
+    <if test="paymentId != null">
+      payment_id = #{paymentId,jdbcType=BIGINT}
+    </if>
+  </select>
 </mapper>
