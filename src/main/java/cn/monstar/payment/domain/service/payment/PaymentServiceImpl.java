@@ -34,9 +34,6 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     private AlipayService alipayService;
 
     @Autowired
-    private MessageConfig messageConfig;
-
-    @Autowired
     @Override
     public void setRepository(TPaymentMapper repository) {
         super.repository = repository;
@@ -51,7 +48,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     }
 
     @Override
-    public PayDto createPayment(PayForm payForm, AccessTypeEnum accessType) {
+    public PayDto createPayment(PayForm payForm) {
         Date now = new Date();
         TPayment tPayment = new TPayment();
         tPayment.setPaymentNo(getPaymentNo());
@@ -74,7 +71,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
                 tPayment.setOrderCreDt(simpleDateFormat.parse(payForm.getOrderCreDt()));
             }catch (Exception e) {
                 e.printStackTrace();
-                throw new BusinessException(messageConfig.E00015);
+                throw new BusinessException(MessageConfig.E00015);
             }
         } else {
             tPayment.setOrderCreDt(now);
@@ -86,15 +83,27 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
         super.repository.insertSelective(tPayment);
         PayDto payDto = new PayDto();
         payDto.setPaymentNo(tPayment.getPaymentNo());
+        return payDto;
+    }
+
+    @Override
+    public String payRequest(String paymentNo, AccessTypeEnum accessType) {
+        TPayment tPayment = super.repository.findByPaymentNo(paymentNo);
+        if(tPayment == null) {
+            throw new BusinessException(MessageConfig.E00002, new String[]{paymentNo});
+        }
+        if(tPayment.getPaymentStatus() != PaymentStatusEnum.UNPAID) {
+            throw new BusinessException(MessageConfig.E00003, new String[]{paymentNo});
+        }
         switch (tPayment.getPaymentType()) {
             case WECHAT:
                 break;
             case ALIPAY:
                 try {
                     if (accessType == AccessTypeEnum.H5) {
-                        payDto.setHtmlStr(alipayService.tradeWapPay(tPayment.getPaymentNo()));
+                        return alipayService.tradeWapPay(paymentNo);
                     } else {
-                        payDto.setHtmlStr(alipayService.tradePagePay(tPayment.getPaymentNo()));
+                        return alipayService.tradePagePay(paymentNo);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -105,14 +114,14 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
             case UNIONPAY:
                 break;
         }
-        return payDto;
+        return "";
     }
 
     @Override
     public PayQueryDto paymentQuery(String paymentNo) {
         TPayment tPayment = super.repository.findByPaymentNo(paymentNo);
         if(tPayment == null) {
-            throw new BusinessException(String.format(messageConfig.E00002, paymentNo));
+            throw new BusinessException(MessageConfig.E00002, new String[]{paymentNo});
         }
         if (tPayment.getPaymentStatus() != PaymentStatusEnum.PAID) {
             switch (tPayment.getPaymentType()) {
@@ -129,6 +138,8 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
         }
         PayQueryDto payQueryDto = new PayQueryDto();
         BeanUtils.copyProperties(tPayment, payQueryDto);
+        payQueryDto.setPaymentType(tPayment.getPaymentType().getEnumValue());
+        payQueryDto.setPaymentStatus(tPayment.getPaymentStatus().getEnumValue());
         return payQueryDto;
     }
 

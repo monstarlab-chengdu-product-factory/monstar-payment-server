@@ -1,9 +1,7 @@
 package cn.monstar.payment.web.controller;
 
-import cn.monstar.payment.config.AlipayConfig;
 import cn.monstar.payment.domain.model.dto.APIResult;
 import cn.monstar.payment.domain.model.dto.PayDto;
-import cn.monstar.payment.domain.model.enums.AccessTypeEnum;
 import cn.monstar.payment.domain.service.payment.PaymentService;
 import cn.monstar.payment.web.controller.form.PayForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,26 +23,14 @@ public class PaymentsController extends BaseController {
     private PaymentService paymentService;
 
     /**
-     * 手机H5支付
+     * 创建付款单
      *
      * @param payForm
      * @return
      */
-    @PostMapping("/wapPay")
-    public APIResult wapPay(@RequestBody @Valid PayForm payForm) {
-        PayDto payDto = paymentService.createPayment(payForm, AccessTypeEnum.H5);
-        return APIResult.success().setData(payDto);
-    }
-
-    /**
-     * PC网站支付
-     *
-     * @param payForm
-     * @return
-     */
-    @PostMapping("/pagePay")
-    public APIResult pagePay(@RequestBody @Valid PayForm payForm) {
-        PayDto payDto = paymentService.createPayment(payForm, AccessTypeEnum.QRCODE);
+    @PostMapping("/create")
+    public APIResult create(@RequestBody @Valid PayForm payForm) {
+        PayDto payDto = paymentService.createPayment(payForm);
         return APIResult.success().setData(payDto);
     }
 

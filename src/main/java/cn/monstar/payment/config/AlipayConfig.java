@@ -45,4 +45,10 @@ public class AlipayConfig {
      */
     @Value("${notifyUrl}")
     public String notifyUrl;
+
+    /**
+     * 同步地址
+     */
+    @Value("${returnUrl}")
+    public String returnUrl;
 }

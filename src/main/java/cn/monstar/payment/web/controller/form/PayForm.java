@@ -25,7 +25,7 @@ public class PayForm implements Serializable {
      * 支付类型
      */
     @NotNull
-    @Max(value = 3, message = "错误")
+    @Max(value = 3, message = "{paymentType.message}")
     private Integer paymentType;
 
     /**
