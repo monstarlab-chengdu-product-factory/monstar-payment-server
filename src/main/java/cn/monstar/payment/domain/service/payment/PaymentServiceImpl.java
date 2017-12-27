@@ -90,10 +90,10 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     public String payRequest(String paymentNo, AccessTypeEnum accessType) {
         TPayment tPayment = super.repository.findByPaymentNo(paymentNo);
         if(tPayment == null) {
-            throw new BusinessException(MessageConfig.E00002, paymentNo);
+            throw new BusinessException(MessageConfig.E00002, new String[]{paymentNo});
         }
         if(tPayment.getPaymentStatus() != PaymentStatusEnum.UNPAID) {
-            throw new BusinessException(MessageConfig.E00003, paymentNo);
+            throw new BusinessException(MessageConfig.E00003, new String[]{paymentNo});
         }
         switch (tPayment.getPaymentType()) {
             case WECHAT:
@@ -121,7 +121,7 @@ public class PaymentServiceImpl extends BaseServiceImpl<TPayment, Long, TPayment
     public PayQueryDto paymentQuery(String paymentNo) {
         TPayment tPayment = super.repository.findByPaymentNo(paymentNo);
         if(tPayment == null) {
-            throw new BusinessException(MessageConfig.E00002, paymentNo);
+            throw new BusinessException(MessageConfig.E00002, new String[]{paymentNo});
         }
         if (tPayment.getPaymentStatus() != PaymentStatusEnum.PAID) {
             switch (tPayment.getPaymentType()) {
